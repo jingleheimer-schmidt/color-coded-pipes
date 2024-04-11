@@ -57,7 +57,7 @@ end
 for _, color in pairs(colors) do
 
     local pipe_remnants = table.deepcopy(data.raw["corpse"]["pipe-remnants"])
-    if not pipe_remnants then error("remnants not found") end
+    if not pipe_remnants then log("remnants not found") end
     pipe_remnants.name = color .. "-pipe-remnants"
     for _, animation in pairs(pipe_remnants.animation) do
         animation.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/hr-pipe-remnants@0.5x.png"
@@ -66,7 +66,7 @@ for _, color in pairs(colors) do
     pipe_remnants.order = pipe_remnants.order .. recipe_order[color]
 
     local pipe = table.deepcopy(data.raw["pipe"]["pipe"])
-    if not pipe then error("pipe not found") end
+    if not pipe then log("pipe not found") end
     local pipe_name = color .. "-" .. pipe.name
     pipe.name = pipe_name
     pipe.minable.result = pipe_name
@@ -81,7 +81,7 @@ for _, color in pairs(colors) do
     pipe.icon = "__color-coded-pipes__/graphics/" .. color .. "_pipe/pipe-icon.png"
 
     local pipe_to_ground = table.deepcopy(data.raw["pipe-to-ground"]["pipe-to-ground"])
-    if not pipe_to_ground then error("pipe-to-ground not found") end
+    if not pipe_to_ground then log("pipe-to-ground not found") end
     local pipe_to_ground_name = color .. "-" .. pipe_to_ground.name
     pipe_to_ground.name = pipe_to_ground_name
     pipe_to_ground.minable.result = pipe_to_ground_name 
@@ -96,17 +96,17 @@ for _, color in pairs(colors) do
     pipe_to_ground.icon = "__color-coded-pipes__/graphics/" .. color .. "_pipe_to_ground/pipe-to-ground-icon.png"
 
     local pipe_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-    if not pipe_subgroup then error("subgroup not found") end
+    if not pipe_subgroup then log("subgroup not found") end
     pipe_subgroup.name = "color-coded-pipe"
     pipe_subgroup.order = pipe_subgroup.order .. "a"
 
     local pipe_to_ground_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-    if not pipe_to_ground_subgroup then error("subgroup not found") end
+    if not pipe_to_ground_subgroup then log("subgroup not found") end
     pipe_to_ground_subgroup.name = "color-coded-pipe-to-ground"
     pipe_to_ground_subgroup.order = pipe_to_ground_subgroup.order .. "b"
 
     local pipe_item = table.deepcopy(data.raw["item"]["pipe"])
-    if not pipe_item then error("item not found") end
+    if not pipe_item then log("item not found") end
     pipe_item.name = pipe_name
     pipe_item.place_result = pipe_name
     pipe_item.localised_name = pipe_localised_name
@@ -115,7 +115,7 @@ for _, color in pairs(colors) do
     pipe_item.subgroup = "color-coded-pipe"
 
     local pipe_to_ground_item = table.deepcopy(data.raw["item"]["pipe-to-ground"])
-    if not pipe_to_ground_item then error("item not found") end
+    if not pipe_to_ground_item then log("item not found") end
     pipe_to_ground_item.name = pipe_to_ground_name
     pipe_to_ground_item.place_result = pipe_to_ground_name
     pipe_to_ground_item.localised_name = pipe_to_ground_localised_name
@@ -124,7 +124,7 @@ for _, color in pairs(colors) do
     pipe_to_ground_item.subgroup = "color-coded-pipe-to-ground"
 
     local pipe_recipe = table.deepcopy(data.raw["recipe"]["pipe"])
-    if not pipe_recipe then error("recipe not found") end
+    if not pipe_recipe then log("recipe not found") end
     pipe_recipe.name = pipe_name
     pipe_recipe.result = pipe_recipe.result and pipe_name or nil
     pipe_recipe.results = pipe_recipe.results and { { type = "item", name = pipe_name, amount = 1 } } or nil
@@ -139,7 +139,7 @@ for _, color in pairs(colors) do
     pipe_recipe.localised_name = pipe_localised_name
 
     local pipe_to_ground_recipe = table.deepcopy(data.raw["recipe"]["pipe-to-ground"])
-    if not pipe_to_ground_recipe then error("recipe not found") end
+    if not pipe_to_ground_recipe then log("recipe not found") end
     pipe_to_ground_recipe.name = pipe_to_ground_name
     pipe_to_ground_recipe.result = pipe_to_ground_recipe.result and pipe_to_ground_name or nil
     pipe_to_ground_recipe.results = pipe_to_ground_recipe.results and { { type = "item", name = pipe_to_ground_name, amount = 1 } } or nil
