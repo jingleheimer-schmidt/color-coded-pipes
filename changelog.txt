@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 14APR2024
+  Features:
+    - added neon color mode for all pipes and pipe-to-ground variants
+    - added startup mod setting to switch between the neon and weathered color modes
+---------------------------------------------------------------------------------------------------
 Version: 0.0.1
 Date: 11APR2024
   Changes:

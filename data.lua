@@ -50,6 +50,8 @@ local recipe_order = {
     ["white"] = "i",
 }
 
+local color_mode = settings.startup["color-coded-pipes-color-mode"].value
+
 local function replace_dash_with_underscore(str)
     return string.gsub(str, "-", "_")
 end
@@ -60,8 +62,8 @@ for _, color in pairs(colors) do
     if not pipe_remnants then log("remnants not found") end
     pipe_remnants.name = color .. "-pipe-remnants"
     for _, animation in pairs(pipe_remnants.animation) do
-        animation.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/hr-pipe-remnants@0.5x.png"
-        animation.hr_version.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/hr-pipe-remnants.png"
+        animation.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/" .. color_mode .. "/hr-pipe-remnants@0.5x.png"
+        animation.hr_version.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/" .. color_mode .. "/hr-pipe-remnants.png"
     end
     pipe_remnants.order = pipe_remnants.order .. recipe_order[color]
 
@@ -72,13 +74,13 @@ for _, color in pairs(colors) do
     pipe.minable.result = pipe_name
     for _, filename in pairs(pipe_filenames) do
         local property_name = replace_dash_with_underscore(filename)
-        pipe.pictures[property_name].filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/hr-pipe-" .. filename .. "@0.5x.png"
-        pipe.pictures[property_name].hr_version.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/hr-pipe-" .. filename .. ".png"
+        pipe.pictures[property_name].filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/" .. color_mode .. "/hr-pipe-" .. filename .. "@0.5x.png"
+        pipe.pictures[property_name].hr_version.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/" .. color_mode .. "/hr-pipe-" .. filename .. ".png"
     end
     local pipe_localised_name = { "", { "color-name." .. color }, " ", { "entity-name.pipe" } }
     pipe.localised_name = pipe_localised_name
     pipe.corpse = color .. "-pipe-remnants"
-    pipe.icon = "__color-coded-pipes__/graphics/" .. color .. "_pipe/pipe-icon.png"
+    pipe.icon = "__color-coded-pipes__/graphics/" .. color .. "_pipe/" .. color_mode .. "/pipe-icon.png"
 
     local pipe_to_ground = table.deepcopy(data.raw["pipe-to-ground"]["pipe-to-ground"])
     if not pipe_to_ground then log("pipe-to-ground not found") end
@@ -87,13 +89,13 @@ for _, color in pairs(colors) do
     pipe_to_ground.minable.result = pipe_to_ground_name 
     for _, filename in pairs(pipe_to_ground_filenames) do
         local property_name = replace_dash_with_underscore(filename)
-        pipe_to_ground.pictures[property_name].filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe_to_ground/hr-pipe-to-ground-" .. filename .. "@0.5x.png"
-        pipe_to_ground.pictures[property_name].hr_version.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe_to_ground/hr-pipe-to-ground-" .. filename .. ".png"
+        pipe_to_ground.pictures[property_name].filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe_to_ground/" .. color_mode .. "/hr-pipe-to-ground-" .. filename .. "@0.5x.png"
+        pipe_to_ground.pictures[property_name].hr_version.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe_to_ground/" .. color_mode .. "/hr-pipe-to-ground-" .. filename .. ".png"
     end
     local pipe_to_ground_localised_name = { "", { "color-name." .. color }, " ", { "entity-name.pipe-to-ground" } }
     pipe_to_ground.localised_name = pipe_to_ground_localised_name
     pipe_to_ground.corpse = color .. "-pipe-remnants"
-    pipe_to_ground.icon = "__color-coded-pipes__/graphics/" .. color .. "_pipe_to_ground/pipe-to-ground-icon.png"
+    pipe_to_ground.icon = "__color-coded-pipes__/graphics/" .. color .. "_pipe_to_ground/" .. color_mode .. "/pipe-to-ground-icon.png"
 
     local pipe_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
     if not pipe_subgroup then log("subgroup not found") end
@@ -110,7 +112,7 @@ for _, color in pairs(colors) do
     pipe_item.name = pipe_name
     pipe_item.place_result = pipe_name
     pipe_item.localised_name = pipe_localised_name
-    pipe_item.icon = "__color-coded-pipes__/graphics/" .. color .. "_pipe/pipe-icon.png"
+    pipe_item.icon = "__color-coded-pipes__/graphics/" .. color .. "_pipe/" .. color_mode .. "/pipe-icon.png"
     pipe_item.order = pipe_item.order .. recipe_order[color]
     pipe_item.subgroup = "color-coded-pipe"
 
@@ -119,7 +121,7 @@ for _, color in pairs(colors) do
     pipe_to_ground_item.name = pipe_to_ground_name
     pipe_to_ground_item.place_result = pipe_to_ground_name
     pipe_to_ground_item.localised_name = pipe_to_ground_localised_name
-    pipe_to_ground_item.icon = "__color-coded-pipes__/graphics/" .. color .. "_pipe_to_ground/pipe-to-ground-icon.png"
+    pipe_to_ground_item.icon = "__color-coded-pipes__/graphics/" .. color .. "_pipe_to_ground/" .. color_mode .. "/pipe-to-ground-icon.png"
     pipe_to_ground_item.order = pipe_to_ground_item.order .. recipe_order[color]
     pipe_to_ground_item.subgroup = "color-coded-pipe-to-ground"
 
