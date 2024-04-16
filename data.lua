@@ -62,7 +62,7 @@ for _, color in pairs(colors) do
     if not pipe_remnants then log("remnants not found") end
     pipe_remnants.name = color .. "-pipe-remnants"
     for _, animation in pairs(pipe_remnants.animation) do
-        animation.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/" .. color_mode .. "/hr-pipe-remnants@0.5x.png"
+        animation.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/" .. color_mode .. "/pipe-remnants.png"
         animation.hr_version.filename = "__color-coded-pipes__/graphics/" .. color .. "_pipe/" .. color_mode .. "/hr-pipe-remnants.png"
     end
     pipe_remnants.order = pipe_remnants.order .. recipe_order[color]
