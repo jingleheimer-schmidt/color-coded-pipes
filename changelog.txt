@@ -1,7 +1,13 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
-Date: ????
+Date: 23APR2024
+  Features:
+    - added color coded pipes to the main menu simulations
+  Locale:
+    - changed the "neon" color mode setting value to "like new"
   Changes:
+    - added photoshop automation script to generate the color coded pipe graphics
+    - restructured the graphics folder structure to support the photoshop automation script
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.3
 Date: 15APR2024
