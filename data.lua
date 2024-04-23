@@ -159,6 +159,8 @@ for _, color in pairs(colors) do
     end
 end
 
+if settings.startup["color-coded-main-menu-simulations"].value then
+
     for _, simulation in pairs(data.raw["utility-constants"]["default"].main_menu_simulations) do
         simulation.init = simulation.init or ""
         simulation.init = simulation.init .. [[
@@ -231,4 +233,6 @@ end
             end
 
         ]]
+    end
+
 end

@@ -6,5 +6,11 @@ data:extend{
         setting_type = "startup",
         default_value = "colorized",
         allowed_values = { "weathered", "colorized" },
+    },
+    {
+        type = "bool-setting",
+        name = "color-coded-main-menu-simulations",
+        setting_type = "startup",
+        default_value = true,
     }
 }
