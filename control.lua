@@ -13,7 +13,7 @@
 -- ---@param entity LuaEntity
 -- ---@return string
 -- local function get_fluid_name(entity)
---     local fluid_name = ""
+--     local fluid_name = "crude-oil"
 --     local fluidbox = entity.fluidbox
 --     if fluidbox and fluidbox.valid then
 --         for index = 1, #fluidbox do
@@ -21,7 +21,6 @@
 --             if contents then
 --                 local amount = 0
 --                 for name, count in pairs(contents) do
---                     game.print(name .. " " .. count)
 --                     if count > amount then
 --                         amount = count
 --                         fluid_name = name
