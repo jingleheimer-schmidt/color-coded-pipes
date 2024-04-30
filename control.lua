@@ -185,6 +185,11 @@ end
 
 -- --     return closest_color
 -- -- end
+local function reset_technology_effects()
+    for _, force in pairs(game.forces) do
+        force.reset_technology_effects()
+    end
+end
 
 -- -- local function get_fluid_color(fluid_name)
 -- --     local fluid = game.fluid_prototypes[fluid_name]
@@ -203,6 +208,9 @@ script.on_load(function()
 end)
 
 -- -- game.print(serpent.line(selected_fluidbox))
+script.on_configuration_changed(function()
+    reset_technology_effects()
+end)
 
 -- -- for _, fluidbox_fluid in ipairs(selected_fluidbox) do
 -- --     if type(fluidbox_fluid) ~= "userdata" then
