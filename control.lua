@@ -179,6 +179,9 @@ end
 -- --             closest_color = color.name
 -- --         end
 -- --     end
+local function add_commands()
+    commands.add_command("paint-pipes", "- replace base game pipes with colored versions matching their contents", color_code_pipes)
+end
 
 -- --     return closest_color
 -- -- end
@@ -188,9 +191,16 @@ end
 -- --     local fluid_color = fluid.base_color
 -- --     return get_closest_color(fluid_color.r, fluid_color.g, fluid_color.b)
 -- -- end
+script.on_init(function()
+    add_commands()
+    reset_technology_effects()
+end)
 
 -- -- local selected_pipe = game.player.selected
 -- -- local selected_fluidbox = selected_pipe and selected_pipe.fluidbox
+script.on_load(function()
+    add_commands()
+end)
 
 -- -- game.print(serpent.line(selected_fluidbox))
 
