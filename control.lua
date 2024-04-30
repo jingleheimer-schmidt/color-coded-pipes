@@ -120,9 +120,57 @@ end
 -- --         end
 -- --         return math.sqrt(sum)
 -- --     end
+---@param event CustomCommandData
+local function color_code_pipes(event)
+    local player_index = event.player_index
+    if not player_index then return end
+    local player = game.get_player(player_index)
+    if not player then return end
+    local surface = player.surface
+    local force = player.force
+    local found_pipes = surface.find_entities_filtered{name = "pipe", force = force}
+    local found_underground_pipes = surface.find_entities_filtered{name = "pipe-to-ground", force = force}
+    local found_storage_tanks = surface.find_entities_filtered{name = "storage-tank", force = force}
 
 -- --     local min_distance = math.huge
 -- --     local closest_color = "unknown"
+    for _, pipe in pairs(found_pipes) do
+        local fluid_name = get_fluid_name(pipe)
+        local pipe_color = fluid_to_color_map[fluid_name]
+        if pipe_color then
+            pipe.order_upgrade{
+                force = force,
+                target = pipe_color .. "-pipe",
+                player = player,
+                direction = pipe.direction
+            }
+        end
+    end
+    for _, pipe in pairs(found_underground_pipes) do
+        local fluid_name = get_fluid_name(pipe)
+        local pipe_color = fluid_to_color_map[fluid_name]
+        if pipe_color then
+            pipe.order_upgrade{
+                force = force,
+                target = pipe_color .. "-pipe-to-ground",
+                player = player,
+                direction = pipe.direction
+            }
+        end
+    end
+    for _, storage_tank in pairs(found_storage_tanks) do
+        local fluid_name = get_fluid_name(storage_tank)
+        local pipe_color = fluid_to_color_map[fluid_name]
+        if pipe_color then
+            storage_tank.order_upgrade{
+                force = force,
+                target = pipe_color .. "-storage-tank",
+                player = player,
+                direction = storage_tank.direction
+            }
+        end
+    end
+end
 
 -- --     for _, color in pairs(color_rgbs) do
 -- --         local d = distance(color.rgb, {r, g, b})
