@@ -77,6 +77,28 @@ local fluid_to_color_map = {
     ["lubricant"] = "green",
 }
 
+---@param entity LuaEntity
+---@return string
+local function get_fluid_name(entity)
+    local fluid_name = ""
+    local fluidbox = entity.fluidbox
+    if fluidbox and fluidbox.valid then
+        for index = 1, #fluidbox do
+            local contents = fluidbox.get_fluid_system_contents(index)
+            if contents then
+                local amount = 0
+                for name, count in pairs(contents) do
+                    if count > amount then
+                        amount = count
+                        fluid_name = name
+                    end
+                end
+                break
+            end
+        end
+    end
+    return fluid_name
+end
 
 -- -- local function get_closest_color(r, g, b)
 -- --     local color_rgbs = {
