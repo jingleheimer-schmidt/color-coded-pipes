@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.5
+Date: 29APR2024
+  Features:
+    - added color coded storage tanks
+    - added the /paint-pipes chat command to upgrade base pipes to a colored variant based on their contents
+  Graphics:
+    - fixed missing couplings and shadow layers in corner-up-right pipe graphics
+    - removed @0.5x scale item graphics files
+  Changes:
+    - moved variant creation to data-updates to capture more mod changes to the base prototypes
+---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 23APR2024
   Features:
