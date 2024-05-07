@@ -106,6 +106,37 @@ script.on_configuration_changed(function()
     reset_technology_effects()
 end)
 
+local function paint_pipe(player, pipe)
+    local fluid_name = get_fluid_name(pipe)
+    local pipe_type = pipe.type
+    if fluid_name and not (fluid_name == "") then
+        pipe.order_upgrade{
+            force = pipe.force,
+            target = fluid_name .. "-" .. pipe_type,
+            player = player,
+            direction = pipe.direction
+        }
+    end
+end
+
+local function on_player_selected_area(event)
+    local player = game.get_player(event.player_index)
+    if not player then return end
+    local surface = player.surface
+    local force = player.force
+    for _, entity in pairs(event.entities) do
+        if entity.type == "pipe" then
+            paint_pipe(player, entity)
+        elseif entity.type == "pipe-to-ground" then
+            paint_pipe(player, entity)
+        elseif entity.type == "storage-tank" then
+            paint_pipe(player, entity)
+        end
+    end
+end
+
+script.on_event(defines.events.on_player_selected_area, on_player_selected_area)
+
 
 -- chat command to "unpaint" all the pipes
 
