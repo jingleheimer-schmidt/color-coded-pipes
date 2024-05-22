@@ -99,6 +99,14 @@ local function create_color_pipe_entity(color)
     pipe.localised_name = pipe_localised_name
     pipe.corpse = color .. "-pipe-remnants"
     pipe.icon = "__color-coded-pipes__/graphics/pipe-icon/" .. color_mode .. "_" .. color .. "-pipe-icon.png"
+    pipe.fluid_box.pipe_covers.north.layers[1].filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-north@0.5x.png"
+    pipe.fluid_box.pipe_covers.north.layers[1].hr_version.filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-north.png"
+    -- pipe.fluid_box.pipe_covers.east.layers[1].filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-east@0.5x.png"
+    -- pipe.fluid_box.pipe_covers.east.layers[1].hr_version.filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-east.png"
+    pipe.fluid_box.pipe_covers.south.layers[1].filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-south@0.5x.png"
+    pipe.fluid_box.pipe_covers.south.layers[1].hr_version.filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-south.png"
+    -- pipe.fluid_box.pipe_covers.west.layers[1].filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-west@0.5x.png"
+    -- pipe.fluid_box.pipe_covers.west.layers[1].hr_version.filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-west.png"
     data:extend{ pipe }
 end
 
