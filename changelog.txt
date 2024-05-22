@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.6
+Date: ????
+  Changes:
+    - cleaned up the pipe window mask graphics
+  Features:
+    - added a hidden pipe variant for each fluid
+    - added a pipe-painting selection tool and shortcut
+---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 29APR2024
   Features:
