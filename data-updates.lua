@@ -593,6 +593,7 @@ end
 
 local pipe_painting_planner = table.deepcopy(data.raw["selection-tool"]["selection-tool"])
 pipe_painting_planner.name = "pipe-painting-planner"
+pipe_painting_planner.entity_type_filters = { "pipe", "pipe-to-ground", "storage-tank" }
 
 data:extend{ pipe_painting_planner }
 
