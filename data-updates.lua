@@ -577,15 +577,15 @@ for _, fluid in pairs(fluids) do
 
     create_fluid_color_pipe_entity(fluid_name, fluid_color)
     create_fluid_color_pipe_item(fluid_name, fluid_color)
-    create_fluid_color_pipe_recipe(fluid_name, fluid_color)
+    -- create_fluid_color_pipe_recipe(fluid_name, fluid_color)
 
     create_fluid_color_pipe_to_ground_entity(fluid_name, fluid_color)
     create_fluid_color_pipe_to_ground_item(fluid_name, fluid_color)
-    create_fluid_color_pipe_to_ground_recipe(fluid_name, fluid_color)
+    -- create_fluid_color_pipe_to_ground_recipe(fluid_name, fluid_color)
 
     create_fluid_color_storage_tank_entity(fluid_name, fluid_color)
     create_fluid_color_storage_tank_item(fluid_name, fluid_color)
-    create_fluid_color_storage_tank_recipe(fluid_name, fluid_color)
+    -- create_fluid_color_storage_tank_recipe(fluid_name, fluid_color)
 
     ::next_fluid::
 
