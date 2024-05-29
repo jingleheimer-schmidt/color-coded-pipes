@@ -613,7 +613,8 @@ if settings.startup["color-coded-main-menu-simulations"].value then
                     local pipe_color = fluid_to_color_map[fluid_name]
                     if pipe_color then
                         surface.create_entity{
-                            name = pipe_color .. "-pipe",
+                            -- name = pipe_color .. "-pipe",
+                            name = fluid_name .. "-pipe",
                             position = pipe.position,
                             force = pipe.force,
                             direction = pipe.direction,
@@ -629,7 +630,8 @@ if settings.startup["color-coded-main-menu-simulations"].value then
                     local pipe_color = fluid_to_color_map[fluid_name]
                     if pipe_color then
                         surface.create_entity{
-                            name = pipe_color .. "-pipe-to-ground",
+                            -- name = pipe_color .. "-pipe-to-ground",
+                            name = fluid_name .. "-pipe-to-ground",
                             position = pipe_to_ground.position,
                             force = pipe_to_ground.force,
                             direction = pipe_to_ground.direction,
@@ -645,7 +647,8 @@ if settings.startup["color-coded-main-menu-simulations"].value then
                     local pipe_color = fluid_to_color_map[fluid_name]
                     if pipe_color then
                         surface.create_entity{
-                            name = pipe_color .. "-storage-tank",
+                            -- name = pipe_color .. "-storage-tank",
+                            name = fluid_name .. "-storage-tank",
                             position = storage_tank.position,
                             force = storage_tank.force,
                             direction = storage_tank.direction,
