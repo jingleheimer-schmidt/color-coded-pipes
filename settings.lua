@@ -6,6 +6,7 @@ data:extend{
         setting_type = "startup",
         default_value = "colorized",
         allowed_values = { "weathered", "colorized" },
+        hidden = true,
     },
     {
         type = "bool-setting",
