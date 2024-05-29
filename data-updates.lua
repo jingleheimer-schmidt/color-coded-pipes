@@ -57,6 +57,166 @@ local function replace_dash_with_underscore(str)
 end
 
 
+-- ----------------------------------------------------------
+-- -- add painted versions of all entities with fluidboxes --
+-- ----------------------------------------------------------
+
+-- -- https://lua-api.factorio.com/latest/types/FluidBox.html
+-- local entities_with_fluidboxes = {
+--     "boiler",
+--     "crafting-machine",
+--     "fluid-turret",
+--     "generator",
+--     "mining-drill",
+--     "offshore-pump",
+--     "pipe",
+--     "pipe-to-ground",
+--     "pump",
+--     "storage-tank",
+-- }
+
+-- local function color_code_fluid_boxes(prototype)
+--     local fluid_boxes = {
+--         ["fluid_box"] = prototype.fluid_box,
+--         ["output_fluid_box"] = prototype.output_fluid_box,
+--         ["input_fluid_box"] = prototype.input_fluid_box,
+--     }
+--     if prototype.fluid_boxes then
+--         for index, fluid_box in pairs(prototype.fluid_boxes) do
+--             if type(fluid_box) == "table" then
+--                 fluid_boxes[index] = fluid_box
+--             end
+--         end
+--     end
+--     local extend_color_coded_prototype = false
+--     for _, fluid_box in pairs(fluid_boxes) do
+--         if not fluid_box then goto next_fluid_box end
+--         local pipe_covers = fluid_box.pipe_covers
+--         local filter = fluid_box.filter
+--         if not (pipe_covers and filter) then goto next_fluid_box end
+--         local filter_fluid = data.raw["fluid"][filter]
+--         if not filter_fluid then goto next_fluid_box end
+--         local fluid_color = filter_fluid.base_color
+--         if not (fluid_color and fluid_color.r and fluid_color.g and fluid_color.b) then goto next_fluid_box end
+--         local directions = { "north", "east", "south", "west" }
+--         for _, direction in pairs(directions) do
+--             local original_layer = table.deepcopy(pipe_covers[direction].layers[1]) ---@type data.Sprite
+--             local overlay_layer = table.deepcopy(pipe_covers[direction].layers[1]) ---@type data.Sprite
+--             local shadow_layer = table.deepcopy(pipe_covers[direction].layers[2]) ---@type data.Sprite
+--             overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
+--             overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
+--             overlay_layer.tint = fluid_color
+--             overlay_layer.hr_version.tint = fluid_color
+--             pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
+--         end
+--         extend_color_coded_prototype = true
+--         ::next_fluid_box::
+--     end
+--     return extend_color_coded_prototype
+-- end
+
+-- local entities_to_extend = {}
+-- for _, entity_type in pairs(entities_with_fluidboxes) do
+--     local prototypes = data.raw[entity_type]
+--     if not prototypes then goto next_entity_type end
+--     for _, prototype in pairs(prototypes) do
+--         if not prototype.fluid_boxes then goto next_prototype end
+--         local color_coded_prototype = table.deepcopy(prototype)
+--         color_coded_prototype.name = "color-coded-" .. prototype.name
+--         color_coded_prototype.localised_name = { "", { "entity-name." .. prototype.name }, " (", { "color-coded-entity.color-coded" }, ")" }
+--         color_coded_prototype.placeable_by = color_coded_prototype.placeable_by or { item = prototype.name, count = 1 }
+--         local extend_color_coded_prototype = color_code_fluid_boxes(color_coded_prototype)
+--         if extend_color_coded_prototype then
+--             table.insert(entities_to_extend, color_coded_prototype)
+--         end
+--         ::next_prototype::
+--     end
+--     ::next_entity_type::
+-- end
+-- data:extend(entities_to_extend)
+
+
+
+-- local recipe_entities_to_extend = {}
+-- for _, recipe in pairs(data.raw["recipe"]) do
+--     if recipe.results then
+--         for _, result in pairs(recipe.results) do
+--             if result.type == "fluid" then
+--                 local fluid = data.raw["fluid"][result.name]
+--                 if fluid then
+--                     local fluid_color = fluid.base_color
+--                     if fluid_color and fluid_color.r and fluid_color.g and fluid_color.b then
+--                         local crafting_entity = get_crafting_entity(recipe)
+--                         if crafting_entity then
+--                             local color_coded_entity = table.deepcopy(crafting_entity)
+--                             color_coded_entity.name = "color-coded-" .. recipe.name .. "-" .. crafting_entity.name
+--                             color_coded_entity.localised_name = { "", { "color-coded-entity.color-coded" }, " ", { "recipe-name." .. recipe.name }, " ", { "entity-name." .. crafting_entity.name } }
+--                             color_coded_entity.placeable_by = color_coded_entity.placeable_by or { item = crafting_entity.name, count = 1 }
+--                             local extend_color_coded_entity = color_code_fluid_boxes(color_coded_entity)
+--                             if extend_color_coded_entity then
+--                                 table.insert(recipe_entities_to_extend, color_coded_entity)
+--                             end
+                            
+--             end
+--     end
+-- end
+
+
+
+
+
+
+-- local color_coded_entities = {}
+-- for _, prototype in pairs(data.raw) do
+--     for name, entity in pairs(prototype) do
+--         local color_coded_entity = table.deepcopy(entity)
+--         color_coded_entity.name = "color-coded-" .. name
+--         color_coded_entity.localised_name = { "", { "entity-name." .. name }, " (", { "color-coded-entity.color-coded" }, ")" }
+--         color_coded_entity.placeable_by = color_coded_entity.placeable_by or { item = name, count = 1 }
+--         local extend_color_coded_entity = false
+--         local fluid_boxes = {
+--             ["fluid_box"] = color_coded_entity.fluid_box,
+--             ["output_fluid_box"] = color_coded_entity.output_fluid_box,
+--             ["input_fluid_box"] = color_coded_entity.input_fluid_box,
+--         }
+--         if color_coded_entity.fluid_boxes then
+--             for index, fluid_box in pairs(color_coded_entity.fluid_boxes) do
+--                 fluid_boxes["" .. index .. ""] = fluid_box
+--             end
+--         end
+--         for _, fluid_box in pairs(fluid_boxes) do
+--             if not fluid_box then goto next_fluid_box end
+--             if not (type(fluid_box) == "table") then goto next_fluid_box end
+--             local pipe_covers = fluid_box.pipe_covers
+--             local filter = fluid_box.filter
+--             if not (pipe_covers and filter) then goto next_fluid_box end
+--             extend_color_coded_entity = true
+--             local filter_fluid = data.raw["fluid"][filter]
+--             if not filter_fluid then goto next_fluid_box end
+--             local fluid_color = filter_fluid.base_color
+--             if not fluid_color and not (fluid_color.r and fluid_color.g and fluid_color.b) then goto next_fluid_box end
+--             local directions = { "north", "east", "south", "west" }
+--             for _, direction in pairs(directions) do
+--                 local original_layer = table.deepcopy(pipe_covers[direction].layers[1]) ---@type data.Sprite
+--                 local overlay_layer = table.deepcopy(pipe_covers[direction].layers[1]) ---@type data.Sprite
+--                 local shadow_layer = table.deepcopy(pipe_covers[direction].layers[2]) ---@type data.Sprite
+--                 overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
+--                 overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
+--                 overlay_layer.tint = fluid_color
+--                 overlay_layer.hr_version.tint = fluid_color
+--                 pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
+--             end
+--             ::next_fluid_box::
+--         end
+--         if extend_color_coded_entity then
+--             table.insert(color_coded_entities, color_coded_entity)
+--         end
+--     end
+-- end
+-- data:extend(color_coded_entities)
+
+-- -- i think i need to do pipe_pictures too :0
+
 ---------------------------------------------------
 -- create subgroups for the color-coded variants --
 ---------------------------------------------------
@@ -99,14 +259,13 @@ local function create_color_pipe_entity(color)
     pipe.localised_name = pipe_localised_name
     pipe.corpse = color .. "-pipe-remnants"
     pipe.icon = "__color-coded-pipes__/graphics/pipe-icon/" .. color_mode .. "_" .. color .. "-pipe-icon.png"
-    pipe.fluid_box.pipe_covers.north.layers[1].filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-north@0.5x.png"
-    pipe.fluid_box.pipe_covers.north.layers[1].hr_version.filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-north.png"
-    -- pipe.fluid_box.pipe_covers.east.layers[1].filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-east@0.5x.png"
-    -- pipe.fluid_box.pipe_covers.east.layers[1].hr_version.filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-east.png"
-    pipe.fluid_box.pipe_covers.south.layers[1].filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-south@0.5x.png"
-    pipe.fluid_box.pipe_covers.south.layers[1].hr_version.filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-south.png"
-    -- pipe.fluid_box.pipe_covers.west.layers[1].filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-west@0.5x.png"
-    -- pipe.fluid_box.pipe_covers.west.layers[1].hr_version.filename = "__color-coded-pipes__/graphics/pipe-covers/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-west.png"
+    if pipe.fluid_box.pipe_covers then
+        local directions = { "north", "east", "south", "west" }
+        for _, direction in pairs(directions) do
+            pipe.fluid_box.pipe_covers[direction].layers[1].filename = "__color-coded-pipes__/graphics/pipe-cover-" .. direction .. "/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-" .. direction .. "@0.5x.png"
+            pipe.fluid_box.pipe_covers[direction].layers[1].hr_version.filename = "__color-coded-pipes__/graphics/pipe-cover-" .. direction .. "/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-" .. direction .. ".png"
+        end
+    end
     data:extend{ pipe }
 end
 
@@ -162,6 +321,13 @@ local function create_color_pipe_to_ground_entity(color)
     pipe_to_ground.localised_name = pipe_to_ground_localised_name
     -- pipe_to_ground.corpse = color .. "-pipe-to-ground-remnants"
     pipe_to_ground.icon = "__color-coded-pipes__/graphics/pipe-to-ground-icon/" .. color_mode .. "_" .. color .. "-pipe-to-ground-icon.png"
+    if pipe_to_ground.fluid_box.pipe_covers then
+        local directions = { "north", "east", "south", "west" }
+        for _, direction in pairs(directions) do
+            pipe_to_ground.fluid_box.pipe_covers[direction].layers[1].filename = "__color-coded-pipes__/graphics/pipe-cover-" .. direction .. "/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-" .. direction .. "@0.5x.png"
+            pipe_to_ground.fluid_box.pipe_covers[direction].layers[1].hr_version.filename = "__color-coded-pipes__/graphics/pipe-cover-" .. direction .. "/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-" .. direction .. ".png"
+        end
+    end
     data:extend{ pipe_to_ground }
 end
 
@@ -214,6 +380,13 @@ local function create_color_storage_tank_entity(color)
     storage_tank.localised_name = storage_tank_localised_name
     -- storage_tank.corpse = color .. "-storage-tank-remnants"
     storage_tank.icon = "__color-coded-pipes__/graphics/storage-tank-icon/" .. color_mode .. "_" .. color .. "-storage-tank-icon.png"
+    if storage_tank.fluid_box.pipe_covers then
+        local directions = { "north", "east", "south", "west" }
+        for _, direction in pairs(directions) do
+            storage_tank.fluid_box.pipe_covers[direction].layers[1].filename = "__color-coded-pipes__/graphics/pipe-cover-" .. direction .. "/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-" .. direction .. "@0.5x.png"
+            storage_tank.fluid_box.pipe_covers[direction].layers[1].hr_version.filename = "__color-coded-pipes__/graphics/pipe-cover-" .. direction .. "/" .. color_mode .. "_" .. color .. "-hr-pipe-cover-" .. direction .. ".png"
+        end
+    end
     data:extend{ storage_tank }
 end
 
@@ -357,6 +530,20 @@ local function create_fluid_color_pipe_entity(fluid_name, fluid_color)
 
     pipe.icons = create_fluid_color_pipe_icons(pipe, fluid_color)
 
+    if pipe.fluid_box.pipe_covers then
+        local directions = { "north", "east", "south", "west" }
+        for _, direction in pairs(directions) do
+            local original_layer = table.deepcopy(pipe.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
+            local overlay_layer = table.deepcopy(pipe.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
+            local shadow_layer = table.deepcopy(pipe.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
+            overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
+            overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
+            overlay_layer.tint = fluid_color
+            overlay_layer.hr_version.tint = fluid_color
+            pipe.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
+        end
+    end
+
     data:extend{ pipe }
 end
 
@@ -432,6 +619,20 @@ local function create_fluid_color_pipe_to_ground_entity(fluid_name, fluid_color)
     pipe_to_ground.localised_name = pipe_to_ground_localised_name
     -- pipe_to_ground.corpse = name .. "-pipe-to-ground-remnants"
     pipe_to_ground.icons = create_fluid_color_pipe_to_ground_icons(pipe_to_ground, fluid_color)
+
+    if pipe_to_ground.fluid_box.pipe_covers then
+        local directions = { "north", "east", "south", "west" }
+        for _, direction in pairs(directions) do
+            local original_layer = table.deepcopy(pipe_to_ground.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
+            local overlay_layer = table.deepcopy(pipe_to_ground.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
+            local shadow_layer = table.deepcopy(pipe_to_ground.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
+            overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
+            overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
+            overlay_layer.tint = fluid_color
+            overlay_layer.hr_version.tint = fluid_color
+            pipe_to_ground.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
+        end
+    end
     data:extend{ pipe_to_ground }
 end
 
@@ -508,6 +709,21 @@ local function create_fluid_color_storage_tank_entity(fluid_name, fluid_color)
     storage_tank.localised_name = storage_tank_localised_name
     -- storage_tank.corpse = color .. "-storage-tank-remnants"
     storage_tank.icons = create_fluid_color_storage_tank_icons(storage_tank, fluid_color)
+
+    if storage_tank.fluid_box.pipe_covers then
+        local directions = { "north", "east", "south", "west" }
+        for _, direction in pairs(directions) do
+            local original_layer = table.deepcopy(storage_tank.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
+            local overlay_layer = table.deepcopy(storage_tank.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
+            local shadow_layer = table.deepcopy(storage_tank.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
+            overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
+            overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
+            overlay_layer.tint = fluid_color
+            overlay_layer.hr_version.tint = fluid_color
+            storage_tank.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
+        end
+    end
+
     data:extend{ storage_tank }
 end
 
