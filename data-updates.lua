@@ -535,7 +535,7 @@ end
 
 for name, color in pairs(rgb_colors) do
 
-    -- color.a = 1
+    color.a = 0.55
     local built_from_base_item = data.raw["fluid"][name] and true or false
 
     create_fluid_color_pipe_entity(name, color, built_from_base_item)
