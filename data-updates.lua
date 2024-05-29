@@ -429,7 +429,6 @@ local function create_fluid_color_pipe_entity(name, color, built_from_base_item)
     if not pipe then log("pipe entity not found") return end
 
     local pipe_name = name .. "-pipe"
-    local pipe_localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
     if built_from_base_item then
         pipe.placeable_by = { item = pipe.name, count = 1 }
     else
@@ -448,24 +447,24 @@ local function create_fluid_color_pipe_entity(name, color, built_from_base_item)
         pipe.pictures[property_name] = {}
         pipe.pictures[property_name].layers = { original_layer, overlay_layer }
     end
-    pipe.localised_name = pipe_localised_name
+    pipe.localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
     -- pipe.corpse = name .. "-pipe-remnants"
 
     pipe.icons = create_fluid_color_pipe_icons(pipe, color)
 
-    -- if pipe.fluid_box.pipe_covers then
-    --     local directions = { "north", "east", "south", "west" }
-    --     for _, direction in pairs(directions) do
-    --         local original_layer = table.deepcopy(pipe.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
-    --         local overlay_layer = table.deepcopy(pipe.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
-    --         local shadow_layer = table.deepcopy(pipe.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
-    --         overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
-    --         overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
-    --         overlay_layer.tint = fluid_color
-    --         overlay_layer.hr_version.tint = fluid_color
-    --         pipe.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
-    --     end
-    -- end
+    if pipe.fluid_box.pipe_covers then
+        local directions = { "north", "east", "south", "west" }
+        for _, direction in pairs(directions) do
+            local original_layer = table.deepcopy(pipe.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
+            local overlay_layer = table.deepcopy(pipe.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
+            local shadow_layer = table.deepcopy(pipe.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
+            overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
+            overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
+            overlay_layer.tint = fluid_color
+            overlay_layer.hr_version.tint = fluid_color
+            pipe.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
+        end
+    end
 
     data:extend{ pipe }
 end
@@ -477,10 +476,9 @@ local function create_fluid_color_pipe_item(name, color)
     local pipe_item = table.deepcopy(data.raw["item"]["pipe"])
     if not pipe_item then log("pipe item not found") return end
     local pipe_item_name = name .. "-pipe"
-    local pipe_item_localised_name = { "", { "fluid-name." .. name }, " ", { "entity-name.pipe" } }
     pipe_item.name = pipe_item_name
     pipe_item.place_result = pipe_item_name
-    pipe_item.localised_name = pipe_item_localised_name
+    pipe_item.localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
     pipe_item.icons = create_fluid_color_pipe_icons(pipe_item, color)
     pipe_item.order = get_order(pipe_item, name)
     pipe_item.subgroup = get_subgroup("pipe", name)
@@ -494,7 +492,6 @@ local function create_fluid_color_pipe_recipe(name, built_from_base_item)
     local pipe_recipe = table.deepcopy(data.raw["recipe"]["pipe"])
     if not pipe_recipe then log("pipe recipe not found") return end
     local pipe_recipe_name = name .. "-pipe"
-    local pipe_recipe_localised_name = { "", { "fluid-name." .. name }, " ", { "entity-name.pipe" } }
     pipe_recipe.name = pipe_recipe_name
     pipe_recipe.result = pipe_recipe.result and pipe_recipe_name or nil
     pipe_recipe.results = pipe_recipe.results and { { type = "item", name = pipe_recipe_name, amount = 1 } } or nil
@@ -515,7 +512,7 @@ local function create_fluid_color_pipe_recipe(name, built_from_base_item)
             pipe_recipe.expensive.hidden = true
         end
     end
-    pipe_recipe.localised_name = pipe_recipe_localised_name
+    pipe_recipe.localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
     data:extend{ pipe_recipe }
 end
 
@@ -542,7 +539,6 @@ local function create_fluid_color_pipe_to_ground_entity(name, color, placeable_b
     local pipe_to_ground = table.deepcopy(data.raw["pipe-to-ground"]["pipe-to-ground"])
     if not pipe_to_ground then log("pipe-to-ground entity not found") return end
     local pipe_to_ground_name = name .. "-pipe-to-ground"
-    local pipe_to_ground_localised_name = { "", { "fluid-name." .. name }, " ", { "entity-name.pipe-to-ground" } }
     if placeable_by_base_item then
         pipe_to_ground.placeable_by = { item = pipe_to_ground.name, count = 1 }
     else
@@ -560,23 +556,23 @@ local function create_fluid_color_pipe_to_ground_entity(name, color, placeable_b
         pipe_to_ground.pictures[property_name] = {}
         pipe_to_ground.pictures[property_name].layers = { original_layer, overlay_layer }
     end
-    pipe_to_ground.localised_name = pipe_to_ground_localised_name
+    pipe_to_ground.localised_name = { "color-coded.name", { "entity-name.pipe-to-ground" }, { "fluid-name." .. name } }
     -- pipe_to_ground.corpse = name .. "-pipe-to-ground-remnants"
     pipe_to_ground.icons = create_fluid_color_pipe_to_ground_icons(pipe_to_ground, color)
 
-    -- if pipe_to_ground.fluid_box.pipe_covers then
-    --     local directions = { "north", "east", "south", "west" }
-    --     for _, direction in pairs(directions) do
-    --         local original_layer = table.deepcopy(pipe_to_ground.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
-    --         local overlay_layer = table.deepcopy(pipe_to_ground.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
-    --         local shadow_layer = table.deepcopy(pipe_to_ground.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
-    --         overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
-    --         overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
-    --         overlay_layer.tint = fluid_color
-    --         overlay_layer.hr_version.tint = fluid_color
-    --         pipe_to_ground.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
-    --     end
-    -- end
+    if pipe_to_ground.fluid_box.pipe_covers then
+        local directions = { "north", "east", "south", "west" }
+        for _, direction in pairs(directions) do
+            local original_layer = table.deepcopy(pipe_to_ground.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
+            local overlay_layer = table.deepcopy(pipe_to_ground.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
+            local shadow_layer = table.deepcopy(pipe_to_ground.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
+            overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
+            overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
+            overlay_layer.tint = fluid_color
+            overlay_layer.hr_version.tint = fluid_color
+            pipe_to_ground.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
+        end
+    end
     data:extend{ pipe_to_ground }
 end
 
@@ -587,10 +583,9 @@ local function create_fluid_color_pipe_to_ground_item(name, color)
     local pipe_to_ground_item = table.deepcopy(data.raw["item"]["pipe-to-ground"])
     if not pipe_to_ground_item then log("pipe-to-ground item not found") return end
     local pipe_to_ground_item_name = name .. "-pipe-to-ground"
-    local pipe_to_ground_item_localised_name = { "", { "fluid-name." .. name }, " ", { "entity-name.pipe-to-ground" } }
     pipe_to_ground_item.name = pipe_to_ground_item_name
     pipe_to_ground_item.place_result = pipe_to_ground_item_name
-    pipe_to_ground_item.localised_name = pipe_to_ground_item_localised_name
+    pipe_to_ground_item.localised_name = { "color-coded.name", { "entity-name.pipe-to-ground" }, { "fluid-name." .. name } }
     pipe_to_ground_item.icons = create_fluid_color_pipe_to_ground_icons(pipe_to_ground_item, color)
     pipe_to_ground_item.order = get_order(pipe_to_ground_item, name)
     pipe_to_ground_item.subgroup = get_subgroup("pipe-to-ground", name)
@@ -604,7 +599,6 @@ local function create_fluid_color_pipe_to_ground_recipe(name, built_from_base_it
     local pipe_to_ground_recipe = table.deepcopy(data.raw["recipe"]["pipe-to-ground"])
     if not pipe_to_ground_recipe then log("pipe-to-ground recipe not found") return end
     local pipe_to_ground_recipe_name = name .. "-pipe-to-ground"
-    local pipe_to_ground_recipe_localised_name = { "", { "fluid-name." .. name }, " ", { "entity-name.pipe-to-ground" } }
     pipe_to_ground_recipe.name = pipe_to_ground_recipe_name
     pipe_to_ground_recipe.result = pipe_to_ground_recipe.result and pipe_to_ground_recipe_name or nil
     pipe_to_ground_recipe.results = pipe_to_ground_recipe.results and { { type = "item", name = pipe_to_ground_recipe_name, amount = 1 } } or nil
@@ -625,7 +619,7 @@ local function create_fluid_color_pipe_to_ground_recipe(name, built_from_base_it
             pipe_to_ground_recipe.expensive.hidden = true
         end
     end
-    pipe_to_ground_recipe.localised_name = pipe_to_ground_recipe_localised_name
+    pipe_to_ground_recipe.localised_name = { "color-coded.name", { "entity-name.pipe-to-ground" }, { "fluid-name." .. name } }
     data:extend{ pipe_to_ground_recipe }
 end
 
@@ -652,7 +646,6 @@ local function create_fluid_color_storage_tank_entity(fluid_name, fluid_color, p
     local storage_tank = table.deepcopy(data.raw["storage-tank"]["storage-tank"])
     if not storage_tank then log("storage-tank entity not found") return end
     local storage_tank_name = fluid_name .. "-storage-tank"
-    local storage_tank_localised_name = { "", { "fluid-name." .. fluid_name }, " ", { "entity-name.storage-tank" } }
     if placeable_by_base_item then
         storage_tank.placeable_by = { item = storage_tank.name, count = 1 }
     else
@@ -671,7 +664,7 @@ local function create_fluid_color_storage_tank_entity(fluid_name, fluid_color, p
         [2] = overlay_sheet,
         [3] = shadow_sheet
     }
-    storage_tank.localised_name = storage_tank_localised_name
+    storage_tank.localised_name = { "color-coded.name", { "entity-name.storage-tank" }, { "fluid-name." .. fluid_name } }
     -- storage_tank.corpse = color .. "-storage-tank-remnants"
     storage_tank.icons = create_fluid_color_storage_tank_icons(storage_tank, fluid_color)
 
@@ -699,10 +692,9 @@ local function create_fluid_color_storage_tank_item(name, color)
     local storage_tank = table.deepcopy(data.raw["item"]["storage-tank"])
     if not storage_tank then log("storage-tank item not found") return end
     local storage_tank_name = name .. "-storage-tank"
-    local storage_tank_localised_name = { "", { "fluid-name." .. name }, " ", { "entity-name.storage-tank" } }
     storage_tank.name = storage_tank_name
     storage_tank.place_result = storage_tank_name
-    storage_tank.localised_name = storage_tank_localised_name
+    storage_tank.localised_name = { "color-coded.name", { "entity-name.storage-tank" }, { "fluid-name." .. name } }
     storage_tank.icons = create_fluid_color_storage_tank_icons(storage_tank, color)
     storage_tank.order = get_order(storage_tank, name)
     storage_tank.subgroup = get_subgroup("storage-tank", name)
@@ -716,7 +708,6 @@ local function create_fluid_color_storage_tank_recipe(name, built_from_base_item
     local storage_tank = table.deepcopy(data.raw["recipe"]["storage-tank"])
     if not storage_tank then log("storage-tank recipe not found") return end
     local storage_tank_name = name .. "-storage-tank"
-    local storage_tank_localised_name = { "", { "fluid-name." .. name }, " ", { "entity-name.storage-tank" } }
     storage_tank.name = storage_tank_name
     storage_tank.result = storage_tank.result and storage_tank_name or nil
     storage_tank.results = storage_tank.results and { { type = "item", name = storage_tank_name, amount = 1 } } or nil
@@ -737,7 +728,7 @@ local function create_fluid_color_storage_tank_recipe(name, built_from_base_item
             storage_tank.expensive.hidden = true
         end
     end
-    storage_tank.localised_name = storage_tank_localised_name
+    storage_tank.localised_name = { "color-coded.name", { "entity-name.storage-tank" }, { "fluid-name." .. name } }
     for _, technology in pairs(data.raw["technology"]) do
         if technology.effects then
             for _, effect in pairs(technology.effects) do
