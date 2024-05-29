@@ -95,6 +95,23 @@ storage_tank_subgroup.order = storage_tank_subgroup.order .. "c"
 
 data:extend{ pipe_subgroup, pipe_to_ground_subgroup, storage_tank_subgroup }
 
+local fluid_color_pipe_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+if not fluid_color_pipe_subgroup then log("subgroup not found") end
+fluid_color_pipe_subgroup.name = "fluid-color-coded-pipe"
+fluid_color_pipe_subgroup.order = fluid_color_pipe_subgroup.order .. "a[fluid]"
+
+local fluid_color_pipe_to_ground_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+if not fluid_color_pipe_to_ground_subgroup then log("subgroup not found") end
+fluid_color_pipe_to_ground_subgroup.name = "fluid-color-coded-pipe-to-ground"
+fluid_color_pipe_to_ground_subgroup.order = fluid_color_pipe_to_ground_subgroup.order .. "b[fluid]"
+
+local fluid_color_storage_tank_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+if not fluid_color_storage_tank_subgroup then log("subgroup not found") end
+fluid_color_storage_tank_subgroup.name = "fluid-color-coded-storage-tank"
+fluid_color_storage_tank_subgroup.order = fluid_color_storage_tank_subgroup.order .. "c[fluid]"
+
+data:extend{ fluid_color_pipe_subgroup, fluid_color_pipe_to_ground_subgroup, fluid_color_storage_tank_subgroup }
+
 
 ---------------------------------
 -- create color-coded entities --
@@ -366,6 +383,18 @@ local function get_order(item, color_name)
 end
 
 
+---@param type string
+---@param name string
+---@return string
+local function get_subgroup(type, name)
+    if data.raw["fluid"][name] then
+        return "fluid-color-coded-" .. type
+    else
+        return "color-coded-" .. type
+    end
+end
+
+
 ---@param pipe data.ItemPrototype | data.PipePrototype
 ---@param fluid_color Color
 ---@return data.IconData
@@ -391,7 +420,7 @@ local function create_fluid_color_pipe_entity(name, color, built_from_base_item)
     if not pipe then log("pipe entity not found") return end
 
     local pipe_name = name .. "-pipe"
-    local pipe_localised_name = { "", { "fluid-name." .. name }, " ", { "entity-name.pipe" } }
+    local pipe_localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
     if built_from_base_item then
         pipe.placeable_by = { item = pipe.name, count = 1 }
     else
@@ -445,7 +474,7 @@ local function create_fluid_color_pipe_item(name, color)
     pipe_item.localised_name = pipe_item_localised_name
     pipe_item.icons = create_fluid_color_pipe_icons(pipe_item, color)
     pipe_item.order = get_order(pipe_item, name)
-    pipe_item.subgroup = "color-coded-pipe"
+    pipe_item.subgroup = get_subgroup("pipe", name)
     data:extend{ pipe_item }
 end
 
@@ -555,7 +584,7 @@ local function create_fluid_color_pipe_to_ground_item(name, color)
     pipe_to_ground_item.localised_name = pipe_to_ground_item_localised_name
     pipe_to_ground_item.icons = create_fluid_color_pipe_to_ground_icons(pipe_to_ground_item, color)
     pipe_to_ground_item.order = get_order(pipe_to_ground_item, name)
-    pipe_to_ground_item.subgroup = "color-coded-pipe-to-ground"
+    pipe_to_ground_item.subgroup = get_subgroup("pipe-to-ground", name)
     data:extend{ pipe_to_ground_item }
 end
 
@@ -667,7 +696,7 @@ local function create_fluid_color_storage_tank_item(name, color)
     storage_tank.localised_name = storage_tank_localised_name
     storage_tank.icons = create_fluid_color_storage_tank_icons(storage_tank, color)
     storage_tank.order = get_order(storage_tank, name)
-    storage_tank.subgroup = "color-coded-storage-tank"
+    storage_tank.subgroup = get_subgroup("storage-tank", name)
     data:extend{ storage_tank }
 end
 
@@ -756,7 +785,7 @@ end
 
 for name, color in pairs(rgb_colors) do
 
-    color.a = 0.75
+    -- color.a = 1
     local built_from_base_item = data.raw["fluid"][name] and true or false
 
     create_fluid_color_pipe_entity(name, color, built_from_base_item)
