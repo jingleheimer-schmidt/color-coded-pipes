@@ -460,8 +460,8 @@ local function create_fluid_color_pipe_entity(name, color, built_from_base_item)
             local shadow_layer = table.deepcopy(pipe.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
             overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
             overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
-            overlay_layer.tint = fluid_color
-            overlay_layer.hr_version.tint = fluid_color
+            overlay_layer.tint = color
+            overlay_layer.hr_version.tint = color
             pipe.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
         end
     end
@@ -568,8 +568,8 @@ local function create_fluid_color_pipe_to_ground_entity(name, color, placeable_b
             local shadow_layer = table.deepcopy(pipe_to_ground.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
             overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
             overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
-            overlay_layer.tint = fluid_color
-            overlay_layer.hr_version.tint = fluid_color
+            overlay_layer.tint = color
+            overlay_layer.hr_version.tint = color
             pipe_to_ground.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
         end
     end
