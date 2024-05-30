@@ -7,16 +7,18 @@ data:extend{
         default_value = "colorized",
         allowed_values = { "weathered", "colorized" },
         hidden = true,
+        order = "a",
     },
     {
         type = "bool-setting",
         name = "color-coded-main-menu-simulations",
         setting_type = "startup",
         default_value = true,
+        order = "a",
     }
 }
 
-local a = 0.55
+local a = 0.45
 local rgb_colors = {
     red =    { r = 0.9, g = 0.2, b = 0.2, a = a },
     orange = { r = 0.9, g = 0.5, b = 0.2, a = a },
@@ -51,3 +53,23 @@ for name, color in pairs(rgb_colors) do
     }
     data:extend{color_setting}
 end
+
+data:extend{
+    {
+        type = "bool-setting",
+        name = "color-coded-pipes-planner-tooltip",
+        setting_type = "runtime-per-user",
+        default_value = false,
+        order = "a",
+    }
+}
+
+data:extend{
+    {
+        type = "bool-setting",
+        name = "color-coded-pipes-bots-required",
+        setting_type = "runtime-per-user",
+        default_value = true,
+        order = "a",
+    }
+}

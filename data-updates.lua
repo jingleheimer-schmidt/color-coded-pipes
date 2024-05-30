@@ -74,6 +74,7 @@ local rgb_colors = {
 for _, fluid in pairs(data.raw["fluid"]) do
     if fluid.base_color then
         rgb_colors[fluid.name] = fluid.base_color
+        rgb_colors[fluid.name].a = 0.5
     end
 end
 
@@ -125,6 +126,8 @@ data:extend{ fluid_color_pipe_subgroup, fluid_color_pipe_to_ground_subgroup, flu
 ---------------------------------
 -- create color-coded entities --
 ---------------------------------
+
+data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = "storage-tank"
 
 ---@param item data.ItemPrototype
 ---@param color_name string?
@@ -185,6 +188,9 @@ local function create_fluid_color_pipe_entity(name, color, built_from_base_item)
         pipe.minable.result = pipe_name
     end
     pipe.name = pipe_name
+
+    pipe.order = get_order(pipe, name)
+    pipe.subgroup = get_subgroup("pipe", name)
 
     for _, filename in pairs(pipe_filenames) do
         local property_name = replace_dash_with_underscore(filename)
@@ -295,6 +301,10 @@ local function create_fluid_color_pipe_to_ground_entity(name, color, placeable_b
         pipe_to_ground.minable.result = pipe_to_ground_name
     end
     pipe_to_ground.name = pipe_to_ground_name
+
+    pipe_to_ground.order = get_order(pipe_to_ground, name)
+    pipe_to_ground.subgroup = get_subgroup("pipe-to-ground", name)
+
     for _, filename in pairs(pipe_to_ground_filenames) do
         local property_name = replace_dash_with_underscore(filename)
         local original_layer = table.deepcopy(pipe_to_ground.pictures[property_name]) ---@type data.Sprite
@@ -402,6 +412,8 @@ local function create_fluid_color_storage_tank_entity(fluid_name, fluid_color, p
         storage_tank.minable.result = storage_tank_name
     end
     storage_tank.name = storage_tank_name
+    storage_tank.order = get_order(storage_tank, fluid_name)
+    storage_tank.subgroup = get_subgroup("storage-tank", fluid_name)
     local base_sheet = table.deepcopy(storage_tank.pictures.picture.sheets[1])
     local shadow_sheet = table.deepcopy(storage_tank.pictures.picture.sheets[2])
     local overlay_sheet = table.deepcopy(base_sheet)
@@ -535,7 +547,7 @@ end
 
 for name, color in pairs(rgb_colors) do
 
-    color.a = 0.55
+    -- color.a = 0.55
     local built_from_base_item = data.raw["fluid"][name] and true or false
 
     create_fluid_color_pipe_entity(name, color, built_from_base_item)
@@ -552,18 +564,85 @@ for name, color in pairs(rgb_colors) do
 
 end
 
+local base_filter_items = {
+    "pipe",
+    "pipe-to-ground",
+    "storage-tank",
+}
+local entity_filters = {}
+local alt_entity_filters = {}
+local reverse_entity_filters = {}
+local alt_reverse_entity_filters = {}
+
+for _, name in pairs(base_filter_items) do
+    table.insert(entity_filters, name)
+    table.insert(alt_entity_filters, name)
+    -- table.insert(reverse_entity_filters, name)
+    -- table.insert(alt_reverse_entity_filters, name)
+end
+for name, _ in pairs(rgb_colors) do
+    -- table.insert(entity_filters, name .. "-pipe")
+    -- table.insert(entity_filters, name .. "-pipe-to-ground")
+    -- table.insert(entity_filters, name .. "-storage-tank")
+    -- table.insert(alt_entity_filters, name .. "-pipe")
+    -- table.insert(alt_entity_filters, name .. "-pipe-to-ground")
+    -- table.insert(alt_entity_filters, name .. "-storage-tank")
+    table.insert(reverse_entity_filters, name .. "-pipe")
+    table.insert(reverse_entity_filters, name .. "-pipe-to-ground")
+    table.insert(reverse_entity_filters, name .. "-storage-tank")
+    table.insert(alt_reverse_entity_filters, name .. "-pipe")
+    table.insert(alt_reverse_entity_filters, name .. "-pipe-to-ground")
+    table.insert(alt_reverse_entity_filters, name .. "-storage-tank")
+end
+
 local pipe_painting_planner = table.deepcopy(data.raw["selection-tool"]["selection-tool"])
 pipe_painting_planner.name = "pipe-painting-planner"
-pipe_painting_planner.entity_type_filters = { "pipe", "pipe-to-ground", "storage-tank" }
+-- pipe_painting_planner.entity_type_filters = { "pipe", "pipe-to-ground", "storage-tank" }
+-- pipe_painting_planner.alt_entity_type_filters = { "pipe", "pipe-to-ground", "storage-tank" }
+pipe_painting_planner.entity_filters = entity_filters
+pipe_painting_planner.alt_entity_filters = alt_entity_filters
+pipe_painting_planner.selection_mode = { "friend", "upgrade", }
+pipe_painting_planner.alt_selection_mode = { "friend", "cancel-upgrade", }
+
+-- pipe_painting_planner.reverse_entity_type_filters = { "pipe", "pipe-to-ground", "storage-tank" }
+-- pipe_painting_planner.alt_reverse_entity_type_filters = { "pipe", "pipe-to-ground", "storage-tank" }
+pipe_painting_planner.reverse_entity_filters = reverse_entity_filters
+pipe_painting_planner.alt_reverse_entity_filters = alt_reverse_entity_filters
+pipe_painting_planner.reverse_selection_mode = { "friend", "upgrade", }
+pipe_painting_planner.alt_reverse_selection_mode = { "friend", "upgrade", }
+
+pipe_painting_planner.flags = { "not-stackable", "spawnable", "only-in-cursor" }
 
 data:extend{ pipe_painting_planner }
 
 local pipe_painting_shortcut = table.deepcopy(data.raw["shortcut"]["give-upgrade-planner"])
 pipe_painting_shortcut.name = "give-pipe-painting-shortcut"
 pipe_painting_shortcut.item_to_spawn = "pipe-painting-planner"
+pipe_painting_shortcut.localised_name = { "shortcut-name.give-pipe-painting-shortcut" }
+pipe_painting_shortcut.associated_control_input = "pipe-painting-custom-input"
+pipe_painting_shortcut.order = "b[blueprints]-p[pipe-painting-planner]"
+pipe_painting_shortcut.style = "default"
 
 data:extend{ pipe_painting_shortcut }
 
+local pipe_painting_custom_input = {
+    type = "custom-input",
+    name = "pipe-painting-custom-input",
+    key_sequence = "ALT + P",
+    action = "spawn-item",
+    item_to_spawn = "pipe-painting-planner",
+}
+data:extend{ pipe_painting_custom_input }
+
+local delete_pipe_painting_planner_custom_input = {
+    type = "custom-input",
+    name = "delete-pipe-painting-planner",
+    key_sequence = "mouse-button-2",
+    action = "lua",
+}
+data:extend{ delete_pipe_painting_planner_custom_input }
+
+-- i think i need to make it an upgrade planner, so it can be opened and deleted from that little gui :(
 
 --------------------------------------------------------
 -- add color-coded pipes to the main menu simulations --
