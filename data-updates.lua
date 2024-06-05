@@ -577,13 +577,13 @@ local alt_reverse_entity_filters = {}
 for _, name in pairs(base_filter_items) do
     table.insert(entity_filters, name)
     table.insert(alt_entity_filters, name)
-    -- table.insert(reverse_entity_filters, name)
+    table.insert(reverse_entity_filters, name)
     table.insert(alt_reverse_entity_filters, name)
 end
 for name, _ in pairs(rgb_colors) do
-    -- table.insert(entity_filters, name .. "-pipe")
-    -- table.insert(entity_filters, name .. "-pipe-to-ground")
-    -- table.insert(entity_filters, name .. "-storage-tank")
+    table.insert(entity_filters, name .. "-pipe")
+    table.insert(entity_filters, name .. "-pipe-to-ground")
+    table.insert(entity_filters, name .. "-storage-tank")
     table.insert(alt_entity_filters, name .. "-pipe")
     table.insert(alt_entity_filters, name .. "-pipe-to-ground")
     table.insert(alt_entity_filters, name .. "-storage-tank")
@@ -618,12 +618,13 @@ pipe_painting_planner.flags = {
     "mod-openable",
 }
 
-data:extend{ pipe_painting_planner }
+data:extend { pipe_painting_planner }
 
 local pipe_painting_shortcut = table.deepcopy(data.raw["shortcut"]["give-upgrade-planner"])
 pipe_painting_shortcut.name = "give-pipe-painting-shortcut"
 pipe_painting_shortcut.item_to_spawn = "pipe-painting-planner"
 pipe_painting_shortcut.localised_name = { "shortcut-name.give-pipe-painting-shortcut" }
+pipe_painting_shortcut.localised_description = { "shortcut-description.give-pipe-painting-shortcut" }
 pipe_painting_shortcut.associated_control_input = "pipe-painting-custom-input"
 pipe_painting_shortcut.order = "b[blueprints]-p[pipe-painting-planner]"
 pipe_painting_shortcut.style = "default"
@@ -647,7 +648,6 @@ local delete_pipe_painting_planner_custom_input = {
 }
 data:extend{ delete_pipe_painting_planner_custom_input }
 
--- i think i need to make it an upgrade planner, so it can be opened and deleted from that little gui :(
 
 --------------------------------------------------------
 -- add color-coded pipes to the main menu simulations --

@@ -171,16 +171,9 @@ local function on_player_selected_area(event)
     local player = game.get_player(event.player_index)
     if not player then return end
     local item = event.item
-    if not item == "pipe-painting-planner" then return end
-    local surface = player.surface
-    local force = player.force
+    if item ~= "pipe-painting-planner" then return end
     for _, entity in pairs(event.entities) do
-        if not entity.valid then
-        elseif entity.type == "pipe" then
-            paint_pipe(player, entity)
-        elseif entity.type == "pipe-to-ground" then
-            paint_pipe(player, entity)
-        elseif entity.type == "storage-tank" then
+        if entity.valid then
             paint_pipe(player, entity)
         end
     end
@@ -192,7 +185,6 @@ local function on_player_alt_selected_area(event)
     if not player then return end
     local item = event.item
     if not item == "pipe-painting-planner" then return end
-    local surface = player.surface
     local force = player.force
     for _, entity in pairs(event.entities) do
         if not entity.valid then
@@ -208,15 +200,8 @@ local function on_player_reverse_selected_area(event)
     if not player then return end
     local item = event.item
     if not item == "pipe-painting-planner" then return end
-    local surface = player.surface
-    local force = player.force
     for _, entity in pairs(event.entities) do
-        if not entity.valid then
-        elseif entity.type == "pipe" then
-            unpaint_pipe(player, entity)
-        elseif entity.type == "pipe-to-ground" then
-            unpaint_pipe(player, entity)
-        elseif entity.type == "storage-tank" then
+        if entity.valid then
             unpaint_pipe(player, entity)
         end
     end
