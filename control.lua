@@ -139,7 +139,6 @@ end
 ---@param player LuaPlayer
 ---@param pipe LuaEntity
 local function unpaint_pipe(player, pipe)
-    local fluid_name = get_fluid_name(pipe)
     local pipe_type = pipe.type
     local already_unpainted = pipe.name == pipe_type
     if not already_unpainted then
