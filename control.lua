@@ -109,6 +109,7 @@ end)
 ---@param player LuaPlayer
 ---@param pipe LuaEntity
 local function paint_pipe(player, pipe)
+    if not pipe.valid then return end
     local fluid_name = get_fluid_name(pipe)
     local pipe_type = pipe.type
     local already_painted = pipe.name == fluid_name .. "-" .. pipe_type
@@ -139,6 +140,7 @@ end
 ---@param player LuaPlayer
 ---@param pipe LuaEntity
 local function unpaint_pipe(player, pipe)
+    if not pipe.valid then return end
     local pipe_type = pipe.type
     local already_unpainted = pipe.name == pipe_type
     if not already_unpainted then
@@ -212,11 +214,9 @@ local function on_player_alt_reverse_selected_area(event)
     if not player then return end
     local item = event.item
     if not item == "pipe-painting-planner" then return end
-    local surface = player.surface
     local force = player.force
     for _, entity in pairs(event.entities) do
-        if not entity.valid then
-        elseif entity.to_be_upgraded() then
+        if entity.valid and entity.to_be_upgraded() then
             entity.cancel_upgrade(force, player)
         end
     end
