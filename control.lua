@@ -297,7 +297,85 @@ local function on_player_cursor_stack_changed(event)
     end
 end
 
-script.on_event(defines.events.on_player_cursor_stack_changed, on_player_cursor_stack_changed)
+-- script.on_event(defines.events.on_player_cursor_stack_changed, on_player_cursor_stack_changed)
+
+---@param event EventData.on_gui_click
+local function on_gui_click(event)
+    local player = game.get_player(event.player_index)
+    if not player then return end
+    local element = event.element
+    if not element.valid then return end
+    local name = element.name
+    if not name then return end
+    if name == "color-coded-pipes-planner-delete-button" then
+        local inventory = player.get_main_inventory()
+        if inventory and inventory.valid then
+            local count = inventory.get_item_count("pipe-painting-planner")
+            if count > 0 then
+                inventory.remove{name = "pipe-painting-planner", count = 1}
+            end
+        end
+        player.gui.screen["color-coded-pipes-planner-frame"].destroy()
+        player.opened = player
+    end
+    if name == "color-coded-pipes-planner-close-button" then
+        player.gui.screen["color-coded-pipes-planner-frame"].destroy()
+        player.opened = player
+    end
+end
+
+script.on_event(defines.events.on_gui_click, on_gui_click)
+
+---@param event EventData.on_mod_item_opened
+local function on_mod_item_opened(event)
+    local player = game.get_player(event.player_index)
+    if not player then return end
+    local item = event.item
+    if not item == "pipe-painting-planner" then return end
+    if player.gui.screen["color-coded-pipes-planner-frame"] then
+        player.gui.screen["color-coded-pipes-planner-frame"].destroy()
+    end
+    local frame = player.gui.screen.add{
+        type = "frame",
+        name = "color-coded-pipes-planner-frame",
+        caption = {"item-name.pipe-painting-planner"},
+    }
+    frame.auto_center = true
+    frame.add{
+        type = "button",
+        -- sprite = "utility/close_black",
+        -- hovered_sprite = "utility/close_white",
+        name = "color-coded-pipes-planner-close-button",
+        caption = {"color-pipes-gui.close-planner-button"},
+        tooltip = {"gui.close-instruction"},
+        style = "back_button",
+    }
+    frame.add{
+        type = "button",
+        -- sprite = "utility/trash",
+        -- hovered_sprite = "utility/trash_white",
+        name = "color-coded-pipes-planner-delete-button",
+        caption = {"color-pipes-gui.delete-planner-button"},
+        tooltip = {"color-pipes-gui.delete-planner-button"},
+        style = "red_confirm_button",
+    }
+    player.opened = frame
+end
+
+script.on_event(defines.events.on_mod_item_opened, on_mod_item_opened)
+
+---@param event EventData.on_gui_closed
+local function on_gui_closed(event)
+    local player = game.get_player(event.player_index)
+    if not player then return end
+    local screen = player.gui.screen
+    if screen["color-coded-pipes-planner-frame"] then
+        screen["color-coded-pipes-planner-frame"].destroy()
+        player.opened = player
+    end
+end
+
+script.on_event(defines.events.on_gui_closed, on_gui_closed)
 
 -- ---@param event EventData.on_mod_item_opened
 -- local function delete_pipe_painting_planner(event)

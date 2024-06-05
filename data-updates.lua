@@ -611,7 +611,12 @@ pipe_painting_planner.alt_reverse_entity_filters = alt_reverse_entity_filters
 pipe_painting_planner.reverse_selection_mode = { "friend", "upgrade", }
 pipe_painting_planner.alt_reverse_selection_mode = { "friend", "upgrade", }
 
-pipe_painting_planner.flags = { "not-stackable", "spawnable", "only-in-cursor" }
+pipe_painting_planner.flags = {
+    "not-stackable",
+    "spawnable",
+    -- "only-in-cursor",
+    "mod-openable",
+}
 
 data:extend{ pipe_painting_planner }
 
