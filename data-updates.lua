@@ -617,6 +617,17 @@ pipe_painting_planner.flags = {
     -- "only-in-cursor",
     "mod-openable",
 }
+pipe_painting_planner.icon = "__color-coded-pipes__/graphics/selection-tool-icon/selection-tool-icon.png"
+pipe_painting_planner.order = "c[automated-construction]-p[pipe-painting-planner]"
+pipe_painting_planner.subgroup = data.raw["upgrade-item"]["upgrade-planner"].subgroup
+-- pipe_painting_planner.icons = {
+--     {
+--         icon = pipe_painting_planner.icon,
+--         icon_size = pipe_painting_planner.icon_size,
+--         icon_mipmaps = pipe_painting_planner.icon_mipmaps,
+--         tint = { r = 0.8, g = 0.5, b = 0.2, a = 1.0 }
+--     }
+-- }
 
 data:extend { pipe_painting_planner }
 
@@ -628,6 +639,9 @@ pipe_painting_shortcut.localised_description = { "shortcut-description.give-pipe
 pipe_painting_shortcut.associated_control_input = "pipe-painting-custom-input"
 pipe_painting_shortcut.order = "b[blueprints]-p[pipe-painting-planner]"
 pipe_painting_shortcut.style = "default"
+pipe_painting_shortcut.icon.filename = "__color-coded-pipes__/graphics/selection-planner-shortcut/pipe-painting-planner-x32-white.png"
+pipe_painting_shortcut.small_icon.filename = "__color-coded-pipes__/graphics/selection-planner-shortcut/pipe-painting-planner-x24-white.png"
+pipe_painting_shortcut.disabled_small_icon.filename = "__color-coded-pipes__/graphics/selection-planner-shortcut/pipe-painting-planner-x24.png"
 
 data:extend{ pipe_painting_shortcut }
 
