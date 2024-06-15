@@ -50,19 +50,21 @@ for name, color in pairs(rgb_colors) do
         setting_type = "startup",
         default_value = color,
         order = recipe_order[name],
+        hidden = true,
     }
     data:extend{color_setting}
 end
 
-data:extend{
-    {
-        type = "bool-setting",
-        name = "color-coded-pipes-planner-tooltip",
-        setting_type = "runtime-per-user",
-        default_value = false,
-        order = "a",
-    }
-}
+-- data:extend{
+--     {
+--         type = "bool-setting",
+--         name = "color-coded-pipes-planner-tooltip",
+--         setting_type = "runtime-per-user",
+--         default_value = false,
+--         order = "a",
+--         hidden = true,
+--     }
+-- }
 
 data:extend{
     {
@@ -71,5 +73,25 @@ data:extend{
         setting_type = "runtime-per-user",
         default_value = true,
         order = "a",
+    }
+}
+
+data:extend{
+    {
+        type = "bool-setting",
+        name = "color-coded-pipes-show-rainbow-recipes",
+        setting_type = "startup",
+        default_value = true,
+        order = "10",
+    }
+}
+
+data:extend{
+    {
+        type = "bool-setting",
+        name = "color-coded-pipes-show-fluid-recipes",
+        setting_type = "startup",
+        default_value = false,
+        order = "20",
     }
 }
