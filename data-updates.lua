@@ -51,7 +51,7 @@ data:extend{ fluid_color_pipe_subgroup, fluid_color_pipe_to_ground_subgroup, flu
 
 data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = "storage-tank"
 
----@param item data.ItemPrototype
+---@param item data.ItemPrototype | data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype
 ---@param color_name string?
 ---@return string
 local function get_order(item, color_name)
