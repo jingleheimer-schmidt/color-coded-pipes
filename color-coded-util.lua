@@ -61,7 +61,9 @@ local rgb_colors = {
 }
 
 for _, fluid in pairs(data.raw["fluid"]) do
-    if fluid.base_color then
+    local has_base_color = fluid.base_color and fluid.base_color.r and fluid.base_color.g and fluid.base_color.b
+    local is_hidden = fluid.hidden
+    if has_base_color and not is_hidden then
         rgb_colors[fluid.name] = fluid.base_color
         rgb_colors[fluid.name].a = 0.5
     end
