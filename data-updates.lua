@@ -10,79 +10,16 @@ local colors = {
     ["white"] = "white",
 }
 
-local pipe_filenames = {
-    "corner-down-left",
-    "corner-down-right",
-    "corner-up-left",
-    "corner-up-right",
-    "cross",
-    "ending-down",
-    "ending-left",
-    "ending-right",
-    "ending-up",
-    "straight-horizontal-window",
-    "straight-horizontal",
-    "straight-vertical-single",
-    "straight-vertical-window",
-    "straight-vertical",
-    "t-down",
-    "t-left",
-    "t-right",
-    "t-up",
-}
-
-local pipe_to_ground_filenames = {
-    "down",
-    "left",
-    "right",
-    "up",
-}
-
-local recipe_order = {
-    ["red"] = "a",
-    ["orange"] = "b",
-    ["yellow"] = "c",
-    ["green"] = "d",
-    ["blue"] = "e",
-    ["purple"] = "f",
-    ["pink"] = "g",
-    ["black"] = "h",
-    ["white"] = "i",
-}
-
-local rgb_colors = {
-    -- red = { r = 0.5, g = 0, b = 0 },
-    -- orange = { r = 0.5, g = 0.25, b = 0 },
-    -- yellow = { r = 0.5, g = 0.5, b = 0 },
-    -- green = { r = 0, g = 0.5, b = 0 },
-    -- blue = { r = 0, g = 0, b = 0.5 },
-    -- purple = { r = 0.25, g = 0, b = 0.5 },
-    -- pink = { r = 0.5, g = 0, b = 0.5 },
-    -- white = { r = 0.5, g = 0.5, b = 0.5 },
-    -- black = { r = 0, g = 0, b = 0 },
-    red = settings.startup["color-coded-pipes-red"].value,
-    orange = settings.startup["color-coded-pipes-orange"].value,
-    yellow = settings.startup["color-coded-pipes-yellow"].value,
-    green = settings.startup["color-coded-pipes-green"].value,
-    blue = settings.startup["color-coded-pipes-blue"].value,
-    purple = settings.startup["color-coded-pipes-purple"].value,
-    pink = settings.startup["color-coded-pipes-pink"].value,
-    white = settings.startup["color-coded-pipes-white"].value,
-    black = settings.startup["color-coded-pipes-black"].value,
-}
-
-for _, fluid in pairs(data.raw["fluid"]) do
-    if fluid.base_color then
-        rgb_colors[fluid.name] = fluid.base_color
-        rgb_colors[fluid.name].a = 0.5
-    end
-end
 
 local color_mode = settings.startup["color-coded-pipes-color-mode"].value
 
-local function replace_dash_with_underscore(str)
-    return string.gsub(str, "-", "_")
-end
+
+local color_coded_util = require("color-coded-util")
+local pipe_filenames = color_coded_util.pipe_filenames
+local pipe_to_ground_filenames = color_coded_util.pipe_to_ground_filenames
+local recipe_order = color_coded_util.recipe_order
+local rgb_colors = color_coded_util.rgb_colors
+local replace_dash_with_underscore = color_coded_util.replace_dash_with_underscore
 
 ---------------------------------------------------
 -- create subgroups for the color-coded variants --
