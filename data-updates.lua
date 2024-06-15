@@ -1,18 +1,3 @@
-local colors = {
-    ["red"] = "red",
-    ["orange"] = "orange",
-    ["yellow"] = "yellow",
-    ["green"] = "green",
-    ["blue"] = "blue",
-    ["purple"] = "purple",
-    ["pink"] = "pink",
-    ["black"] = "black",
-    ["white"] = "white",
-}
-
-
-local color_mode = settings.startup["color-coded-pipes-color-mode"].value
-
 
 local color_coded_util = require("color-coded-util")
 local pipe_filenames = color_coded_util.pipe_filenames
