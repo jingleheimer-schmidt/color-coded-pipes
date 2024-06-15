@@ -94,12 +94,12 @@ local function reset_technology_effects()
 end
 
 script.on_init(function()
-    add_commands()
+    -- add_commands()
     reset_technology_effects()
 end)
 
 script.on_load(function()
-    add_commands()
+    -- add_commands()
 end)
 
 script.on_configuration_changed(function()
