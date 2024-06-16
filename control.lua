@@ -106,6 +106,38 @@ script.on_configuration_changed(function()
     reset_technology_effects()
 end)
 
+-- local count = 1
+-- for name, prototype in pairs(game.fluid_prototypes) do
+--     local surface = game.player.surface
+--     local force = game.player.force
+--     local fluid_name = prototype.name
+--     if game.entity_prototypes[fluid_name .. "-pipe"] then
+--         local underground = surface.create_entity{
+--             name = fluid_name .. "-pipe-to-ground",
+--             position = {x = game.player.position.x + count -1, y = game.player.position.y + 2},
+--             force = force,
+--             direction = defines.direction.south,
+--         }
+--         local pipe_length = 3
+--         for i = 0, pipe_length do
+--             local pipe = surface.create_entity{
+--                 name = fluid_name .. "-pipe",
+--                 position = {x = game.player.position.x + count - 1, y = game.player.position.y + 3 + i},
+--                 force = force,
+--             }
+--         end
+--         local tank = surface.create_entity{
+--             name = fluid_name .. "-storage-tank",
+--             position = {x = game.player.position.x + count, y = game.player.position.y + 5 + pipe_length},
+--             force = force,
+--         }
+--         tank.insert_fluid{
+--             name = fluid_name,
+--             amount = 10000
+--         }
+--         count = count + 3
+--     end
+-- end
 
 
 -- chat command to "unpaint" all the pipes
