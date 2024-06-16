@@ -18,7 +18,7 @@ data:extend{
     }
 }
 
-local a = 0.45
+local a = 0.6
 local rgb_colors = {
     red =    { r = 0.9, g = 0.2, b = 0.2, a = a },
     orange = { r = 0.9, g = 0.5, b = 0.2, a = a },

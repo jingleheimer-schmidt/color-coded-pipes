@@ -65,7 +65,7 @@ for _, fluid in pairs(data.raw["fluid"]) do
     local is_hidden = fluid.hidden
     if has_base_color and not is_hidden then
         rgb_colors[fluid.name] = fluid.base_color
-        rgb_colors[fluid.name].a = 0.5
+        rgb_colors[fluid.name].a = 0.6
     end
 end
 
