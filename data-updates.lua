@@ -51,6 +51,7 @@ data:extend{ fluid_pipe_subgroup, fluid_pipe_to_ground_subgroup, fluid_pump_subg
 -- create color-coded entities --
 ---------------------------------
 
+-- add a fast_replaceable_group to the base storage tank so that all the color-coded storage tanks inherit it
 data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = "storage-tank"
 
 ---@param item data.ItemPrototype | data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype
@@ -113,7 +114,7 @@ end
 ---@param pipe data.ItemPrototype | data.PipePrototype
 ---@param fluid_color Color
 ---@return data.IconData
-local function create_fluid_color_pipe_icons(pipe, fluid_color)
+local function create_color_overlay_pipe_icons(pipe, fluid_color)
     local icon_base = {
         icon = pipe.icon,
         icon_size = pipe.icon_size,
@@ -129,7 +130,7 @@ end
 ---@param name string
 ---@param color Color
 ---@param built_from_base_item boolean
-local function create_fluid_color_pipe_entity(name, color, built_from_base_item)
+local function create_color_overlay_pipe_entity(name, color, built_from_base_item)
 
     local pipe = table.deepcopy(data.raw["pipe"]["pipe"])
     if not pipe then log("pipe entity not found") return end
@@ -159,7 +160,7 @@ local function create_fluid_color_pipe_entity(name, color, built_from_base_item)
     pipe.localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
     -- pipe.corpse = name .. "-pipe-remnants"
 
-    pipe.icons = create_fluid_color_pipe_icons(pipe, color)
+    pipe.icons = create_color_overlay_pipe_icons(pipe, color)
 
     if pipe.fluid_box.pipe_covers then
         local directions = { "north", "east", "south", "west" }
@@ -180,7 +181,7 @@ end
 
 ---@param name string
 ---@param color Color
-local function create_fluid_color_pipe_item(name, color)
+local function create_color_overlay_pipe_item(name, color)
 
     local pipe_item = table.deepcopy(data.raw["item"]["pipe"])
     if not pipe_item then log("pipe item not found") return end
@@ -188,7 +189,7 @@ local function create_fluid_color_pipe_item(name, color)
     pipe_item.name = pipe_item_name
     pipe_item.place_result = pipe_item_name
     pipe_item.localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
-    pipe_item.icons = create_fluid_color_pipe_icons(pipe_item, color)
+    pipe_item.icons = create_color_overlay_pipe_icons(pipe_item, color)
     pipe_item.order = get_order(pipe_item, name)
     pipe_item.subgroup = get_subgroup("pipe", name)
     data:extend{ pipe_item }
@@ -196,7 +197,7 @@ end
 
 ---@param name string
 ---@param built_from_base_item boolean
-local function create_fluid_color_pipe_recipe(name, built_from_base_item)
+local function create_color_overlay_pipe_recipe(name, built_from_base_item)
 
     local pipe_recipe = table.deepcopy(data.raw["recipe"]["pipe"])
     if not pipe_recipe then log("pipe recipe not found") return end
@@ -229,7 +230,7 @@ end
 ---@param pipe_to_ground data.ItemPrototype | data.PipeToGroundPrototype
 ---@param color Color
 ---@return data.IconData
-local function create_fluid_color_pipe_to_ground_icons(pipe_to_ground, color)
+local function create_color_overlay_pipe_to_ground_icons(pipe_to_ground, color)
     local icon_base = {
         icon = pipe_to_ground.icon,
         icon_size = pipe_to_ground.icon_size,
@@ -244,7 +245,7 @@ end
 ---@param name string
 ---@param color Color
 ---@param placeable_by_base_item boolean
-local function create_fluid_color_pipe_to_ground_entity(name, color, placeable_by_base_item)
+local function create_color_overlay_pipe_to_ground_entity(name, color, placeable_by_base_item)
 
     local pipe_to_ground = table.deepcopy(data.raw["pipe-to-ground"]["pipe-to-ground"])
     if not pipe_to_ground then log("pipe-to-ground entity not found") return end
@@ -272,7 +273,7 @@ local function create_fluid_color_pipe_to_ground_entity(name, color, placeable_b
     end
     pipe_to_ground.localised_name = { "color-coded.name", { "entity-name.pipe-to-ground" }, { "fluid-name." .. name } }
     -- pipe_to_ground.corpse = name .. "-pipe-to-ground-remnants"
-    pipe_to_ground.icons = create_fluid_color_pipe_to_ground_icons(pipe_to_ground, color)
+    pipe_to_ground.icons = create_color_overlay_pipe_to_ground_icons(pipe_to_ground, color)
 
     if pipe_to_ground.fluid_box.pipe_covers then
         local directions = { "north", "east", "south", "west" }
@@ -292,7 +293,7 @@ end
 
 ---@param name string
 ---@param color Color
-local function create_fluid_color_pipe_to_ground_item(name, color)
+local function create_color_overlay_pipe_to_ground_item(name, color)
 
     local pipe_to_ground_item = table.deepcopy(data.raw["item"]["pipe-to-ground"])
     if not pipe_to_ground_item then log("pipe-to-ground item not found") return end
@@ -300,7 +301,7 @@ local function create_fluid_color_pipe_to_ground_item(name, color)
     pipe_to_ground_item.name = pipe_to_ground_item_name
     pipe_to_ground_item.place_result = pipe_to_ground_item_name
     pipe_to_ground_item.localised_name = { "color-coded.name", { "entity-name.pipe-to-ground" }, { "fluid-name." .. name } }
-    pipe_to_ground_item.icons = create_fluid_color_pipe_to_ground_icons(pipe_to_ground_item, color)
+    pipe_to_ground_item.icons = create_color_overlay_pipe_to_ground_icons(pipe_to_ground_item, color)
     pipe_to_ground_item.order = get_order(pipe_to_ground_item, name)
     pipe_to_ground_item.subgroup = get_subgroup("pipe-to-ground", name)
     data:extend{ pipe_to_ground_item }
@@ -308,7 +309,7 @@ end
 
 ---@param name string
 ---@param built_from_base_item boolean
-local function create_fluid_color_pipe_to_ground_recipe(name, built_from_base_item)
+local function create_color_overlay_pipe_to_ground_recipe(name, built_from_base_item)
 
     local pipe_to_ground_recipe = table.deepcopy(data.raw["recipe"]["pipe-to-ground"])
     if not pipe_to_ground_recipe then log("pipe-to-ground recipe not found") return end
@@ -341,7 +342,7 @@ end
 ---@param storage_tank data.ItemPrototype | data.StorageTankPrototype
 ---@param fluid_color Color
 ---@return data.IconData
-local function create_fluid_color_storage_tank_icons(storage_tank, fluid_color)
+local function create_color_overlay_storage_tank_icons(storage_tank, fluid_color)
     local icon_base = {
         icon = storage_tank.icon,
         icon_size = storage_tank.icon_size,
@@ -356,7 +357,7 @@ end
 ---@param fluid_name string
 ---@param fluid_color Color
 ---@param placeable_by_base_item boolean
-local function create_fluid_color_storage_tank_entity(fluid_name, fluid_color, placeable_by_base_item)
+local function create_color_overlay_storage_tank_entity(fluid_name, fluid_color, placeable_by_base_item)
 
     local storage_tank = table.deepcopy(data.raw["storage-tank"]["storage-tank"])
     if not storage_tank then log("storage-tank entity not found") return end
@@ -383,7 +384,7 @@ local function create_fluid_color_storage_tank_entity(fluid_name, fluid_color, p
     }
     storage_tank.localised_name = { "color-coded.name", { "entity-name.storage-tank" }, { "fluid-name." .. fluid_name } }
     -- storage_tank.corpse = color .. "-storage-tank-remnants"
-    storage_tank.icons = create_fluid_color_storage_tank_icons(storage_tank, fluid_color)
+    storage_tank.icons = create_color_overlay_storage_tank_icons(storage_tank, fluid_color)
 
     if storage_tank.fluid_box.pipe_covers then
         local directions = { "north", "east", "south", "west" }
@@ -404,7 +405,7 @@ end
 
 ---@param name string
 ---@param color Color
-local function create_fluid_color_storage_tank_item(name, color)
+local function create_color_overlay_storage_tank_item(name, color)
 
     local storage_tank = table.deepcopy(data.raw["item"]["storage-tank"])
     if not storage_tank then log("storage-tank item not found") return end
@@ -412,7 +413,7 @@ local function create_fluid_color_storage_tank_item(name, color)
     storage_tank.name = storage_tank_name
     storage_tank.place_result = storage_tank_name
     storage_tank.localised_name = { "color-coded.name", { "entity-name.storage-tank" }, { "fluid-name." .. name } }
-    storage_tank.icons = create_fluid_color_storage_tank_icons(storage_tank, color)
+    storage_tank.icons = create_color_overlay_storage_tank_icons(storage_tank, color)
     storage_tank.order = get_order(storage_tank, name)
     storage_tank.subgroup = get_subgroup("storage-tank", name)
     data:extend{ storage_tank }
@@ -420,7 +421,7 @@ end
 
 ---@param name string
 ---@param built_from_base_item boolean
-local function create_fluid_color_storage_tank_recipe(name, built_from_base_item)
+local function create_color_overlay_storage_tank_recipe(name, built_from_base_item)
 
     local storage_tank = table.deepcopy(data.raw["recipe"]["storage-tank"])
     if not storage_tank then log("storage-tank recipe not found") return end
@@ -450,7 +451,7 @@ local function create_fluid_color_storage_tank_recipe(name, built_from_base_item
     data:extend{ storage_tank }
 end
 
-local function create_fluid_color_pump_icons(pump, color)
+local function create_color_overlay_pump_icons(pump, color)
     local icon_base = {
         icon = pump.icon,
         icon_size = pump.icon_size,
@@ -465,7 +466,7 @@ end
 ---@param name string
 ---@param color Color
 ---@param built_from_base_item boolean
-local function create_fluid_color_pump(name, color, built_from_base_item)
+local function create_color_overlay_pump(name, color, built_from_base_item)
 
     local pump = table.deepcopy(data.raw["pump"]["pump"])
     if not pump then log("pump entity not found") return end
@@ -488,20 +489,20 @@ local function create_fluid_color_pump(name, color, built_from_base_item)
         pump.animations[direction] = { layers = { original_layer, overlay_layer } }
     end
     pump.localised_name = { "color-coded.name", { "entity-name.pump" }, { "fluid-name." .. name } }
-    pump.icons = create_fluid_color_pump_icons(pump, color)
+    pump.icons = create_color_overlay_pump_icons(pump, color)
     data:extend{ pump }
 end
 
 ---@param name string
 ---@param color Color
-local function create_fluid_color_pump_item(name, color)
+local function create_color_overlay_pump_item(name, color)
     local pump = table.deepcopy(data.raw["item"]["pump"])
     if not pump then log("pump item not found") return end
     local pump_name = name .. "-pump"
     pump.name = pump_name
     pump.place_result = pump_name
     pump.localised_name = { "color-coded.name", { "entity-name.pump" }, { "fluid-name." .. name } }
-    pump.icons = create_fluid_color_pump_icons(pump, color)
+    pump.icons = create_color_overlay_pump_icons(pump, color)
     pump.order = get_order(pump, name)
     pump.subgroup = get_subgroup("pump", name)
     data:extend{ pump }
@@ -509,7 +510,7 @@ end
 
 ---@param name string
 ---@param built_from_base_item boolean
-local function create_fluid_color_pump_recipe(name, built_from_base_item)
+local function create_color_overlay_pump_recipe(name, built_from_base_item)
     local pump = table.deepcopy(data.raw["recipe"]["pump"])
     if not pump then log("pump recipe not found") return end
     local pump_name = name .. "-pump"
@@ -576,21 +577,21 @@ for name, color in pairs(rgb_colors) do
     local is_rainbow_color = not is_fluid_color
     local built_from_base_item = (is_fluid_color and not show_fluid_recipes) or (is_rainbow_color and not show_rainbow_recipes) and true or false
 
-    create_fluid_color_pipe_entity(name, color, built_from_base_item)
-    create_fluid_color_pipe_item(name, color)
-    create_fluid_color_pipe_recipe(name, built_from_base_item)
+    create_color_overlay_pipe_entity(name, color, built_from_base_item)
+    create_color_overlay_pipe_item(name, color)
+    create_color_overlay_pipe_recipe(name, built_from_base_item)
 
-    create_fluid_color_pipe_to_ground_entity(name, color, built_from_base_item)
-    create_fluid_color_pipe_to_ground_item(name, color)
-    create_fluid_color_pipe_to_ground_recipe(name, built_from_base_item)
+    create_color_overlay_pipe_to_ground_entity(name, color, built_from_base_item)
+    create_color_overlay_pipe_to_ground_item(name, color)
+    create_color_overlay_pipe_to_ground_recipe(name, built_from_base_item)
 
-    create_fluid_color_storage_tank_entity(name, color, built_from_base_item)
-    create_fluid_color_storage_tank_item(name, color)
-    create_fluid_color_storage_tank_recipe(name, built_from_base_item)
+    create_color_overlay_storage_tank_entity(name, color, built_from_base_item)
+    create_color_overlay_storage_tank_item(name, color)
+    create_color_overlay_storage_tank_recipe(name, built_from_base_item)
 
-    create_fluid_color_pump(name, color, built_from_base_item)
-    create_fluid_color_pump_item(name, color)
-    create_fluid_color_pump_recipe(name, built_from_base_item)
+    create_color_overlay_pump(name, color, built_from_base_item)
+    create_color_overlay_pump_item(name, color)
+    create_color_overlay_pump_recipe(name, built_from_base_item)
 
 end
 
