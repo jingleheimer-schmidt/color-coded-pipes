@@ -10,7 +10,7 @@ local replace_dash_with_underscore = color_coded_util.replace_dash_with_undersco
 -- create subgroups for the color-coded variants --
 ---------------------------------------------------
 
-local function create_subgroup(name_suffix, order_suffix)
+local function create_rainbow_subgroup(name_suffix, order_suffix)
     local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
     if not subgroup then
         log("subgroup not found")
@@ -21,17 +21,17 @@ local function create_subgroup(name_suffix, order_suffix)
     end
 end
 
-local pipe_subgroup = create_subgroup("pipe", "a")
-local pipe_to_ground_subgroup = create_subgroup("pipe-to-ground", "b")
-local pump_subgroup = create_subgroup("pump", "c")
-local storage_tank_subgroup = create_subgroup("storage-tank", "d")
+local pipe_subgroup = create_rainbow_subgroup("pipe", "a")
+local pipe_to_ground_subgroup = create_rainbow_subgroup("pipe-to-ground", "b")
+local pump_subgroup = create_rainbow_subgroup("pump", "c")
+local storage_tank_subgroup = create_rainbow_subgroup("storage-tank", "d")
 
 data:extend{ pipe_subgroup, pipe_to_ground_subgroup, pump_subgroup, storage_tank_subgroup }
 
 local function create_fluid_subgroup(name_suffix, order_suffix)
     local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-    if not subgroup then 
-        log("subgroup not found") 
+    if not subgroup then
+        log("subgroup not found")
     else
         subgroup.name = "fluid-color-coded-" .. name_suffix
         subgroup.order = subgroup.order .. order_suffix
