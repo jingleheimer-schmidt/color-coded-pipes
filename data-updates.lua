@@ -111,65 +111,26 @@ local function add_recipe_to_technology_effects(recipe_to_match, recipe_to_add)
 end
 
 
----@param pipe data.ItemPrototype | data.PipePrototype
----@param fluid_color Color
----@return data.IconData
-local function create_color_overlay_pipe_icons(pipe, fluid_color)
-    local icon_base = {
-        icon = pipe.icon,
-        icon_size = pipe.icon_size,
-        icon_mipmaps = pipe.icon_mipmaps
-    }
-    local icon_overlay = table.deepcopy(icon_base)
-    icon_overlay.tint = fluid_color
-    icon_overlay.icon = "__color-coded-pipes__/graphics/overlay-pipe-icon/overlay-pipe-icon.png"
-    return { icon_base, icon_overlay }
-end
-
----@param pipe_to_ground data.ItemPrototype | data.PipeToGroundPrototype
+---@param prototype data.ItemPrototype | data.PipePrototype | data.PipeToGroundPrototype | data.PumpPrototype | data.StorageTankPrototype
 ---@param color Color
+---@param type string
 ---@return data.IconData
-local function create_color_overlay_pipe_to_ground_icons(pipe_to_ground, color)
+local function create_color_overlay_icons(prototype, color, type)
+    local overlay_path = "__color-coded-pipes__/graphics/overlay-" .. type .. "-icon/overlay-" .. type .. "-icon.png"
     local icon_base = {
-        icon = pipe_to_ground.icon,
-        icon_size = pipe_to_ground.icon_size,
-        icon_mipmaps = pipe_to_ground.icon_mipmaps
+        icon = prototype.icon,
+        icon_size = prototype.icon_size,
+        icon_mipmaps = prototype.icon_mipmaps
     }
-    local icon_overlay = table.deepcopy(icon_base)
-    icon_overlay.tint = color
-    icon_overlay.icon = "__color-coded-pipes__/graphics/overlay-pipe-to-ground-icon/overlay-pipe-to-ground-icon.png"
+    local icon_overlay = {
+        icon = overlay_path,
+        icon_size = prototype.icon_size,
+        icon_mipmaps = prototype.icon_mipmaps,
+        tint = color
+    }
     return { icon_base, icon_overlay }
 end
 
----@param pump data.ItemPrototype | data.PumpPrototype
----@param color Color
----@return data.IconData
-local function create_color_overlay_pump_icons(pump, color)
-    local icon_base = {
-        icon = pump.icon,
-        icon_size = pump.icon_size,
-        icon_mipmaps = pump.icon_mipmaps
-    }
-    local icon_overlay = table.deepcopy(icon_base)
-    icon_overlay.tint = color
-    icon_overlay.icon = "__color-coded-pipes__/graphics/overlay-pump-icon/overlay-pump-icon.png"
-    return { icon_base, icon_overlay }
-end
-
----@param storage_tank data.ItemPrototype | data.StorageTankPrototype
----@param fluid_color Color
----@return data.IconData
-local function create_color_overlay_storage_tank_icons(storage_tank, fluid_color)
-    local icon_base = {
-        icon = storage_tank.icon,
-        icon_size = storage_tank.icon_size,
-        icon_mipmaps = storage_tank.icon_mipmaps
-    }
-    local icon_overlay = table.deepcopy(icon_base)
-    icon_overlay.tint = fluid_color
-    icon_overlay.icon = "__color-coded-pipes__/graphics/overlay-storage-tank-icon/overlay-storage-tank-icon.png"
-    return { icon_base, icon_overlay }
-end
 
 ---@param name string
 ---@param color Color
@@ -204,7 +165,7 @@ local function create_color_overlay_pipe_entity(name, color, built_from_base_ite
     pipe.localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
     -- pipe.corpse = name .. "-pipe-remnants"
 
-    pipe.icons = create_color_overlay_pipe_icons(pipe, color)
+    pipe.icons = create_color_overlay_icons(pipe, color, "pipe")
 
     if pipe.fluid_box.pipe_covers then
         local directions = { "north", "east", "south", "west" }
@@ -233,7 +194,7 @@ local function create_color_overlay_pipe_item(name, color)
     pipe_item.name = pipe_item_name
     pipe_item.place_result = pipe_item_name
     pipe_item.localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
-    pipe_item.icons = create_color_overlay_pipe_icons(pipe_item, color)
+    pipe_item.icons = create_color_overlay_icons(pipe_item, color, "pipe")
     pipe_item.order = get_order(pipe_item, name)
     pipe_item.subgroup = get_subgroup("pipe", name)
     data:extend{ pipe_item }
@@ -304,7 +265,7 @@ local function create_color_overlay_pipe_to_ground_entity(name, color, placeable
     end
     pipe_to_ground.localised_name = { "color-coded.name", { "entity-name.pipe-to-ground" }, { "fluid-name." .. name } }
     -- pipe_to_ground.corpse = name .. "-pipe-to-ground-remnants"
-    pipe_to_ground.icons = create_color_overlay_pipe_to_ground_icons(pipe_to_ground, color)
+    pipe_to_ground.icons = create_color_overlay_icons(pipe_to_ground, color, "pipe-to-ground")
 
     if pipe_to_ground.fluid_box.pipe_covers then
         local directions = { "north", "east", "south", "west" }
@@ -332,7 +293,7 @@ local function create_color_overlay_pipe_to_ground_item(name, color)
     pipe_to_ground_item.name = pipe_to_ground_item_name
     pipe_to_ground_item.place_result = pipe_to_ground_item_name
     pipe_to_ground_item.localised_name = { "color-coded.name", { "entity-name.pipe-to-ground" }, { "fluid-name." .. name } }
-    pipe_to_ground_item.icons = create_color_overlay_pipe_to_ground_icons(pipe_to_ground_item, color)
+    pipe_to_ground_item.icons = create_color_overlay_icons(pipe_to_ground_item, color, "pipe-to-ground")
     pipe_to_ground_item.order = get_order(pipe_to_ground_item, name)
     pipe_to_ground_item.subgroup = get_subgroup("pipe-to-ground", name)
     data:extend{ pipe_to_ground_item }
@@ -402,7 +363,7 @@ local function create_color_overlay_storage_tank_entity(fluid_name, fluid_color,
     }
     storage_tank.localised_name = { "color-coded.name", { "entity-name.storage-tank" }, { "fluid-name." .. fluid_name } }
     -- storage_tank.corpse = color .. "-storage-tank-remnants"
-    storage_tank.icons = create_color_overlay_storage_tank_icons(storage_tank, fluid_color)
+    storage_tank.icons = create_color_overlay_icons(storage_tank, fluid_color, "storage-tank")
 
     if storage_tank.fluid_box.pipe_covers then
         local directions = { "north", "east", "south", "west" }
@@ -431,7 +392,7 @@ local function create_color_overlay_storage_tank_item(name, color)
     storage_tank.name = storage_tank_name
     storage_tank.place_result = storage_tank_name
     storage_tank.localised_name = { "color-coded.name", { "entity-name.storage-tank" }, { "fluid-name." .. name } }
-    storage_tank.icons = create_color_overlay_storage_tank_icons(storage_tank, color)
+    storage_tank.icons = create_color_overlay_icons(storage_tank, color, "storage-tank")
     storage_tank.order = get_order(storage_tank, name)
     storage_tank.subgroup = get_subgroup("storage-tank", name)
     data:extend{ storage_tank }
@@ -497,7 +458,7 @@ local function create_color_overlay_pump(name, color, built_from_base_item)
         pump.animations[direction] = { layers = { original_layer, overlay_layer } }
     end
     pump.localised_name = { "color-coded.name", { "entity-name.pump" }, { "fluid-name." .. name } }
-    pump.icons = create_color_overlay_pump_icons(pump, color)
+    pump.icons = create_color_overlay_icons(pump, color, "pump")
     data:extend{ pump }
 end
 
@@ -510,7 +471,7 @@ local function create_color_overlay_pump_item(name, color)
     pump.name = pump_name
     pump.place_result = pump_name
     pump.localised_name = { "color-coded.name", { "entity-name.pump" }, { "fluid-name." .. name } }
-    pump.icons = create_color_overlay_pump_icons(pump, color)
+    pump.icons = create_color_overlay_icons(pump, color, "pump")
     pump.order = get_order(pump, name)
     pump.subgroup = get_subgroup("pump", name)
     data:extend{ pump }
