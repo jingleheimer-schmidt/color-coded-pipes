@@ -230,6 +230,7 @@ local function create_fluid_color_pipe_recipe(name, built_from_base_item)
         end
     end
     pipe_recipe.localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
+    add_recipe_to_technology_effects("pipe", pipe_recipe_name)
     data:extend{ pipe_recipe }
 end
 
@@ -341,6 +342,7 @@ local function create_fluid_color_pipe_to_ground_recipe(name, built_from_base_it
         end
     end
     pipe_to_ground_recipe.localised_name = { "color-coded.name", { "entity-name.pipe-to-ground" }, { "fluid-name." .. name } }
+    add_recipe_to_technology_effects("pipe-to-ground", pipe_to_ground_recipe_name)
     data:extend{ pipe_to_ground_recipe }
 end
 
@@ -452,20 +454,6 @@ local function create_fluid_color_storage_tank_recipe(name, built_from_base_item
         end
     end
     storage_tank.localised_name = { "color-coded.name", { "entity-name.storage-tank" }, { "fluid-name." .. name } }
-    for _, technology in pairs(data.raw["technology"]) do
-        if technology.effects then
-            for _, effect in pairs(technology.effects) do
-                if effect.type == "unlock-recipe" and effect.recipe == "storage-tank" then
-                    table.insert(technology.effects, { type = "unlock-recipe", recipe = storage_tank_name })
-                end
-            end
-        end
-        if technology.normal and technology.normal.effects then
-            for _, effect in pairs(technology.normal.effects) do
-                if effect.type == "unlock-recipe" and effect.recipe == "storage-tank" then
-                    table.insert(technology.normal.effects, { type = "unlock-recipe", recipe = storage_tank_name })
-                end
-            end
     add_recipe_to_technology_effects("storage-tank", storage_tank_name)
     data:extend{ storage_tank }
 end
@@ -545,12 +533,6 @@ local function create_fluid_color_pump_recipe(name, built_from_base_item)
         if built_from_base_item then
             pump.normal.hidden = true
         end
-        if technology.expensive and technology.expensive.effects then
-            for _, effect in pairs(technology.expensive.effects) do
-                if effect.type == "unlock-recipe" and effect.recipe == "storage-tank" then
-                    table.insert(technology.expensive.effects, { type = "unlock-recipe", recipe = storage_tank_name })
-                end
-            end
     end
     if pump.expensive then
         pump.expensive.result = pump.expensive.result and pump_name or nil
@@ -559,7 +541,6 @@ local function create_fluid_color_pump_recipe(name, built_from_base_item)
             pump.expensive.hidden = true
         end
     end
-    data:extend{ storage_tank }
     pump.localised_name = { "color-coded.name", { "entity-name.pump" }, { "fluid-name." .. name } }
     add_recipe_to_technology_effects("pump", pump_name)
     data:extend{ pump }
