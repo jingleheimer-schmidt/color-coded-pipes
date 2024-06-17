@@ -126,6 +126,50 @@ local function create_color_overlay_pipe_icons(pipe, fluid_color)
     return { icon_base, icon_overlay }
 end
 
+---@param pipe_to_ground data.ItemPrototype | data.PipeToGroundPrototype
+---@param color Color
+---@return data.IconData
+local function create_color_overlay_pipe_to_ground_icons(pipe_to_ground, color)
+    local icon_base = {
+        icon = pipe_to_ground.icon,
+        icon_size = pipe_to_ground.icon_size,
+        icon_mipmaps = pipe_to_ground.icon_mipmaps
+    }
+    local icon_overlay = table.deepcopy(icon_base)
+    icon_overlay.tint = color
+    icon_overlay.icon = "__color-coded-pipes__/graphics/overlay-pipe-to-ground-icon/overlay-pipe-to-ground-icon.png"
+    return { icon_base, icon_overlay }
+end
+
+---@param pump data.ItemPrototype | data.PumpPrototype
+---@param color Color
+---@return data.IconData
+local function create_color_overlay_pump_icons(pump, color)
+    local icon_base = {
+        icon = pump.icon,
+        icon_size = pump.icon_size,
+        icon_mipmaps = pump.icon_mipmaps
+    }
+    local icon_overlay = table.deepcopy(icon_base)
+    icon_overlay.tint = color
+    icon_overlay.icon = "__color-coded-pipes__/graphics/overlay-pump-icon/overlay-pump-icon.png"
+    return { icon_base, icon_overlay }
+end
+
+---@param storage_tank data.ItemPrototype | data.StorageTankPrototype
+---@param fluid_color Color
+---@return data.IconData
+local function create_color_overlay_storage_tank_icons(storage_tank, fluid_color)
+    local icon_base = {
+        icon = storage_tank.icon,
+        icon_size = storage_tank.icon_size,
+        icon_mipmaps = storage_tank.icon_mipmaps
+    }
+    local icon_overlay = table.deepcopy(icon_base)
+    icon_overlay.tint = fluid_color
+    icon_overlay.icon = "__color-coded-pipes__/graphics/overlay-storage-tank-icon/overlay-storage-tank-icon.png"
+    return { icon_base, icon_overlay }
+end
 
 ---@param name string
 ---@param color Color
@@ -227,20 +271,7 @@ local function create_color_overlay_pipe_recipe(name, built_from_base_item)
     data:extend{ pipe_recipe }
 end
 
----@param pipe_to_ground data.ItemPrototype | data.PipeToGroundPrototype
----@param color Color
----@return data.IconData
-local function create_color_overlay_pipe_to_ground_icons(pipe_to_ground, color)
-    local icon_base = {
-        icon = pipe_to_ground.icon,
-        icon_size = pipe_to_ground.icon_size,
-        icon_mipmaps = pipe_to_ground.icon_mipmaps
-    }
-    local icon_overlay = table.deepcopy(icon_base)
-    icon_overlay.tint = color
-    icon_overlay.icon = "__color-coded-pipes__/graphics/overlay-pipe-to-ground-icon/overlay-pipe-to-ground-icon.png"
-    return { icon_base, icon_overlay }
-end
+
 
 ---@param name string
 ---@param color Color
@@ -339,20 +370,7 @@ local function create_color_overlay_pipe_to_ground_recipe(name, built_from_base_
     data:extend{ pipe_to_ground_recipe }
 end
 
----@param storage_tank data.ItemPrototype | data.StorageTankPrototype
----@param fluid_color Color
----@return data.IconData
-local function create_color_overlay_storage_tank_icons(storage_tank, fluid_color)
-    local icon_base = {
-        icon = storage_tank.icon,
-        icon_size = storage_tank.icon_size,
-        icon_mipmaps = storage_tank.icon_mipmaps
-    }
-    local icon_overlay = table.deepcopy(icon_base)
-    icon_overlay.tint = fluid_color
-    icon_overlay.icon = "__color-coded-pipes__/graphics/overlay-storage-tank-icon/overlay-storage-tank-icon.png"
-    return { icon_base, icon_overlay }
-end
+
 
 ---@param fluid_name string
 ---@param fluid_color Color
@@ -451,17 +469,7 @@ local function create_color_overlay_storage_tank_recipe(name, built_from_base_it
     data:extend{ storage_tank }
 end
 
-local function create_color_overlay_pump_icons(pump, color)
-    local icon_base = {
-        icon = pump.icon,
-        icon_size = pump.icon_size,
-        icon_mipmaps = pump.icon_mipmaps
-    }
-    local icon_overlay = table.deepcopy(icon_base)
-    icon_overlay.tint = color
-    icon_overlay.icon = "__color-coded-pipes__/graphics/overlay-pump-icon/overlay-pump-icon.png"
-    return { icon_base, icon_overlay }
-end
+
 
 ---@param name string
 ---@param color Color
