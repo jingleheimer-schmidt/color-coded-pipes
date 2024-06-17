@@ -79,6 +79,35 @@ local function get_subgroup(type, name)
 end
 
 
+---@param recipe_to_match string
+---@param recipe_to_add string
+local function add_recipe_to_technology_effects(recipe_to_match, recipe_to_add)
+    for _, technology in pairs(data.raw["technology"]) do
+        if technology.effects then
+            for _, effect in pairs(technology.effects) do
+                if effect.type == "unlock-recipe" and effect.recipe == recipe_to_match then
+                    table.insert(technology.effects, { type = "unlock-recipe", recipe = recipe_to_add })
+                end
+            end
+        end
+        if technology.normal and technology.normal.effects then
+            for _, effect in pairs(technology.normal.effects) do
+                if effect.type == "unlock-recipe" and effect.recipe == recipe_to_match then
+                    table.insert(technology.normal.effects, { type = "unlock-recipe", recipe = recipe_to_add })
+                end
+            end
+        end
+        if technology.expensive and technology.expensive.effects then
+            for _, effect in pairs(technology.expensive.effects) do
+                if effect.type == "unlock-recipe" and effect.recipe == recipe_to_match then
+                    table.insert(technology.expensive.effects, { type = "unlock-recipe", recipe = recipe_to_add })
+                end
+            end
+        end
+    end
+end
+
+
 ---@param pipe data.ItemPrototype | data.PipePrototype
 ---@param fluid_color Color
 ---@return data.IconData
