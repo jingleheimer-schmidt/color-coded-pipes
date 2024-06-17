@@ -39,7 +39,7 @@ local recipe_order = {
     ["white"] = "i",
 }
 
-local rgb_colors = {
+local rgb_colors = { ---@type table<string, Color>
     -- red = { r = 0.5, g = 0, b = 0 },
     -- orange = { r = 0.5, g = 0.25, b = 0 },
     -- yellow = { r = 0.5, g = 0.5, b = 0 },
@@ -49,15 +49,15 @@ local rgb_colors = {
     -- pink = { r = 0.5, g = 0, b = 0.5 },
     -- white = { r = 0.5, g = 0.5, b = 0.5 },
     -- black = { r = 0, g = 0, b = 0 },
-    red = settings.startup["color-coded-pipes-red"].value,
-    orange = settings.startup["color-coded-pipes-orange"].value,
-    yellow = settings.startup["color-coded-pipes-yellow"].value,
-    green = settings.startup["color-coded-pipes-green"].value,
-    blue = settings.startup["color-coded-pipes-blue"].value,
-    purple = settings.startup["color-coded-pipes-purple"].value,
-    pink = settings.startup["color-coded-pipes-pink"].value,
-    white = settings.startup["color-coded-pipes-white"].value,
-    black = settings.startup["color-coded-pipes-black"].value,
+    red = settings.startup["color-coded-pipes-red"].value, ---@type Color
+    orange = settings.startup["color-coded-pipes-orange"].value, ---@type Color
+    yellow = settings.startup["color-coded-pipes-yellow"].value, ---@type Color
+    green = settings.startup["color-coded-pipes-green"].value, ---@type Color
+    blue = settings.startup["color-coded-pipes-blue"].value, ---@type Color
+    purple = settings.startup["color-coded-pipes-purple"].value, ---@type Color
+    pink = settings.startup["color-coded-pipes-pink"].value, ---@type Color
+    white = settings.startup["color-coded-pipes-white"].value, ---@type Color
+    black = settings.startup["color-coded-pipes-black"].value, ---@type Color
 }
 
 for _, fluid in pairs(data.raw["fluid"]) do
