@@ -583,16 +583,6 @@ for name, color in pairs(rgb_colors) do
     local is_fluid_color = data.raw["fluid"][name] and true or false
     local is_rainbow_color = not is_fluid_color
     local built_from_base_item = (is_fluid_color and not show_fluid_recipes) or (is_rainbow_color and not show_rainbow_recipes) and true or false
-    -- if show_fluid_recipes and is_fluid_color then
-    --     create_fluid_color_pipe_recipe(name, built_from_base_item)
-    --     create_fluid_color_pipe_to_ground_recipe(name, built_from_base_item)
-    --     create_fluid_color_storage_tank_recipe(name, built_from_base_item)
-    -- end
-    -- if show_rainbow_recipes and not is_fluid_color then
-    --     create_fluid_color_pipe_recipe(name, built_from_base_item)
-    --     create_fluid_color_pipe_to_ground_recipe(name, built_from_base_item)
-    --     create_fluid_color_storage_tank_recipe(name, built_from_base_item)
-    -- end
 
     create_fluid_color_pipe_entity(name, color, built_from_base_item)
     create_fluid_color_pipe_item(name, color)
