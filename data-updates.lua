@@ -10,49 +10,41 @@ local replace_dash_with_underscore = color_coded_util.replace_dash_with_undersco
 -- create subgroups for the color-coded variants --
 ---------------------------------------------------
 
-local pipe_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-if not pipe_subgroup then log("subgroup not found") end
-pipe_subgroup.name = "color-coded-pipe"
-pipe_subgroup.order = pipe_subgroup.order .. "a"
+local function create_subgroup(name_suffix, order_suffix)
+    local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+    if not subgroup then
+        log("subgroup not found")
+    else
+        subgroup.name = "color-coded-" .. name_suffix
+        subgroup.order = subgroup.order .. order_suffix
+        return subgroup
+    end
+end
 
-local pipe_to_ground_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-if not pipe_to_ground_subgroup then log("subgroup not found") end
-pipe_to_ground_subgroup.name = "color-coded-pipe-to-ground"
-pipe_to_ground_subgroup.order = pipe_to_ground_subgroup.order .. "b"
-
-local pump_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-if not pump_subgroup then log("subgroup not found") end
-pump_subgroup.name = "color-coded-pump"
-pump_subgroup.order = pump_subgroup.order .. "c"
-
-local storage_tank_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-if not storage_tank_subgroup then log("subgroup not found") end
-storage_tank_subgroup.name = "color-coded-storage-tank"
-storage_tank_subgroup.order = storage_tank_subgroup.order .. "d"
+local pipe_subgroup = create_subgroup("pipe", "a")
+local pipe_to_ground_subgroup = create_subgroup("pipe-to-ground", "b")
+local pump_subgroup = create_subgroup("pump", "c")
+local storage_tank_subgroup = create_subgroup("storage-tank", "d")
 
 data:extend{ pipe_subgroup, pipe_to_ground_subgroup, pump_subgroup, storage_tank_subgroup }
 
-local fluid_color_pipe_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-if not fluid_color_pipe_subgroup then log("subgroup not found") end
-fluid_color_pipe_subgroup.name = "fluid-color-coded-pipe"
-fluid_color_pipe_subgroup.order = fluid_color_pipe_subgroup.order .. "a[fluid]"
+local function create_fluid_subgroup(name_suffix, order_suffix)
+    local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+    if not subgroup then 
+        log("subgroup not found") 
+    else
+        subgroup.name = "fluid-color-coded-" .. name_suffix
+        subgroup.order = subgroup.order .. order_suffix
+        return subgroup
+    end
+end
 
-local fluid_color_pipe_to_ground_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-if not fluid_color_pipe_to_ground_subgroup then log("subgroup not found") end
-fluid_color_pipe_to_ground_subgroup.name = "fluid-color-coded-pipe-to-ground"
-fluid_color_pipe_to_ground_subgroup.order = fluid_color_pipe_to_ground_subgroup.order .. "b[fluid]"
+local fluid_pipe_subgroup = create_fluid_subgroup("pipe", "a[fluid]")
+local fluid_pipe_to_ground_subgroup = create_fluid_subgroup("pipe-to-ground", "b[fluid]")
+local fluid_pump_subgroup = create_fluid_subgroup("pump", "c[fluid]")
+local fluid_storage_tank_subgroup = create_fluid_subgroup("storage-tank", "d[fluid]")
 
-local fluid_color_pump_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-if not fluid_color_pump_subgroup then log("subgroup not found") end
-fluid_color_pump_subgroup.name = "fluid-color-coded-pump"
-fluid_color_pump_subgroup.order = fluid_color_pump_subgroup.order .. "c[fluid]"
-
-local fluid_color_storage_tank_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-if not fluid_color_storage_tank_subgroup then log("subgroup not found") end
-fluid_color_storage_tank_subgroup.name = "fluid-color-coded-storage-tank"
-fluid_color_storage_tank_subgroup.order = fluid_color_storage_tank_subgroup.order .. "d[fluid]"
-
-data:extend{ fluid_color_pipe_subgroup, fluid_color_pipe_to_ground_subgroup, fluid_color_pump_subgroup, fluid_color_storage_tank_subgroup }
+data:extend{ fluid_pipe_subgroup, fluid_pipe_to_ground_subgroup, fluid_pump_subgroup, fluid_storage_tank_subgroup }
 
 
 ---------------------------------
