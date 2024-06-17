@@ -280,34 +280,6 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
 end
 
 
--- local fluids = data.raw["fluid"]
--- for _, fluid in pairs(fluids) do
---     local fluid_color = fluid.base_color
---     local fluid_name = fluid.name
-
---     if not (fluid_color.r and fluid_color.g and fluid_color.b) then
---         log("fluid " .. fluid_name .. " has no color")
---         goto next_fluid
---     end
-
---     fluid_color.a = 0.75
-
---     create_fluid_color_pipe_entity(fluid_name, fluid_color, true)
---     create_fluid_color_pipe_item(fluid_name, fluid_color)
---     -- create_fluid_color_pipe_recipe(fluid_name, fluid_color)
-
---     create_fluid_color_pipe_to_ground_entity(fluid_name, fluid_color, true)
---     create_fluid_color_pipe_to_ground_item(fluid_name, fluid_color)
---     -- create_fluid_color_pipe_to_ground_recipe(fluid_name, fluid_color)
-
---     create_fluid_color_storage_tank_entity(fluid_name, fluid_color, true)
---     create_fluid_color_storage_tank_item(fluid_name, fluid_color)
---     -- create_fluid_color_storage_tank_recipe(fluid_name, fluid_color)
-
---     ::next_fluid::
-
--- end
-
 for name, color in pairs(rgb_colors) do
 
     -- color.a = 0.55
