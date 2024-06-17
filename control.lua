@@ -166,3 +166,85 @@ end)
 --         direction = storage_tank.direction
 --     }
 -- end
+
+
+-- comand to filter quickbar slots for testing stuff
+-- local function filter_quickbar()
+--     local fluid_pipes = {}
+--     local rainbow_pipes = {}
+--     local player = game.get_player("asher_sky")
+--     rainbow_pipes = {
+--         "red",
+--         "orange",
+--         "yellow",
+--         "green",
+--         "blue",
+--         "purple",
+--         "pink",
+--         "black",
+--         "white",
+--     }
+--     for name, prototype in pairs(game.fluid_prototypes) do
+--         if game.entity_prototypes[name .. "-pipe"] then
+--             table.insert(fluid_pipes, name)
+--         end
+--     end
+
+--     local quickbar_index = 1
+--     for _, pipe_color in pairs(rainbow_pipes) do
+--         if game.item_prototypes[pipe_color .. "-pipe"] then
+--             player.set_quick_bar_slot(quickbar_index, game.item_prototypes[pipe_color .. "-pipe"])
+--             quickbar_index = quickbar_index + 1
+--         end
+--     end
+--     quickbar_index = 11
+--     for _, pipe_color in pairs(rainbow_pipes) do
+--         if game.item_prototypes[pipe_color .. "-pipe-to-ground"] then
+--             player.set_quick_bar_slot(quickbar_index, game.item_prototypes[pipe_color .. "-pipe-to-ground"])
+--             quickbar_index = quickbar_index + 1
+--         end
+--     end
+--     quickbar_index = 21
+--     for _, pipe_color in pairs(rainbow_pipes) do
+--         if game.item_prototypes[pipe_color .. "-pump"] then
+--             player.set_quick_bar_slot(quickbar_index, game.item_prototypes[pipe_color .. "-pump"])
+--             quickbar_index = quickbar_index + 1
+--         end
+--     end
+--     quickbar_index = 31
+--     for _, pipe_color in pairs(rainbow_pipes) do
+--         if game.item_prototypes[pipe_color .. "-storage-tank"] then
+--             player.set_quick_bar_slot(quickbar_index, game.item_prototypes[pipe_color .. "-storage-tank"])
+--             quickbar_index = quickbar_index + 1
+--         end
+--     end
+--     quickbar_index = 41
+--     for _, pipe_color in pairs(fluid_pipes) do
+--         if game.item_prototypes[pipe_color .. "-pipe"] then
+--             player.set_quick_bar_slot(quickbar_index, game.item_prototypes[pipe_color .. "-pipe"])
+--             quickbar_index = quickbar_index + 1
+--         end
+--     end
+--     quickbar_index = 51
+--     for _, pipe_color in pairs(fluid_pipes) do
+--         if game.item_prototypes[pipe_color .. "-pipe-to-ground"] then
+--             player.set_quick_bar_slot(quickbar_index, game.item_prototypes[pipe_color .. "-pipe-to-ground"])
+--             quickbar_index = quickbar_index + 1
+--         end
+--     end
+--     quickbar_index = 61
+--     for _, pipe_color in pairs(fluid_pipes) do
+--         if game.item_prototypes[pipe_color .. "-pump"] then
+--             player.set_quick_bar_slot(quickbar_index, game.item_prototypes[pipe_color .. "-pump"])
+--             quickbar_index = quickbar_index + 1
+--         end
+--     end
+--     quickbar_index = 71
+--     for _, pipe_color in pairs(fluid_pipes) do
+--         if game.item_prototypes[pipe_color .. "-storage-tank"] then
+--             player.set_quick_bar_slot(quickbar_index, game.item_prototypes[pipe_color .. "-storage-tank"])
+--             quickbar_index = quickbar_index + 1
+--         end
+--     end
+-- end
+-- filter_quickbar()
