@@ -20,12 +20,17 @@ if not pipe_to_ground_subgroup then log("subgroup not found") end
 pipe_to_ground_subgroup.name = "color-coded-pipe-to-ground"
 pipe_to_ground_subgroup.order = pipe_to_ground_subgroup.order .. "b"
 
+local pump_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+if not pump_subgroup then log("subgroup not found") end
+pump_subgroup.name = "color-coded-pump"
+pump_subgroup.order = pump_subgroup.order .. "c"
+
 local storage_tank_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
 if not storage_tank_subgroup then log("subgroup not found") end
 storage_tank_subgroup.name = "color-coded-storage-tank"
-storage_tank_subgroup.order = storage_tank_subgroup.order .. "c"
+storage_tank_subgroup.order = storage_tank_subgroup.order .. "d"
 
-data:extend{ pipe_subgroup, pipe_to_ground_subgroup, storage_tank_subgroup }
+data:extend{ pipe_subgroup, pipe_to_ground_subgroup, pump_subgroup, storage_tank_subgroup }
 
 local fluid_color_pipe_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
 if not fluid_color_pipe_subgroup then log("subgroup not found") end
@@ -37,12 +42,17 @@ if not fluid_color_pipe_to_ground_subgroup then log("subgroup not found") end
 fluid_color_pipe_to_ground_subgroup.name = "fluid-color-coded-pipe-to-ground"
 fluid_color_pipe_to_ground_subgroup.order = fluid_color_pipe_to_ground_subgroup.order .. "b[fluid]"
 
+local fluid_color_pump_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+if not fluid_color_pump_subgroup then log("subgroup not found") end
+fluid_color_pump_subgroup.name = "fluid-color-coded-pump"
+fluid_color_pump_subgroup.order = fluid_color_pump_subgroup.order .. "c[fluid]"
+
 local fluid_color_storage_tank_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
 if not fluid_color_storage_tank_subgroup then log("subgroup not found") end
 fluid_color_storage_tank_subgroup.name = "fluid-color-coded-storage-tank"
-fluid_color_storage_tank_subgroup.order = fluid_color_storage_tank_subgroup.order .. "c[fluid]"
+fluid_color_storage_tank_subgroup.order = fluid_color_storage_tank_subgroup.order .. "d[fluid]"
 
-data:extend{ fluid_color_pipe_subgroup, fluid_color_pipe_to_ground_subgroup, fluid_color_storage_tank_subgroup }
+data:extend{ fluid_color_pipe_subgroup, fluid_color_pipe_to_ground_subgroup, fluid_color_pump_subgroup, fluid_color_storage_tank_subgroup }
 
 
 ---------------------------------
@@ -51,7 +61,7 @@ data:extend{ fluid_color_pipe_subgroup, fluid_color_pipe_to_ground_subgroup, flu
 
 data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = "storage-tank"
 
----@param item data.ItemPrototype | data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype
+---@param item data.ItemPrototype | data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype
 ---@param color_name string?
 ---@return string
 local function get_order(item, color_name)
@@ -456,6 +466,84 @@ local function create_fluid_color_storage_tank_recipe(name, built_from_base_item
                     table.insert(technology.normal.effects, { type = "unlock-recipe", recipe = storage_tank_name })
                 end
             end
+    add_recipe_to_technology_effects("storage-tank", storage_tank_name)
+    data:extend{ storage_tank }
+end
+
+local function create_fluid_color_pump_icons(pump, color)
+    local icon_base = {
+        icon = pump.icon,
+        icon_size = pump.icon_size,
+        icon_mipmaps = pump.icon_mipmaps
+    }
+    local icon_overlay = table.deepcopy(icon_base)
+    icon_overlay.tint = color
+    icon_overlay.icon = "__color-coded-pipes__/graphics/overlay-pump-icon/overlay-pump-icon.png"
+    return { icon_base, icon_overlay }
+end
+
+---@param name string
+---@param color Color
+---@param built_from_base_item boolean
+local function create_fluid_color_pump(name, color, built_from_base_item)
+
+    local pump = table.deepcopy(data.raw["pump"]["pump"])
+    if not pump then log("pump entity not found") return end
+    local pump_name = name .. "-pump"
+    if built_from_base_item then
+        pump.placeable_by = { item = pump.name, count = 1 }
+    else
+        pump.minable.result = pump_name
+    end
+    pump.name = pump_name
+    pump.order = get_order(pump, name)
+    pump.subgroup = get_subgroup("pump", name)
+    for _, direction in pairs({ "north", "east", "south", "west" }) do
+        local original_layer = table.deepcopy(pump.animations[direction]) ---@type data.Animation
+        local overlay_layer = table.deepcopy(pump.animations[direction]) ---@type data.Animation
+        -- overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pump/overlay-pump-" .. direction .. ".png"
+        overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pump-" .. direction .. "/overlay-hr-pump-" .. direction .. ".png"
+        overlay_layer.tint = color
+        overlay_layer.hr_version.tint = color
+        pump.animations[direction] = { layers = { original_layer, overlay_layer } }
+    end
+    pump.localised_name = { "color-coded.name", { "entity-name.pump" }, { "fluid-name." .. name } }
+    pump.icons = create_fluid_color_pump_icons(pump, color)
+    data:extend{ pump }
+end
+
+---@param name string
+---@param color Color
+local function create_fluid_color_pump_item(name, color)
+    local pump = table.deepcopy(data.raw["item"]["pump"])
+    if not pump then log("pump item not found") return end
+    local pump_name = name .. "-pump"
+    pump.name = pump_name
+    pump.place_result = pump_name
+    pump.localised_name = { "color-coded.name", { "entity-name.pump" }, { "fluid-name." .. name } }
+    pump.icons = create_fluid_color_pump_icons(pump, color)
+    pump.order = get_order(pump, name)
+    pump.subgroup = get_subgroup("pump", name)
+    data:extend{ pump }
+end
+
+---@param name string
+---@param built_from_base_item boolean
+local function create_fluid_color_pump_recipe(name, built_from_base_item)
+    local pump = table.deepcopy(data.raw["recipe"]["pump"])
+    if not pump then log("pump recipe not found") return end
+    local pump_name = name .. "-pump"
+    pump.name = pump_name
+    pump.result = pump.result and pump_name or nil
+    pump.results = pump.results and { { type = "item", name = pump_name, amount = 1 } } or nil
+    if built_from_base_item then
+        pump.hidden = true
+    end
+    if pump.normal then
+        pump.normal.result = pump.normal.result and pump_name or nil
+        pump.normal.results = pump.normal.results and { { type = "item", name = pump_name, amount = 1 } } or nil
+        if built_from_base_item then
+            pump.normal.hidden = true
         end
         if technology.expensive and technology.expensive.effects then
             for _, effect in pairs(technology.expensive.effects) do
@@ -463,10 +551,20 @@ local function create_fluid_color_storage_tank_recipe(name, built_from_base_item
                     table.insert(technology.expensive.effects, { type = "unlock-recipe", recipe = storage_tank_name })
                 end
             end
+    end
+    if pump.expensive then
+        pump.expensive.result = pump.expensive.result and pump_name or nil
+        pump.expensive.results = pump.expensive.results and { { type = "item", name = pump_name, amount = 1 } } or nil
+        if built_from_base_item then
+            pump.expensive.hidden = true
         end
     end
     data:extend{ storage_tank }
+    pump.localised_name = { "color-coded.name", { "entity-name.pump" }, { "fluid-name." .. name } }
+    add_recipe_to_technology_effects("pump", pump_name)
+    data:extend{ pump }
 end
+
 
 -- local fluids = data.raw["fluid"]
 -- for _, fluid in pairs(fluids) do
@@ -526,6 +624,10 @@ for name, color in pairs(rgb_colors) do
     create_fluid_color_storage_tank_entity(name, color, built_from_base_item)
     create_fluid_color_storage_tank_item(name, color)
     create_fluid_color_storage_tank_recipe(name, built_from_base_item)
+
+    create_fluid_color_pump(name, color, built_from_base_item)
+    create_fluid_color_pump_item(name, color)
+    create_fluid_color_pump_recipe(name, built_from_base_item)
 
 end
 
