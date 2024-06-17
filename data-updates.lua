@@ -153,6 +153,137 @@ local function create_color_overlay_item(name, color, entity_type)
     data:extend{ item }
 end
 
+---@param name string
+---@param built_from_base_item boolean
+local function create_color_overlay_pipe_recipe(name, built_from_base_item)
+
+    local pipe_recipe = table.deepcopy(data.raw["recipe"]["pipe"])
+    if not pipe_recipe then log("pipe recipe not found") return end
+    local pipe_recipe_name = name .. "-pipe"
+    pipe_recipe.name = pipe_recipe_name
+    pipe_recipe.result = pipe_recipe.result and pipe_recipe_name or nil
+    pipe_recipe.results = pipe_recipe.results and { { type = "item", name = pipe_recipe_name, amount = 1 } } or nil
+    if built_from_base_item then
+        pipe_recipe.hidden = true
+    end
+    if pipe_recipe.normal then
+        pipe_recipe.normal.result = pipe_recipe.normal.result and pipe_recipe_name or nil
+        pipe_recipe.normal.results = pipe_recipe.normal.results and { { type = "item", name = pipe_recipe_name, amount = 1 } } or nil
+        if built_from_base_item then
+            pipe_recipe.normal.hidden = true
+        end
+    end
+    if pipe_recipe.expensive then
+        pipe_recipe.expensive.result = pipe_recipe.expensive.result and pipe_recipe_name or nil
+        pipe_recipe.expensive.results = pipe_recipe.expensive.results and { { type = "item", name = pipe_recipe_name, amount = 1 } } or nil
+        if built_from_base_item then
+            pipe_recipe.expensive.hidden = true
+        end
+    end
+    pipe_recipe.localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
+    add_recipe_to_technology_effects("pipe", pipe_recipe_name)
+    data:extend{ pipe_recipe }
+end
+
+
+---@param name string
+---@param built_from_base_item boolean
+local function create_color_overlay_pipe_to_ground_recipe(name, built_from_base_item)
+
+    local pipe_to_ground_recipe = table.deepcopy(data.raw["recipe"]["pipe-to-ground"])
+    if not pipe_to_ground_recipe then log("pipe-to-ground recipe not found") return end
+    local pipe_to_ground_recipe_name = name .. "-pipe-to-ground"
+    pipe_to_ground_recipe.name = pipe_to_ground_recipe_name
+    pipe_to_ground_recipe.result = pipe_to_ground_recipe.result and pipe_to_ground_recipe_name or nil
+    pipe_to_ground_recipe.results = pipe_to_ground_recipe.results and { { type = "item", name = pipe_to_ground_recipe_name, amount = 1 } } or nil
+    if built_from_base_item then
+        pipe_to_ground_recipe.hidden = true
+    end
+    if pipe_to_ground_recipe.normal then
+        pipe_to_ground_recipe.normal.result = pipe_to_ground_recipe.normal.result and pipe_to_ground_recipe_name or nil
+        pipe_to_ground_recipe.normal.results = pipe_to_ground_recipe.normal.results and { { type = "item", name = pipe_to_ground_recipe_name, amount = 1 } } or nil
+        if built_from_base_item then
+            pipe_to_ground_recipe.normal.hidden = true
+        end
+    end
+    if pipe_to_ground_recipe.expensive then
+        pipe_to_ground_recipe.expensive.result = pipe_to_ground_recipe.expensive.result and pipe_to_ground_recipe_name or nil
+        pipe_to_ground_recipe.expensive.results = pipe_to_ground_recipe.expensive.results and { { type = "item", name = pipe_to_ground_recipe_name, amount = 1 } } or nil
+        if built_from_base_item then
+            pipe_to_ground_recipe.expensive.hidden = true
+        end
+    end
+    pipe_to_ground_recipe.localised_name = { "color-coded.name", { "entity-name.pipe-to-ground" }, { "fluid-name." .. name } }
+    add_recipe_to_technology_effects("pipe-to-ground", pipe_to_ground_recipe_name)
+    data:extend{ pipe_to_ground_recipe }
+end
+
+
+
+---@param name string
+---@param built_from_base_item boolean
+local function create_color_overlay_storage_tank_recipe(name, built_from_base_item)
+
+    local storage_tank = table.deepcopy(data.raw["recipe"]["storage-tank"])
+    if not storage_tank then log("storage-tank recipe not found") return end
+    local storage_tank_name = name .. "-storage-tank"
+    storage_tank.name = storage_tank_name
+    storage_tank.result = storage_tank.result and storage_tank_name or nil
+    storage_tank.results = storage_tank.results and { { type = "item", name = storage_tank_name, amount = 1 } } or nil
+    if built_from_base_item then
+        storage_tank.hidden = true
+    end
+    if storage_tank.normal then
+        storage_tank.normal.result = storage_tank.normal.result and storage_tank_name or nil
+        storage_tank.normal.results = storage_tank.normal.results and { { type = "item", name = storage_tank_name, amount = 1 } } or nil
+        if built_from_base_item then
+            storage_tank.normal.hidden = true
+        end
+    end
+    if storage_tank.expensive then
+        storage_tank.expensive.result = storage_tank.expensive.result and storage_tank_name or nil
+        storage_tank.expensive.results = storage_tank.expensive.results and { { type = "item", name = storage_tank_name, amount = 1 } } or nil
+        if built_from_base_item then
+            storage_tank.expensive.hidden = true
+        end
+    end
+    storage_tank.localised_name = { "color-coded.name", { "entity-name.storage-tank" }, { "fluid-name." .. name } }
+    add_recipe_to_technology_effects("storage-tank", storage_tank_name)
+    data:extend{ storage_tank }
+end
+
+---@param name string
+---@param built_from_base_item boolean
+local function create_color_overlay_pump_recipe(name, built_from_base_item)
+    local pump = table.deepcopy(data.raw["recipe"]["pump"])
+    if not pump then log("pump recipe not found") return end
+    local pump_name = name .. "-pump"
+    pump.name = pump_name
+    pump.result = pump.result and pump_name or nil
+    pump.results = pump.results and { { type = "item", name = pump_name, amount = 1 } } or nil
+    if built_from_base_item then
+        pump.hidden = true
+    end
+    if pump.normal then
+        pump.normal.result = pump.normal.result and pump_name or nil
+        pump.normal.results = pump.normal.results and { { type = "item", name = pump_name, amount = 1 } } or nil
+        if built_from_base_item then
+            pump.normal.hidden = true
+        end
+    end
+    if pump.expensive then
+        pump.expensive.result = pump.expensive.result and pump_name or nil
+        pump.expensive.results = pump.expensive.results and { { type = "item", name = pump_name, amount = 1 } } or nil
+        if built_from_base_item then
+            pump.expensive.hidden = true
+        end
+    end
+    pump.localised_name = { "color-coded.name", { "entity-name.pump" }, { "fluid-name." .. name } }
+    add_recipe_to_technology_effects("pump", pump_name)
+    data:extend{ pump }
+end
+
+
 
 ---@param name string
 ---@param color Color
@@ -206,39 +337,6 @@ local function create_color_overlay_pipe_entity(name, color, built_from_base_ite
     data:extend{ pipe }
 end
 
----@param name string
----@param built_from_base_item boolean
-local function create_color_overlay_pipe_recipe(name, built_from_base_item)
-
-    local pipe_recipe = table.deepcopy(data.raw["recipe"]["pipe"])
-    if not pipe_recipe then log("pipe recipe not found") return end
-    local pipe_recipe_name = name .. "-pipe"
-    pipe_recipe.name = pipe_recipe_name
-    pipe_recipe.result = pipe_recipe.result and pipe_recipe_name or nil
-    pipe_recipe.results = pipe_recipe.results and { { type = "item", name = pipe_recipe_name, amount = 1 } } or nil
-    if built_from_base_item then
-        pipe_recipe.hidden = true
-    end
-    if pipe_recipe.normal then
-        pipe_recipe.normal.result = pipe_recipe.normal.result and pipe_recipe_name or nil
-        pipe_recipe.normal.results = pipe_recipe.normal.results and { { type = "item", name = pipe_recipe_name, amount = 1 } } or nil
-        if built_from_base_item then
-            pipe_recipe.normal.hidden = true
-        end
-    end
-    if pipe_recipe.expensive then
-        pipe_recipe.expensive.result = pipe_recipe.expensive.result and pipe_recipe_name or nil
-        pipe_recipe.expensive.results = pipe_recipe.expensive.results and { { type = "item", name = pipe_recipe_name, amount = 1 } } or nil
-        if built_from_base_item then
-            pipe_recipe.expensive.hidden = true
-        end
-    end
-    pipe_recipe.localised_name = { "color-coded.name", { "entity-name.pipe" }, { "fluid-name." .. name } }
-    add_recipe_to_technology_effects("pipe", pipe_recipe_name)
-    data:extend{ pipe_recipe }
-end
-
-
 
 ---@param name string
 ---@param color Color
@@ -287,40 +385,6 @@ local function create_color_overlay_pipe_to_ground_entity(name, color, placeable
         end
     end
     data:extend{ pipe_to_ground }
-end
-
-
-
----@param name string
----@param built_from_base_item boolean
-local function create_color_overlay_pipe_to_ground_recipe(name, built_from_base_item)
-
-    local pipe_to_ground_recipe = table.deepcopy(data.raw["recipe"]["pipe-to-ground"])
-    if not pipe_to_ground_recipe then log("pipe-to-ground recipe not found") return end
-    local pipe_to_ground_recipe_name = name .. "-pipe-to-ground"
-    pipe_to_ground_recipe.name = pipe_to_ground_recipe_name
-    pipe_to_ground_recipe.result = pipe_to_ground_recipe.result and pipe_to_ground_recipe_name or nil
-    pipe_to_ground_recipe.results = pipe_to_ground_recipe.results and { { type = "item", name = pipe_to_ground_recipe_name, amount = 1 } } or nil
-    if built_from_base_item then
-        pipe_to_ground_recipe.hidden = true
-    end
-    if pipe_to_ground_recipe.normal then
-        pipe_to_ground_recipe.normal.result = pipe_to_ground_recipe.normal.result and pipe_to_ground_recipe_name or nil
-        pipe_to_ground_recipe.normal.results = pipe_to_ground_recipe.normal.results and { { type = "item", name = pipe_to_ground_recipe_name, amount = 1 } } or nil
-        if built_from_base_item then
-            pipe_to_ground_recipe.normal.hidden = true
-        end
-    end
-    if pipe_to_ground_recipe.expensive then
-        pipe_to_ground_recipe.expensive.result = pipe_to_ground_recipe.expensive.result and pipe_to_ground_recipe_name or nil
-        pipe_to_ground_recipe.expensive.results = pipe_to_ground_recipe.expensive.results and { { type = "item", name = pipe_to_ground_recipe_name, amount = 1 } } or nil
-        if built_from_base_item then
-            pipe_to_ground_recipe.expensive.hidden = true
-        end
-    end
-    pipe_to_ground_recipe.localised_name = { "color-coded.name", { "entity-name.pipe-to-ground" }, { "fluid-name." .. name } }
-    add_recipe_to_technology_effects("pipe-to-ground", pipe_to_ground_recipe_name)
-    data:extend{ pipe_to_ground_recipe }
 end
 
 
@@ -376,39 +440,6 @@ end
 
 
 
----@param name string
----@param built_from_base_item boolean
-local function create_color_overlay_storage_tank_recipe(name, built_from_base_item)
-
-    local storage_tank = table.deepcopy(data.raw["recipe"]["storage-tank"])
-    if not storage_tank then log("storage-tank recipe not found") return end
-    local storage_tank_name = name .. "-storage-tank"
-    storage_tank.name = storage_tank_name
-    storage_tank.result = storage_tank.result and storage_tank_name or nil
-    storage_tank.results = storage_tank.results and { { type = "item", name = storage_tank_name, amount = 1 } } or nil
-    if built_from_base_item then
-        storage_tank.hidden = true
-    end
-    if storage_tank.normal then
-        storage_tank.normal.result = storage_tank.normal.result and storage_tank_name or nil
-        storage_tank.normal.results = storage_tank.normal.results and { { type = "item", name = storage_tank_name, amount = 1 } } or nil
-        if built_from_base_item then
-            storage_tank.normal.hidden = true
-        end
-    end
-    if storage_tank.expensive then
-        storage_tank.expensive.result = storage_tank.expensive.result and storage_tank_name or nil
-        storage_tank.expensive.results = storage_tank.expensive.results and { { type = "item", name = storage_tank_name, amount = 1 } } or nil
-        if built_from_base_item then
-            storage_tank.expensive.hidden = true
-        end
-    end
-    storage_tank.localised_name = { "color-coded.name", { "entity-name.storage-tank" }, { "fluid-name." .. name } }
-    add_recipe_to_technology_effects("storage-tank", storage_tank_name)
-    data:extend{ storage_tank }
-end
-
-
 
 ---@param name string
 ---@param color Color
@@ -440,38 +471,6 @@ local function create_color_overlay_pump(name, color, built_from_base_item)
     data:extend{ pump }
 end
 
-
-
----@param name string
----@param built_from_base_item boolean
-local function create_color_overlay_pump_recipe(name, built_from_base_item)
-    local pump = table.deepcopy(data.raw["recipe"]["pump"])
-    if not pump then log("pump recipe not found") return end
-    local pump_name = name .. "-pump"
-    pump.name = pump_name
-    pump.result = pump.result and pump_name or nil
-    pump.results = pump.results and { { type = "item", name = pump_name, amount = 1 } } or nil
-    if built_from_base_item then
-        pump.hidden = true
-    end
-    if pump.normal then
-        pump.normal.result = pump.normal.result and pump_name or nil
-        pump.normal.results = pump.normal.results and { { type = "item", name = pump_name, amount = 1 } } or nil
-        if built_from_base_item then
-            pump.normal.hidden = true
-        end
-    end
-    if pump.expensive then
-        pump.expensive.result = pump.expensive.result and pump_name or nil
-        pump.expensive.results = pump.expensive.results and { { type = "item", name = pump_name, amount = 1 } } or nil
-        if built_from_base_item then
-            pump.expensive.hidden = true
-        end
-    end
-    pump.localised_name = { "color-coded.name", { "entity-name.pump" }, { "fluid-name." .. name } }
-    add_recipe_to_technology_effects("pump", pump_name)
-    data:extend{ pump }
-end
 
 
 -- local fluids = data.raw["fluid"]
