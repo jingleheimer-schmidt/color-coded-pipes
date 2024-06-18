@@ -329,16 +329,6 @@ if settings.startup["color-coded-main-menu-simulations"].value then
         simulation.init = simulation.init or ""
         simulation.init = simulation.init .. [[
             
-            local fluid_to_color_map = {
-                ["water"] = "blue",
-                ["crude-oil"] = "black",
-                ["steam"] = "white",
-                ["heavy-oil"] = "red",
-                ["light-oil"] = "orange",
-                ["petroleum-gas"] = "purple",
-                ["sulfuric-acid"] = "yellow",
-                ["lubricant"] = "green",
-            }
             local function get_fluid_name(entity)
                 local fluid_name = "crude-oil"
                 local fluidbox = entity.fluidbox
