@@ -201,7 +201,9 @@ local function create_color_overlay_recipe(base_recipe_name, name, built_from_ba
         end
     end
     new_recipe.localised_name = { "color-coded.name", { "entity-name." .. base_recipe_name }, { "fluid-name." .. name } }
-    add_recipe_to_technology_effects(base_recipe_name, new_recipe_name)
+    if not built_from_base_item then
+        add_recipe_to_technology_effects(base_recipe_name, new_recipe_name)
+    end
     data:extend{ new_recipe }
 end
 
