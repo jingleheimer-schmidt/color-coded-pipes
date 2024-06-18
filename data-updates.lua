@@ -360,53 +360,54 @@ if settings.startup["color-coded-main-menu-simulations"].value then
                 local original_pipes = surface.find_entities_filtered{name="pipe"}
                 for _, pipe in pairs(original_pipes) do
                     local fluid_name = get_fluid_name(pipe)
-                    local pipe_color = fluid_to_color_map[fluid_name]
-                    if pipe_color then
-                        surface.create_entity{
-                            -- name = pipe_color .. "-pipe",
-                            name = fluid_name .. "-pipe",
-                            position = pipe.position,
-                            force = pipe.force,
-                            direction = pipe.direction,
-                            fluidbox = pipe.fluidbox,
-                            fast_replace = true,
-                            spill = false
-                        }
-                    end
+                    surface.create_entity{
+                        name = fluid_name .. "-pipe",
+                        position = pipe.position,
+                        force = pipe.force,
+                        direction = pipe.direction,
+                        fluidbox = pipe.fluidbox,
+                        fast_replace = true,
+                        spill = false
+                    }
                 end
                 local original_pipe_to_grounds = surface.find_entities_filtered{name="pipe-to-ground"}
                 for _, pipe_to_ground in pairs(original_pipe_to_grounds) do
                     local fluid_name = get_fluid_name(pipe_to_ground)
-                    local pipe_color = fluid_to_color_map[fluid_name]
-                    if pipe_color then
-                        surface.create_entity{
-                            -- name = pipe_color .. "-pipe-to-ground",
-                            name = fluid_name .. "-pipe-to-ground",
-                            position = pipe_to_ground.position,
-                            force = pipe_to_ground.force,
-                            direction = pipe_to_ground.direction,
-                            fluidbox = pipe_to_ground.fluidbox,
-                            fast_replace = true,
-                            spill = false
-                        }
-                    end
+                    surface.create_entity{
+                        name = fluid_name .. "-pipe-to-ground",
+                        position = pipe_to_ground.position,
+                        force = pipe_to_ground.force,
+                        direction = pipe_to_ground.direction,
+                        fluidbox = pipe_to_ground.fluidbox,
+                        fast_replace = true,
+                        spill = false
+                    }
                 end
                 local original_storage_tanks = surface.find_entities_filtered{name="storage-tank"}
                 for _, storage_tank in pairs(original_storage_tanks) do
                     local fluid_name = get_fluid_name(storage_tank)
-                    local pipe_color = fluid_to_color_map[fluid_name]
-                    if pipe_color then
-                        surface.create_entity{
-                            -- name = pipe_color .. "-storage-tank",
-                            name = fluid_name .. "-storage-tank",
-                            position = storage_tank.position,
-                            force = storage_tank.force,
-                            direction = storage_tank.direction,
-                            fluidbox = storage_tank.fluidbox,
-                            fast_replace = true,
-                            spill = false
-                        }
-                    end
+                    surface.create_entity{
+                        name = fluid_name .. "-storage-tank",
+                        position = storage_tank.position,
+                        force = storage_tank.force,
+                        direction = storage_tank.direction,
+                        fluidbox = storage_tank.fluidbox,
+                        fast_replace = true,
+                        spill = false
+                    }
+                end
+                local original_pumps = surface.find_entities_filtered{name="pump"}
+                for _, pump in pairs(original_pumps) do
+                    local fluid_name = get_fluid_name(pump)
+                    surface.create_entity{
+                        name = fluid_name .. "-pump",
+                        position = pump.position,
+                        force = pump.force,
+                        direction = pump.direction,
+                        fluidbox = pump.fluidbox,
+                        fast_replace = true,
+                        spill = false
+                    }
                 end
             end
 
