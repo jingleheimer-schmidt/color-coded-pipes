@@ -1,4 +1,8 @@
 
+-----------------------------------------
+-- import util constants and functions --
+-----------------------------------------
+
 local color_coded_util = require("color-coded-util")
 local pipe_filenames = color_coded_util.pipe_filenames
 local pipe_to_ground_filenames = color_coded_util.pipe_to_ground_filenames
@@ -6,10 +10,14 @@ local recipe_order = color_coded_util.recipe_order
 local rgb_colors = color_coded_util.rgb_colors
 local replace_dash_with_underscore = color_coded_util.replace_dash_with_underscore
 
+
 ---------------------------------------------------
 -- create subgroups for the color-coded variants --
 ---------------------------------------------------
 
+---@param name_suffix string
+---@param order_suffix string
+---@return data.ItemSubGroup?
 local function create_rainbow_subgroup(name_suffix, order_suffix)
     local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
     if not subgroup then
@@ -28,6 +36,9 @@ local storage_tank_subgroup = create_rainbow_subgroup("storage-tank", "d")
 
 data:extend{ pipe_subgroup, pipe_to_ground_subgroup, pump_subgroup, storage_tank_subgroup }
 
+---@param name_suffix string
+---@param order_suffix string
+---@return data.ItemSubGroup?
 local function create_fluid_subgroup(name_suffix, order_suffix)
     local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
     if not subgroup then
@@ -47,13 +58,18 @@ local fluid_storage_tank_subgroup = create_fluid_subgroup("storage-tank", "d[flu
 data:extend{ fluid_pipe_subgroup, fluid_pipe_to_ground_subgroup, fluid_pump_subgroup, fluid_storage_tank_subgroup }
 
 
----------------------------------
--- create color-coded entities --
----------------------------------
+----------------------------------------------------------------------------------------------------------------
+-- add a fast_replaceable_group to the base storage tank so that all the color-coded storage tanks inherit it --
+----------------------------------------------------------------------------------------------------------------
 
--- add a fast_replaceable_group to the base storage tank so that all the color-coded storage tanks inherit it
 data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = "storage-tank"
 
+
+------------------------------------
+-- just a couple helper functions --
+------------------------------------
+
+-- get the order of a color-coded item or entity
 ---@param item data.ItemPrototype | data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype
 ---@param color_name string?
 ---@return string
@@ -70,6 +86,7 @@ local function get_order(item, color_name)
 end
 
 
+-- get the subgroup of a color-coded item or entity
 ---@param type string
 ---@param name string
 ---@return string
@@ -82,6 +99,7 @@ local function get_subgroup(type, name)
 end
 
 
+-- add a color-coded variant to all the same technology effects as its base version
 ---@param recipe_to_match string
 ---@param recipe_to_add string
 local function add_recipe_to_technology_effects(recipe_to_match, recipe_to_add)
@@ -111,6 +129,7 @@ local function add_recipe_to_technology_effects(recipe_to_match, recipe_to_add)
 end
 
 
+-- create icons for a color-coded item or entity
 ---@param prototype data.ItemPrototype | data.PipePrototype | data.PipeToGroundPrototype | data.PumpPrototype | data.StorageTankPrototype
 ---@param color Color
 ---@param type string
@@ -132,17 +151,20 @@ local function create_color_overlay_icons(prototype, color, type)
 end
 
 
+----------------------------------------------
+-- functions to create color-coded variants --
+----------------------------------------------
+
+-- create a color-coded version of an item
 ---@param name string
 ---@param color Color
 ---@param entity_type string
 local function create_color_overlay_item(name, color, entity_type)
-
     local item = table.deepcopy(data.raw["item"][entity_type])
     if not item then
         log(entity_type .. " item not found")
         return
     end
-
     local item_name = name .. "-" .. entity_type
     item.name = item_name
     item.place_result = item_name
@@ -153,22 +175,21 @@ local function create_color_overlay_item(name, color, entity_type)
     data:extend{ item }
 end
 
+
+-- create a color-coded version of a recipe
 ---@param base_recipe_name string
 ---@param name string
 ---@param built_from_base_item boolean
 local function create_color_overlay_recipe(base_recipe_name, name, built_from_base_item)
     local new_recipe = table.deepcopy(data.raw["recipe"][base_recipe_name])
     if not new_recipe then log(base_recipe_name .. " recipe not found") return end
-
     local new_recipe_name = name .. "-" .. base_recipe_name
     new_recipe.name = new_recipe_name
     new_recipe.result = new_recipe.result and new_recipe_name or nil
     new_recipe.results = new_recipe.results and { { type = "item", name = new_recipe_name, amount = 1 } } or nil
-
     if built_from_base_item then
         new_recipe.hidden = true
     end
-
     if new_recipe.normal then
         new_recipe.normal.result = new_recipe.normal.result and new_recipe_name or nil
         new_recipe.normal.results = new_recipe.normal.results and { { type = "item", name = new_recipe_name, amount = 1 } } or nil
@@ -176,7 +197,6 @@ local function create_color_overlay_recipe(base_recipe_name, name, built_from_ba
             new_recipe.normal.hidden = true
         end
     end
-
     if new_recipe.expensive then
         new_recipe.expensive.result = new_recipe.expensive.result and new_recipe_name or nil
         new_recipe.expensive.results = new_recipe.expensive.results and { { type = "item", name = new_recipe_name, amount = 1 } } or nil
@@ -184,23 +204,20 @@ local function create_color_overlay_recipe(base_recipe_name, name, built_from_ba
             new_recipe.expensive.hidden = true
         end
     end
-
     new_recipe.localised_name = { "color-coded.name", { "entity-name." .. base_recipe_name }, { "fluid-name." .. name } }
     add_recipe_to_technology_effects(base_recipe_name, new_recipe_name)
     data:extend{ new_recipe }
 end
 
 
-
+-- create a color-coded version of a pipe, pipe-to-ground, pump, or storage tank
 ---@param entity_type string
 ---@param name string
 ---@param color Color
 ---@param built_from_base_item boolean
 local function create_color_overlay_entity(entity_type, name, color, built_from_base_item)
-
     local entity = table.deepcopy(data.raw[entity_type][entity_type])
     if not entity then log(entity_type .. " entity not found") return  end
-    
     local entity_name = name .. "-" .. entity_type
     if built_from_base_item then
         entity.placeable_by = { item = entity.name, count = 1 }
@@ -208,12 +225,10 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
         entity.minable.result = entity_name
     end
     entity.name = entity_name
-
     entity.order = get_order(entity, name)
     entity.subgroup = get_subgroup(entity_type, name)
     entity.icons = create_color_overlay_icons(entity, color, entity_type)
     entity.localised_name = { "color-coded.name", { "entity-name." .. entity_type }, { "fluid-name." .. name } }
-
     if entity.fluid_box.pipe_covers then
         local directions = { "north", "east", "south", "west" }
         for _, direction in pairs(directions) do
@@ -227,7 +242,6 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             entity.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
         end
     end
-
     if entity_type == "pipe" then
         for _, filename in pairs(pipe_filenames) do
             local property_name = replace_dash_with_underscore(filename)
@@ -275,14 +289,15 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             [3] = shadow_sheet
         }
     end
-
     data:extend{ entity }
 end
 
 
-for name, color in pairs(rgb_colors) do
+------------------------------------------------------------------------------------
+-- create color-coded versions of pipes, pipe-to-ground, storage tanks, and pumps --
+------------------------------------------------------------------------------------
 
-    -- color.a = 0.55
+for name, color in pairs(rgb_colors) do
     local show_rainbow_recipes = settings.startup["color-coded-pipes-show-rainbow-recipes"].value
     local show_fluid_recipes = settings.startup["color-coded-pipes-show-fluid-recipes"].value
     local is_fluid_color = data.raw["fluid"][name] and true or false
@@ -304,9 +319,7 @@ for name, color in pairs(rgb_colors) do
     create_color_overlay_entity("pump", name, color, built_from_base_item)
     create_color_overlay_item(name, color, "pump")
     create_color_overlay_recipe("pump", name, built_from_base_item)
-
 end
-
 
 
 --------------------------------------------------------
@@ -314,7 +327,6 @@ end
 --------------------------------------------------------
 
 if settings.startup["color-coded-main-menu-simulations"].value then
-
     for _, simulation in pairs(data.raw["utility-constants"]["default"].main_menu_simulations) do
         simulation.init = simulation.init or ""
         simulation.init = simulation.init .. [[
@@ -329,7 +341,6 @@ if settings.startup["color-coded-main-menu-simulations"].value then
                 ["sulfuric-acid"] = "yellow",
                 ["lubricant"] = "green",
             }
-
             local function get_fluid_name(entity)
                 local fluid_name = "crude-oil"
                 local fluidbox = entity.fluidbox
@@ -349,7 +360,6 @@ if settings.startup["color-coded-main-menu-simulations"].value then
                 end
                 return fluid_name
             end
-
             for _, surface in pairs(game.surfaces) do
                 local original_pipes = surface.find_entities_filtered{name="pipe"}
                 for _, pipe in pairs(original_pipes) do
@@ -406,5 +416,4 @@ if settings.startup["color-coded-main-menu-simulations"].value then
 
         ]]
     end
-
 end
