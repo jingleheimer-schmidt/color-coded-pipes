@@ -17,7 +17,6 @@ local replace_dash_with_underscore = color_coded_util.replace_dash_with_undersco
 
 ---@param name_suffix string
 ---@param order_suffix string
----@return data.ItemSubGroup?
 local function create_rainbow_subgroup(name_suffix, order_suffix)
     local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
     if not subgroup then
@@ -25,20 +24,12 @@ local function create_rainbow_subgroup(name_suffix, order_suffix)
     else
         subgroup.name = "color-coded-" .. name_suffix
         subgroup.order = subgroup.order .. order_suffix
-        return subgroup
+        data:extend{ subgroup }
     end
 end
 
-local pipe_subgroup = create_rainbow_subgroup("pipe", "a")
-local pipe_to_ground_subgroup = create_rainbow_subgroup("pipe-to-ground", "b")
-local pump_subgroup = create_rainbow_subgroup("pump", "c")
-local storage_tank_subgroup = create_rainbow_subgroup("storage-tank", "d")
-
-data:extend{ pipe_subgroup, pipe_to_ground_subgroup, pump_subgroup, storage_tank_subgroup }
-
 ---@param name_suffix string
 ---@param order_suffix string
----@return data.ItemSubGroup?
 local function create_fluid_subgroup(name_suffix, order_suffix)
     local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
     if not subgroup then
@@ -46,16 +37,21 @@ local function create_fluid_subgroup(name_suffix, order_suffix)
     else
         subgroup.name = "fluid-color-coded-" .. name_suffix
         subgroup.order = subgroup.order .. order_suffix
-        return subgroup
+        data:extend{ subgroup }
     end
 end
 
-local fluid_pipe_subgroup = create_fluid_subgroup("pipe", "a[fluid]")
-local fluid_pipe_to_ground_subgroup = create_fluid_subgroup("pipe-to-ground", "b[fluid]")
-local fluid_pump_subgroup = create_fluid_subgroup("pump", "c[fluid]")
-local fluid_storage_tank_subgroup = create_fluid_subgroup("storage-tank", "d[fluid]")
+local group_sorting = {
+    ["pipe"] = "a",
+    ["pipe-to-ground"] = "b",
+    ["pump"] = "c",
+    ["storage-tank"] = "d"
+}
 
-data:extend{ fluid_pipe_subgroup, fluid_pipe_to_ground_subgroup, fluid_pump_subgroup, fluid_storage_tank_subgroup }
+for item, order in pairs(group_sorting) do
+    create_rainbow_subgroup(item, order)
+    create_fluid_subgroup(item, order .. "[fluid]")
+end
 
 
 ----------------------------------------------------------------------------------------------------------------
