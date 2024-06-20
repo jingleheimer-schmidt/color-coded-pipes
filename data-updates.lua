@@ -268,6 +268,7 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
         for _, direction in pairs({ "north", "east", "south", "west" }) do
             local original_layer = table.deepcopy(entity.animations[direction]) ---@type data.Animation
             local overlay_layer = table.deepcopy(entity.animations[direction]) ---@type data.Animation
+            overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pump-" .. direction .. "/overlay-pump-" .. direction .. ".png"
             overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pump-" .. direction .. "/overlay-hr-pump-" .. direction .. ".png"
             overlay_layer.tint = color
             overlay_layer.hr_version.tint = color
