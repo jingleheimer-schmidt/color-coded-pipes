@@ -15,42 +15,27 @@ local replace_dash_with_underscore = color_coded_util.replace_dash_with_undersco
 -- create subgroups for the color-coded variants --
 ---------------------------------------------------
 
----@param name_suffix string
----@param order_suffix string
-local function create_rainbow_subgroup(name_suffix, order_suffix)
+local function create_subgroup(name_suffix, order_suffix, fluid)
     local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
     if not subgroup then
         log("subgroup not found")
     else
-        subgroup.name = "color-coded-" .. name_suffix
+        subgroup.name = (fluid and "fluid-" or "") .. "color-coded-" .. name_suffix
         subgroup.order = subgroup.order .. order_suffix
-        data:extend{ subgroup }
-    end
-end
-
----@param name_suffix string
----@param order_suffix string
-local function create_fluid_subgroup(name_suffix, order_suffix)
-    local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-    if not subgroup then
-        log("subgroup not found")
-    else
-        subgroup.name = "fluid-color-coded-" .. name_suffix
-        subgroup.order = subgroup.order .. order_suffix
-        data:extend{ subgroup }
+        data:extend { subgroup }
     end
 end
 
 local group_sorting = {
-    ["pipe"] = "a",
-    ["pipe-to-ground"] = "b",
-    ["pump"] = "c",
-    ["storage-tank"] = "d"
+    { entity_type = "pipe",           order = "a" },
+    { entity_type = "pipe-to-ground", order = "b" },
+    { entity_type = "pump",           order = "c" },
+    { entity_type = "storage-tank",   order = "d" }
 }
 
-for item, order in pairs(group_sorting) do
-    create_rainbow_subgroup(item, order)
-    create_fluid_subgroup(item, order .. "[fluid]")
+for _, group in ipairs(group_sorting) do
+    create_subgroup(group.entity_type, group.order, false)
+    create_subgroup(group.entity_type, group.order .. "[fluid]", true)
 end
 
 
@@ -100,24 +85,13 @@ end
 ---@param recipe_to_add string
 local function add_recipe_to_technology_effects(recipe_to_match, recipe_to_add)
     for _, technology in pairs(data.raw["technology"]) do
-        if technology.effects then
-            for _, effect in pairs(technology.effects) do
-                if effect.type == "unlock-recipe" and effect.recipe == recipe_to_match then
-                    table.insert(technology.effects, { type = "unlock-recipe", recipe = recipe_to_add })
-                end
-            end
-        end
-        if technology.normal and technology.normal.effects then
-            for _, effect in pairs(technology.normal.effects) do
-                if effect.type == "unlock-recipe" and effect.recipe == recipe_to_match then
-                    table.insert(technology.normal.effects, { type = "unlock-recipe", recipe = recipe_to_add })
-                end
-            end
-        end
-        if technology.expensive and technology.expensive.effects then
-            for _, effect in pairs(technology.expensive.effects) do
-                if effect.type == "unlock-recipe" and effect.recipe == recipe_to_match then
-                    table.insert(technology.expensive.effects, { type = "unlock-recipe", recipe = recipe_to_add })
+        local effect_tables = { technology.effects, technology.normal and technology.normal.effects, technology.expensive and technology.expensive.effects }
+        for _, effect_table in pairs(effect_tables) do
+            if effect_table then
+                for _, effect in pairs(effect_table) do
+                    if effect.type == "unlock-recipe" and effect.recipe == recipe_to_match then
+                        table.insert(effect_table, { type = "unlock-recipe", recipe = recipe_to_add })
+                    end
                 end
             end
         end
@@ -214,7 +188,7 @@ end
 ---@param color Color
 ---@param built_from_base_item boolean
 local function create_color_overlay_entity(entity_type, name, color, built_from_base_item)
-    local entity = table.deepcopy(data.raw[entity_type][entity_type]) ---@type data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype
+    local entity = table.deepcopy(data.raw[entity_type][entity_type])
     if not entity then log(entity_type .. " entity not found") return  end
     local entity_name = name .. "-" .. entity_type
     if built_from_base_item then
