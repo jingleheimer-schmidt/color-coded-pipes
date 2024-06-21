@@ -41,7 +41,7 @@ local function paint_entity(player, entity, color)
     local pipe_type = entity.type
     local planner_mod_enabled = game.active_mods["color-coded-pipe-planner"]
     if planner_mod_enabled and player.mod_settings["color-coded-pipe-planner-bots-required"].value then
-        entity.order_upgrade{
+        entity.order_upgrade {
             force = entity.force,
             -- target = fluid_name .. "-" .. pipe_type,
             target = color .. "-" .. pipe_type,
@@ -49,8 +49,8 @@ local function paint_entity(player, entity, color)
             direction = entity.direction
         }
     else
-        local replacement_entity = player.surface.create_entity{
-            name =  color .. "-" .. pipe_type,
+        local replacement_entity = player.surface.create_entity {
+            name = color .. "-" .. pipe_type,
             position = entity.position,
             force = entity.force,
             direction = entity.direction,
@@ -70,14 +70,14 @@ local function unpaint_entity(player, entity)
     local pipe_type = entity.type
     local planner_mod_enabled = game.active_mods["color-coded-pipe-planner"]
     if planner_mod_enabled and player.mod_settings["color-coded-pipe-planner-bots-required"].value then
-        entity.order_upgrade{
+        entity.order_upgrade {
             force = entity.force,
             target = pipe_type,
             player = player,
             direction = entity.direction
         }
     else
-        local replacement_entity = player.surface.create_entity{
+        local replacement_entity = player.surface.create_entity {
             name = pipe_type,
             position = entity.position,
             force = entity.force,
@@ -100,10 +100,10 @@ local function paint_pipes(event)
     if not player then return end
     local surface = player.surface
     local force = player.force
-    local found_pipes = surface.find_entities_filtered{name = "pipe", force = force}
-    local found_underground_pipes = surface.find_entities_filtered{name = "pipe-to-ground", force = force}
-    local found_pumps = surface.find_entities_filtered{name = "pump", force = force}
-    local found_storage_tanks = surface.find_entities_filtered{name = "storage-tank", force = force}
+    local found_pipes = surface.find_entities_filtered { name = "pipe", force = force }
+    local found_underground_pipes = surface.find_entities_filtered { name = "pipe-to-ground", force = force }
+    local found_pumps = surface.find_entities_filtered { name = "pump", force = force }
+    local found_storage_tanks = surface.find_entities_filtered { name = "storage-tank", force = force }
     for _, pipe in pairs(found_pipes) do
         local fluid_name = get_fluid_name(pipe)
         local pipe_color = fluid_to_color_map[fluid_name]
@@ -172,10 +172,10 @@ local function unpaint_pipes(event)
     if not player then return end
     local surface = player.surface
     local force = player.force
-    local found_pipes = surface.find_entities_filtered{name = get_color_coded_names("pipe"), force = force}
-    local found_underground_pipes = surface.find_entities_filtered{name = get_color_coded_names("pipe-to-ground"), force = force}
-    local found_pumps = surface.find_entities_filtered{name = get_color_coded_names("pump"), force = force}
-    local found_storage_tanks = surface.find_entities_filtered{name = get_color_coded_names("storage-tank"), force = force}
+    local found_pipes = surface.find_entities_filtered { name = get_color_coded_names("pipe"), force = force }
+    local found_underground_pipes = surface.find_entities_filtered { name = get_color_coded_names("pipe-to-ground"), force = force }
+    local found_pumps = surface.find_entities_filtered { name = get_color_coded_names("pump"), force = force }
+    local found_storage_tanks = surface.find_entities_filtered { name = get_color_coded_names("storage-tank"), force = force }
     for _, pipe in pairs(found_pipes) do
         unpaint_entity(player, pipe)
     end
@@ -191,7 +191,8 @@ local function unpaint_pipes(event)
 end
 
 local function add_commands()
-    commands.add_command("paint-pipes", "- replace base game pipes with colored versions matching their contents", paint_pipes)
+    commands.add_command("paint-pipes", "- replace base game pipes with colored versions matching their contents",
+        paint_pipes)
     commands.add_command("unpaint-pipes", "- replace colored pipes with base game versions", unpaint_pipes)
 end
 
@@ -331,3 +332,4 @@ end)
 --     end
 -- end
 -- filter_quickbar()
+

@@ -142,7 +142,7 @@ local function create_color_overlay_item(name, color, entity_type)
     item.icons = create_color_overlay_icons(item, color, entity_type)
     item.order = get_order(item, name)
     item.subgroup = get_subgroup(entity_type, name)
-    data:extend{ item }
+    data:extend { item }
 end
 
 
@@ -178,7 +178,7 @@ local function create_color_overlay_recipe(base_recipe_name, name, built_from_ba
     if not built_from_base_item then
         add_recipe_to_technology_effects(base_recipe_name, new_recipe_name)
     end
-    data:extend{ new_recipe }
+    data:extend { new_recipe }
 end
 
 
