@@ -1,22 +1,39 @@
-
-data:extend{
-    {
-        type = "string-setting",
-        name = "color-coded-pipes-color-mode",
-        setting_type = "startup",
-        default_value = "colorized",
-        allowed_values = { "weathered", "colorized" },
-        hidden = true,
-        order = "a",
-    },
-    {
-        type = "bool-setting",
-        name = "color-coded-main-menu-simulations",
-        setting_type = "startup",
-        default_value = true,
-        order = "a",
-    }
+local color_mode = {
+    type = "string-setting",
+    name = "color-coded-pipes-color-mode",
+    setting_type = "startup",
+    default_value = "colorized",
+    allowed_values = { "weathered", "colorized" },
+    hidden = true,
+    order = "0",
 }
+
+local menu_simulations = {
+    type = "bool-setting",
+    name = "color-coded-main-menu-simulations",
+    setting_type = "startup",
+    default_value = true,
+    hidden = false,
+    order = "0",
+}
+local rainbow_recipes = {
+    type = "bool-setting",
+    name = "color-coded-pipes-show-rainbow-recipes",
+    setting_type = "startup",
+    default_value = true,
+    hidden = false,
+    order = "10",
+}
+local fluid_recipes = {
+    type = "bool-setting",
+    name = "color-coded-pipes-show-fluid-recipes",
+    setting_type = "startup",
+    default_value = false,
+    hidden = false,
+    order = "20",
+}
+
+data:extend { color_mode, menu_simulations, rainbow_recipes, fluid_recipes }
 
 local a = 0.6
 local rgb_colors = {
@@ -31,7 +48,7 @@ local rgb_colors = {
     white =  { r = 0.9, g = 0.9, b = 0.9, a = a },
 }
 
-local recipe_order = {
+local order = {
     ["red"] = "a",
     ["orange"] = "b",
     ["yellow"] = "c",
@@ -49,28 +66,8 @@ for name, color in pairs(rgb_colors) do
         name = "color-coded-pipes-" .. name,
         setting_type = "startup",
         default_value = color,
-        order = recipe_order[name],
+        order = order[name],
         hidden = true,
     }
-    data:extend{color_setting}
+    data:extend { color_setting }
 end
-
-data:extend{
-    {
-        type = "bool-setting",
-        name = "color-coded-pipes-show-rainbow-recipes",
-        setting_type = "startup",
-        default_value = true,
-        order = "10",
-    }
-}
-
-data:extend{
-    {
-        type = "bool-setting",
-        name = "color-coded-pipes-show-fluid-recipes",
-        setting_type = "startup",
-        default_value = false,
-        order = "20",
-    }
-}

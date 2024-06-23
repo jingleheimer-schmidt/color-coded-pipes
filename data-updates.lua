@@ -263,7 +263,7 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             [3] = shadow_sheet
         }
     end
-    data:extend{ entity }
+    data:extend { entity }
 end
 
 
