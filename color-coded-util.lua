@@ -39,16 +39,23 @@ local recipe_order = {
     ["white"] = "i",
 }
 
+---@param setting string
+---@return Color
+local function get_color(setting)
+    local value = settings.startup[setting].value ---@as Color
+    return value
+end
+
 local rgb_colors = { ---@type table<string, Color>
-    red = settings.startup["color-coded-pipes-red"].value, ---@type Color
-    orange = settings.startup["color-coded-pipes-orange"].value, ---@type Color
-    yellow = settings.startup["color-coded-pipes-yellow"].value, ---@type Color
-    green = settings.startup["color-coded-pipes-green"].value, ---@type Color
-    blue = settings.startup["color-coded-pipes-blue"].value, ---@type Color
-    purple = settings.startup["color-coded-pipes-purple"].value, ---@type Color
-    pink = settings.startup["color-coded-pipes-pink"].value, ---@type Color
-    white = settings.startup["color-coded-pipes-white"].value, ---@type Color
-    black = settings.startup["color-coded-pipes-black"].value, ---@type Color
+    red = get_color("color-coded-pipes-red"),
+    orange = get_color("color-coded-pipes-orange"),
+    yellow = get_color("color-coded-pipes-yellow"),
+    green = get_color("color-coded-pipes-green"),
+    blue = get_color("color-coded-pipes-blue"),
+    purple = get_color("color-coded-pipes-purple"),
+    pink = get_color("color-coded-pipes-pink"),
+    black = get_color("color-coded-pipes-black"),
+    white = get_color("color-coded-pipes-white"),
 }
 
 for _, fluid in pairs(data.raw["fluid"]) do
