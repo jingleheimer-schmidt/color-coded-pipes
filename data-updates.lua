@@ -189,6 +189,7 @@ end
 ---@param built_from_base_item boolean
 local function create_color_overlay_entity(entity_type, name, color, built_from_base_item)
     local entity = table.deepcopy(data.raw[entity_type][entity_type])
+    entity = entity ---@type data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype
     if not entity then log(entity_type .. " entity not found") return  end
     local entity_name = name .. "-" .. entity_type
     if built_from_base_item then
