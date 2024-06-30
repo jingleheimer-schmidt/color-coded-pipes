@@ -1,15 +1,17 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
-Date: ????
+Date: 22JUN2024
   Features:
+    - added color coded pumps
+    - reworked graphics to use tintable overlays
     - added pipe variants for all enabled fluids
-    - added mod settings to toggle visibility of rainbow and fluid color recipes
-    - added "overlay" graphics set
+    - added mod settings to toggle visibility of rainbow and fluid colored recipes
   Changes:
     - cleaned up the pipe window mask
-    - modified "rainbow" pipes to use overlay graphics (colors are defined in hidden mod settings)
+    - added hidden mod settings to define rainbow color pipe colors
     - removed the "color mode" mod setting
-    - removed /paint-pipes chat command (migrated to https://mods.factorio.com/mod/color-coded-pipe-planner)
+    - improved the /paint-pipes chat command to add compatibility with color coded pipe planner mod
+    - added an /unpaint-pipes chat command
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.5
 Date: 29APR2024
