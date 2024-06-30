@@ -50,7 +50,7 @@ data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = "storage-tank"
 -- just a couple helper functions --
 ------------------------------------
 
--- get the order of a color-coded item or entity
+-- get the order for a color-coded item or entity
 ---@param item data.ItemPrototype | data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype
 ---@param color_name string?
 ---@return string
@@ -67,7 +67,7 @@ local function get_order(item, color_name)
 end
 
 
--- get the subgroup of a color-coded item or entity
+-- get the subgroup for a color-coded item or entity
 ---@param type string
 ---@param name string
 ---@return string
@@ -203,8 +203,7 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
     entity.icons = create_color_overlay_icons(entity, color, entity_type)
     entity.localised_name = { "color-coded.name", { "entity-name." .. entity_type }, { "fluid-name." .. name } }
     if entity.fluid_box.pipe_covers then
-        local directions = { "north", "east", "south", "west" }
-        for _, direction in pairs(directions) do
+        for _, direction in pairs({ "north", "east", "south", "west" }) do
             local original_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
             local overlay_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
             local shadow_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
