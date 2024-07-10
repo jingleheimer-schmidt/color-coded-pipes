@@ -107,6 +107,7 @@ end
 ---@return data.IconData
 local function create_color_overlay_icons(prototype, color, type)
     local overlay_path = "__color-coded-pipes__/graphics/overlay-" .. type .. "-icon/overlay-" .. type .. "-icon.png"
+    local icons = prototype.icons
     local icon_base = {
         icon = prototype.icon,
         icon_size = prototype.icon_size,
@@ -118,7 +119,14 @@ local function create_color_overlay_icons(prototype, color, type)
         icon_mipmaps = prototype.icon_mipmaps,
         tint = color
     }
-    return { icon_base, icon_overlay }
+    if icons then
+        icon_overlay.icon_size = icons[1].icon_size
+        icon_overlay.icon_mipmaps = icons[1].icon_mipmaps
+        table.insert(icons, icon_overlay)
+    else
+        icons = { icon_base, icon_overlay }
+    end
+    return icons
 end
 
 
