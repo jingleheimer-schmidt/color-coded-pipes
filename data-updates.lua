@@ -43,7 +43,8 @@ end
 -- add a fast_replaceable_group to the base storage tank so that all the color-coded storage tanks inherit it --
 ----------------------------------------------------------------------------------------------------------------
 
-data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = "storage-tank"
+local fast_replaceable_group = data.raw["storage-tank"]["storage-tank"].fast_replaceable_group or "storage-tank"
+data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = fast_replaceable_group
 
 
 ------------------------------------
