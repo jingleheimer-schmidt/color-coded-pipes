@@ -44,13 +44,13 @@ local function paint_entity(player, entity, color)
         entity.order_upgrade {
             force = entity.force,
             -- target = fluid_name .. "-" .. pipe_type,
-            target = color .. "-" .. pipe_type,
+            target = color .. "-color-coded-" .. pipe_type,
             player = player,
             direction = entity.direction
         }
     else
         local replacement_entity = player.surface.create_entity {
-            name = color .. "-" .. pipe_type,
+            name = color .. "-color-coded-" .. pipe_type,
             position = entity.position,
             force = entity.force,
             direction = entity.direction,

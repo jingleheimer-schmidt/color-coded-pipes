@@ -136,7 +136,7 @@ local function create_color_overlay_item(name, color, entity_type)
         log(entity_type .. " item not found")
         return
     end
-    local item_name = name .. "-" .. entity_type
+    local item_name = name .. "-color-coded-" .. entity_type
     item.name = item_name
     item.place_result = item_name
     item.localised_name = { "color-coded.name", { "entity-name." .. entity_type }, { "fluid-name." .. name } }
@@ -154,7 +154,7 @@ end
 local function create_color_overlay_recipe(base_recipe_name, name, built_from_base_item)
     local new_recipe = table.deepcopy(data.raw["recipe"][base_recipe_name])
     if not new_recipe then log(base_recipe_name .. " recipe not found") return end
-    local new_recipe_name = name .. "-" .. base_recipe_name
+    local new_recipe_name = name .. "-color-coded-" .. base_recipe_name
     new_recipe.name = new_recipe_name
     new_recipe.result = new_recipe.result and new_recipe_name or nil
     new_recipe.results = new_recipe.results and { { type = "item", name = new_recipe_name, amount = 1 } } or nil
@@ -192,7 +192,7 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
     local entity = table.deepcopy(data.raw[entity_type][entity_type])
     entity = entity ---@type data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype
     if not entity then log(entity_type .. " entity not found") return  end
-    local entity_name = name .. "-" .. entity_type
+    local entity_name = name .. "-color-coded-" .. entity_type
     if built_from_base_item then
         entity.placeable_by = { item = entity.name, count = 1 }
     else
@@ -349,7 +349,7 @@ if settings.startup["color-coded-main-menu-simulations"].value then
                 for _, pipe in pairs(original_pipes) do
                     local fluid_name = get_fluid_name(pipe)
                     surface.create_entity{
-                        name = fluid_name .. "-pipe",
+                        name = fluid_name .. "-color-coded-pipe",
                         position = pipe.position,
                         force = pipe.force,
                         direction = pipe.direction,
@@ -362,7 +362,7 @@ if settings.startup["color-coded-main-menu-simulations"].value then
                 for _, pipe_to_ground in pairs(original_pipe_to_grounds) do
                     local fluid_name = get_fluid_name(pipe_to_ground)
                     surface.create_entity{
-                        name = fluid_name .. "-pipe-to-ground",
+                        name = fluid_name .. "-color-coded-pipe-to-ground",
                         position = pipe_to_ground.position,
                         force = pipe_to_ground.force,
                         direction = pipe_to_ground.direction,
@@ -375,7 +375,7 @@ if settings.startup["color-coded-main-menu-simulations"].value then
                 for _, storage_tank in pairs(original_storage_tanks) do
                     local fluid_name = get_fluid_name(storage_tank)
                     surface.create_entity{
-                        name = fluid_name .. "-storage-tank",
+                        name = fluid_name .. "-color-coded-storage-tank",
                         position = storage_tank.position,
                         force = storage_tank.force,
                         direction = storage_tank.direction,
@@ -388,7 +388,7 @@ if settings.startup["color-coded-main-menu-simulations"].value then
                 for _, pump in pairs(original_pumps) do
                     local fluid_name = get_fluid_name(pump)
                     surface.create_entity{
-                        name = fluid_name .. "-pump",
+                        name = fluid_name .. "-color-coded-pump",
                         position = pump.position,
                         force = pump.force,
                         direction = pump.direction,
