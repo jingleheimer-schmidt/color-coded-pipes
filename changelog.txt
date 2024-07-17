@@ -2,7 +2,8 @@
 Version: 0.0.7
 Date: ????
   Changes:
-    - added compatibility for bob's logistics mod (added "color-coded-" identifier to prototype names)
+    - added "color-coded-" identifier to prototype names to avoid namespace conflicts with other mods (i.e. bob's logistics)
+    - added migration script to update existing items, recipes, and entities to the new name format
     - added compatibility for artisanal reskins: bobs mods mod (copy icon data from prototype.icons[1] if available)
     - added compatibility for mods that remove either the normal or high resolution pipe/pump/tank graphics
   Bugfixes:
