@@ -150,13 +150,13 @@ local function get_color_coded_names(type)
         "white",
     }
     for _, color in pairs(rbg) do
-        local prototype_name = color .. "-" .. type
+        local prototype_name = color .. "-color-coded-" .. type
         if game.entity_prototypes[prototype_name] then
             table.insert(color_coded_names, prototype_name)
         end
     end
     for _, fluid in pairs(game.fluid_prototypes) do
-        local prototype_name = fluid.name .. "-" .. type
+        local prototype_name = fluid.name .. "-color-coded-" .. type
         if game.entity_prototypes[prototype_name] then
             table.insert(color_coded_names, prototype_name)
         end
