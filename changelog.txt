@@ -5,6 +5,8 @@ Date: ????
     - added compatibility for bob's logistics mod (added "color-coded-" identifier to prototype names)
     - added compatibility for artisanal reskins: bobs mods mod (copy icon data from prototype.icons[1] if available)
     - added compatibility for mods that remove either the normal or high resolution pipe/pump/tank graphics
+  Bugfixes:
+    - fixed that color coded recipes were not always disabled at the start of a game when they were unlockable from technology
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 30JUN2024

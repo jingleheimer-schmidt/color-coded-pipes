@@ -84,7 +84,9 @@ end
 -- add a color-coded variant to all the same technology effects as its base version
 ---@param recipe_to_match string
 ---@param recipe_to_add string
+---@return boolean
 local function add_recipe_to_technology_effects(recipe_to_match, recipe_to_add)
+    local added_to_technology = false
     for _, technology in pairs(data.raw["technology"]) do
         local effect_tables = { technology.effects, technology.normal and technology.normal.effects, technology.expensive and technology.expensive.effects }
         for _, effect_table in pairs(effect_tables) do
@@ -92,11 +94,13 @@ local function add_recipe_to_technology_effects(recipe_to_match, recipe_to_add)
                 for _, effect in pairs(effect_table) do
                     if effect.type == "unlock-recipe" and effect.recipe == recipe_to_match then
                         table.insert(effect_table, { type = "unlock-recipe", recipe = recipe_to_add })
+                        added_to_technology = true
                     end
                 end
             end
         end
     end
+    return added_to_technology
 end
 
 
@@ -185,7 +189,16 @@ local function create_color_overlay_recipe(base_recipe_name, name, built_from_ba
     end
     new_recipe.localised_name = { "color-coded.name", { "entity-name." .. base_recipe_name }, { "fluid-name." .. name } }
     if not built_from_base_item then
-        add_recipe_to_technology_effects(base_recipe_name, new_recipe_name)
+        local added_to_technology = add_recipe_to_technology_effects(base_recipe_name, new_recipe_name)
+        if added_to_technology then
+            new_recipe.enabled = false
+            if new_recipe.normal then
+                new_recipe.normal.enabled = false
+            end
+            if new_recipe.expensive then
+                new_recipe.expensive.enabled = false
+            end
+        end
     end
     data:extend { new_recipe }
 end
