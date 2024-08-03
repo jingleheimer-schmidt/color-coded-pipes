@@ -114,49 +114,6 @@ local function unpaint_entity(player, entity)
     end
 end
 
-
----@param event CustomCommandData
-local function paint_pipes(event)
-    local player_index = event.player_index
-    if not player_index then return end
-    local player = game.get_player(player_index)
-    if not player then return end
-    local surface = player.surface
-    local force = player.force
-    local found_pipes = surface.find_entities_filtered { name = "pipe", force = force }
-    local found_underground_pipes = surface.find_entities_filtered { name = "pipe-to-ground", force = force }
-    local found_pumps = surface.find_entities_filtered { name = "pump", force = force }
-    local found_storage_tanks = surface.find_entities_filtered { name = "storage-tank", force = force }
-    for _, pipe in pairs(found_pipes) do
-        local fluid_name = get_fluid_name(pipe)
-        local pipe_color = fluid_to_color_map[fluid_name]
-        if pipe_color and pipe.valid then
-            paint_entity(player, pipe, pipe_color)
-        end
-    end
-    for _, pipe in pairs(found_underground_pipes) do
-        local fluid_name = get_fluid_name(pipe)
-        local pipe_color = fluid_to_color_map[fluid_name]
-        if pipe_color and pipe.valid then
-            paint_entity(player, pipe, pipe_color)
-        end
-    end
-    for _, pump in pairs(found_pumps) do
-        local fluid_name = get_fluid_name(pump)
-        local pipe_color = fluid_to_color_map[fluid_name]
-        if pipe_color and pump.valid then
-            paint_entity(player, pump, pipe_color)
-        end
-    end
-    for _, storage_tank in pairs(found_storage_tanks) do
-        local fluid_name = get_fluid_name(storage_tank)
-        local pipe_color = fluid_to_color_map[fluid_name]
-        if pipe_color and storage_tank.valid then
-            paint_entity(player, storage_tank, pipe_color)
-        end
-    end
-end
-
 ---@param type string
 ---@return string[]
 local function get_color_coded_names(type)
@@ -185,6 +142,49 @@ local function get_color_coded_names(type)
         end
     end
     return color_coded_names
+end
+
+
+---@param event CustomCommandData
+local function paint_pipes(event)
+    local player_index = event.player_index
+    if not player_index then return end
+    local player = game.get_player(player_index)
+    if not player then return end
+    local surface = player.surface
+    local force = player.force
+    local found_pipes = surface.find_entities_filtered { name = get_color_coded_names("pipe"), force = force }
+    local found_underground_pipes = surface.find_entities_filtered { name = get_color_coded_names("pipe-to-ground"), force = force }
+    local found_pumps = surface.find_entities_filtered { name = get_color_coded_names("pump"), force = force }
+    local found_storage_tanks = surface.find_entities_filtered { name = get_color_coded_names("storage-tank"), force = force }
+    for _, pipe in pairs(found_pipes) do
+        local fluid_name = get_fluid_name(pipe)
+        local pipe_color = fluid_to_color_map[fluid_name]
+        if pipe_color and pipe.valid then
+            paint_entity(player, pipe, pipe_color)
+        end
+    end
+    for _, pipe in pairs(found_underground_pipes) do
+        local fluid_name = get_fluid_name(pipe)
+        local pipe_color = fluid_to_color_map[fluid_name]
+        if pipe_color and pipe.valid then
+            paint_entity(player, pipe, pipe_color)
+        end
+    end
+    for _, pump in pairs(found_pumps) do
+        local fluid_name = get_fluid_name(pump)
+        local pipe_color = fluid_to_color_map[fluid_name]
+        if pipe_color and pump.valid then
+            paint_entity(player, pump, pipe_color)
+        end
+    end
+    for _, storage_tank in pairs(found_storage_tanks) do
+        local fluid_name = get_fluid_name(storage_tank)
+        local pipe_color = fluid_to_color_map[fluid_name]
+        if pipe_color and storage_tank.valid then
+            paint_entity(player, storage_tank, pipe_color)
+        end
+    end
 end
 
 ---@param event CustomCommandData
