@@ -40,26 +40,38 @@ local function paint_entity(player, entity, color)
     if not entity.valid then return end
     local pipe_type = entity.type
     local planner_mod_enabled = game.active_mods["color-coded-pipe-planner"]
+    local name = color .. "-color-coded-" .. pipe_type
+    local force = entity.force
+    local direction = entity.direction
     if planner_mod_enabled and player.mod_settings["color-coded-pipe-planner-bots-required"].value then
         entity.order_upgrade {
-            force = entity.force,
+            force = force,
             -- target = fluid_name .. "-" .. pipe_type,
-            target = color .. "-color-coded-" .. pipe_type,
+            target = name,
             player = player,
-            direction = entity.direction
+            direction = direction
         }
     else
-        local replacement_entity = player.surface.create_entity {
-            name = color .. "-color-coded-" .. pipe_type,
-            position = entity.position,
-            force = entity.force,
-            direction = entity.direction,
-            fluidbox = entity.fluidbox,
-            fast_replace = true,
-            spill = false,
-            player = nil,
-        }
-        replacement_entity.last_user = player
+        local surface = entity.surface
+        local position = entity.position
+        if surface.can_fast_replace {
+                name = name,
+                position = position,
+                direction = direction,
+                force = force,
+            } then
+            local replacement_entity = surface.create_entity {
+                name = name,
+                position = entity.position,
+                force = entity.force,
+                direction = entity.direction,
+                fluidbox = entity.fluidbox,
+                fast_replace = true,
+                spill = false,
+                player = nil,
+            }
+            replacement_entity.last_user = player
+        end
     end
 end
 
@@ -69,25 +81,36 @@ local function unpaint_entity(player, entity)
     if not entity.valid then return end
     local pipe_type = entity.type
     local planner_mod_enabled = game.active_mods["color-coded-pipe-planner"]
+    local force = entity.force
+    local direction = entity.direction
     if planner_mod_enabled and player.mod_settings["color-coded-pipe-planner-bots-required"].value then
         entity.order_upgrade {
-            force = entity.force,
+            force = force,
             target = pipe_type,
             player = player,
-            direction = entity.direction
+            direction = direction
         }
     else
-        local replacement_entity = player.surface.create_entity {
-            name = pipe_type,
-            position = entity.position,
-            force = entity.force,
-            direction = entity.direction,
-            fluidbox = entity.fluidbox,
-            fast_replace = true,
-            spill = false,
-            player = nil,
-        }
-        replacement_entity.last_user = player
+        local surface = entity.surface
+        local position = entity.position
+        if surface.can_fast_replace {
+                name = pipe_type,
+                position = position,
+                direction = direction,
+                force = force,
+            } then
+            local replacement_entity = surface.create_entity {
+                name = pipe_type,
+                position = position,
+                force = force,
+                direction = direction,
+                fluidbox = entity.fluidbox,
+                fast_replace = true,
+                spill = false,
+                player = nil,
+            }
+            replacement_entity.last_user = player
+        end
     end
 end
 

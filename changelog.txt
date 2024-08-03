@@ -8,6 +8,7 @@ Date: ????
     - added compatibility for mods that remove either the normal or high resolution pipe/pump/tank graphics
   Bugfixes:
     - fixed that color coded recipes were not always disabled at the start of a game when they were unlockable from technology
+    - fixed that /paint-pipes and /unpaint-pipes chat commands could sometimes create multiple pipes in the same tile
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.6
 Date: 30JUN2024
