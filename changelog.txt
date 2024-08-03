@@ -6,6 +6,7 @@ Date: ????
     - added migration script to update existing items, recipes, and entities to the new name format
     - added compatibility for artisanal reskins: bobs mods mod (copy icon data from prototype.icons[1] if available)
     - added compatibility for mods that remove either the normal or high resolution pipe/pump/tank graphics
+    - the /paint-pipes chat command now attempts to re-paint already painted pipes
   Bugfixes:
     - fixed that color coded recipes were not always disabled at the start of a game when they were unlockable from technology
     - fixed that /paint-pipes and /unpaint-pipes chat commands could sometimes create multiple pipes in the same tile
