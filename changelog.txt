@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
-Date: ????
+Date: 03AUG2024
   Changes:
     - added "color-coded-" identifier to prototype names to avoid namespace conflicts with other mods (i.e. bob's logistics)
     - added migration script to update existing items, recipes, and entities to the new name format
