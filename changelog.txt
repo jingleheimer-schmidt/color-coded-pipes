@@ -2,6 +2,7 @@
 Version: 0.0.8
 Date: ????
   Changes:
+    - added compatibility for changes to pip graphics in K2 and AAI mods
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 03AUG2024

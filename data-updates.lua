@@ -9,6 +9,7 @@ local pipe_to_ground_filenames = color_coded_util.pipe_to_ground_filenames
 local recipe_order = color_coded_util.recipe_order
 local rgb_colors = color_coded_util.rgb_colors
 local replace_dash_with_underscore = color_coded_util.replace_dash_with_underscore
+local krastorio2pipefilenames = color_coded_util.krastorio2pipefilenames
 
 
 ---------------------------------------------------
@@ -248,10 +249,16 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             if overlay_layer.filename then
                 overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. "@0.5x.png"
                 overlay_layer.tint = color
+                if krastorio2pipefilenames[filename] then
+                    overlay_layer.filename = "__color-coded-pipes__/graphics/compatibility/krastorio2/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. "@0.5x.png"
+                end
             end
             if overlay_layer.hr_version then
                 overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. ".png"
                 overlay_layer.hr_version.tint = color
+                if krastorio2pipefilenames[filename] then
+                    overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/compatibility/krastorio2/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. ".png"
+                end
             end
             entity.pictures[property_name] = {}
             entity.pictures[property_name].layers = { original_layer, overlay_layer }
