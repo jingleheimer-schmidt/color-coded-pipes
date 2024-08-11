@@ -304,15 +304,15 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
         local overlay_sheet = table.deepcopy(base_sheet)
         if overlay_sheet.filename then
             -- base_sheet.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_base/base-storage-tank/base-hr-storage-tank.png"
-            -- overlay_sheet.filename = "__color-coded-pipes__/graphics/overlay-storage-tank/overlay-storage-tank.png"
-            overlay_sheet.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_overlay/overlay-storage-tank/overlay-storage-tank.png"
+            overlay_sheet.filename = "__color-coded-pipes__/graphics/overlay-storage-tank/overlay-storage-tank.png"
+            -- overlay_sheet.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_overlay/overlay-storage-tank/overlay-storage-tank.png"
             overlay_sheet.tint = color
         end
         if overlay_sheet.hr_version then
-            -- overlay_sheet.hr_version.filename = "__color-coded-pipes__/graphics/overlay-storage-tank/overlay-hr-storage-tank.png"
-            overlay_sheet.hr_version.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_overlay/overlay-storage-tank/overlay-hr-storage-tank.png"
+            overlay_sheet.hr_version.filename = "__color-coded-pipes__/graphics/overlay-storage-tank/overlay-hr-storage-tank.png"
+            -- overlay_sheet.hr_version.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_overlay/overlay-storage-tank/overlay-hr-storage-tank.png"
             overlay_sheet.hr_version.tint = color
-            overlay_sheet.hr_version.height = overlay_sheet.hr_version.height + 10
+            -- overlay_sheet.hr_version.height = overlay_sheet.hr_version.height + 10
         end
         entity.pictures.picture.sheets = {
             [1] = base_sheet,
