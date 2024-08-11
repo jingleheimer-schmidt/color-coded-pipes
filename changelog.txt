@@ -2,7 +2,8 @@
 Version: 0.0.8
 Date: ????
   Changes:
-    - added compatibility for changes to pip graphics in K2 and AAI mods
+    - patched base pipe graphics to make pipe segments render correctly as ghosts
+    - modified color coded pipe graphics to use the new pipe segment style (fixed graphical glitch when pipes of different colors were placed next to eachother)
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 03AUG2024
