@@ -71,7 +71,7 @@ local function replace_dash_with_underscore(str)
     return string.gsub(str, "-", "_")
 end
 
-local krastorio2pipefilenames = {
+local pipe_patch_filenames = {
     ["corner-up-left"] = "corner-up-left",
     ["corner-up-right"] = "corner-up-right",
     ["cross"] = "cross",
@@ -83,11 +83,17 @@ local krastorio2pipefilenames = {
     ["t-up"] = "t-up",
 }
 
+local pipe_to_ground_patch_filenames = {
+    ["down"] = "down",
+    ["up"] = "up",
+}
+
 return {
     pipe_filenames = pipe_filenames,
     pipe_to_ground_filenames = pipe_to_ground_filenames,
     recipe_order = recipe_order,
     rgb_colors = rgb_colors,
     replace_dash_with_underscore = replace_dash_with_underscore,
-    krastorio2pipefilenames = krastorio2pipefilenames,
+    pipe_patch_filenames = pipe_patch_filenames,
+    pipe_to_ground_patch_filenames = pipe_to_ground_patch_filenames,
 }
