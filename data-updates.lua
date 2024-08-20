@@ -35,7 +35,7 @@ local group_sorting = {
     { entity_type = "storage-tank",   order = "d" }
 }
 
-for _, group in ipairs(group_sorting) do
+for _, group in pairs(group_sorting) do
     create_subgroup(group.entity_type, group.order, false)
     create_subgroup(group.entity_type, group.order .. "[fluid]", true)
 end
