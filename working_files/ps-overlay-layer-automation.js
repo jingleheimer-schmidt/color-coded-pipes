@@ -22,9 +22,9 @@ for (var d = 0; d < docs.length; d++) {
         var layer = layers[i];
         if (layer.visible) {
             // var adjustmentName = layer.name.replace(/\s+/g, "_"); // Replace spaces with underscores
-            var adjustmentName = "overlay-";
-            var fileName = adjustmentName + doc.name + ".png";
-            var halfResolutionFileName = adjustmentName + doc.name + "@0.5x.png";
+            var layerName = "overlay-";
+            var fileName = layerName + doc.name + ".png";
+            var halfResolutionFileName = layerName + doc.name + "@0.5x.png";
             fileName = fileName.replace(".psd", ""); // Remove .psd extension (if it exists)
             halfResolutionFileName = halfResolutionFileName.replace(".psd", ""); // Remove .psd extension (if it exists)
             var folderName = "overlay-" + doc.name;

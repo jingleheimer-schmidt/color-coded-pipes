@@ -19,9 +19,9 @@ for (var d = 0; d < docs.length; d++) {
 
     // Export the file
     // var adjustmentName = layer.name.replace(/\s+/g, "_"); // Replace spaces with underscores
-    var adjustmentName = "base-patch-";
-    var fileName = adjustmentName + doc.name + ".png";
-    var halfResolutionFileName = adjustmentName + doc.name + "@0.5x.png";
+    var layerName = "base-patch-";
+    var fileName = layerName + doc.name + ".png";
+    var halfResolutionFileName = layerName + doc.name + "@0.5x.png";
     fileName = fileName.replace(".psd", ""); // Remove .psd extension (if it exists)
     halfResolutionFileName = halfResolutionFileName.replace(".psd", ""); // Remove .psd extension (if it exists)
     var folderName = "base-patch-" + doc.name;

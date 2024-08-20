@@ -112,7 +112,7 @@ end
 ---@param type string
 ---@return data.IconData
 local function create_color_overlay_icons(prototype, color, type)
-    local overlay_path = "__color-coded-pipes__/graphics/overlay-" .. type .. "-icon/overlay-" .. type .. "-icon.png"
+    local overlay_path = "__color-coded-pipes__/graphics/icons/overlay-" .. type .. "-icon/overlay-" .. type .. "-icon.png"
     local icons = prototype.icons
     local icon_base = {
         icon = prototype.icon,
@@ -232,11 +232,11 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             local overlay_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
             local shadow_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
             if overlay_layer.filename then
-                overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
+                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-cover/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
                 overlay_layer.tint = color
             end
             if overlay_layer.hr_version then
-                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
+                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/pipe-cover/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
                 overlay_layer.hr_version.tint = color
             end
             entity.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
@@ -249,15 +249,13 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             local overlay_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
             local apply_patch_overlay = pipe_patch_filenames[filename] and true or false
             if overlay_layer.filename then
-                original_layer.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_base/base-patch-pipe-" .. filename .. "/base-patch-hr-pipe-" .. filename .. "@0.5x.png"
-                overlay_layer.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_overlay/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. "@0.5x.png"
-                -- overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. "@0.5x.png"
+                original_layer.filename = "__color-coded-pipes__/graphics/pipe/base-pipe-" .. filename .. "/base-hr-pipe-" .. filename .. "@0.5x.png"
+                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. "@0.5x.png"
                 overlay_layer.tint = color
             end
             if overlay_layer.hr_version then
-                original_layer.hr_version.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_base/base-patch-pipe-" .. filename .. "/base-patch-hr-pipe-" .. filename .. ".png"
-                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_overlay/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. ".png"
-                -- overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. ".png"
+                original_layer.hr_version.filename = "__color-coded-pipes__/graphics/pipe/base-pipe-" .. filename .. "/base-hr-pipe-" .. filename .. ".png"
+                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/pipe/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. ".png"
                 overlay_layer.hr_version.tint = color
             end
             entity.pictures[property_name] = {}
@@ -270,15 +268,13 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             local overlay_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
             local apply_patch = pipe_to_ground_patch_filenames[filename] and true or false
             if overlay_layer.filename then
-                original_layer.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_base/base-patch-pipe-to-ground-" .. filename .. "/base-patch-hr-pipe-to-ground-" .. filename .. "@0.5x.png"
-                overlay_layer.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_overlay/overlay-pipe-to-ground-" .. filename .. "/overlay-hr-pipe-to-ground-" .. filename .. "@0.5x.png"
-                -- overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pipe-to-ground-" .. filename .. "/overlay-hr-pipe-to-ground-" .. filename .. "@0.5x.png"
+                original_layer.filename = "__color-coded-pipes__/graphics/pipe-to-ground/base-pipe-to-ground-" .. filename .. "/base-hr-pipe-to-ground-" .. filename .. "@0.5x.png"
+                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-to-ground/overlay-pipe-to-ground-" .. filename .. "/overlay-hr-pipe-to-ground-" .. filename .. "@0.5x.png"
                 overlay_layer.tint = color
             end
             if overlay_layer.hr_version then
-                original_layer.hr_version.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_base/base-patch-pipe-to-ground-" .. filename .. "/base-patch-hr-pipe-to-ground-" .. filename .. ".png"
-                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_overlay/overlay-pipe-to-ground-" .. filename .. "/overlay-hr-pipe-to-ground-" .. filename .. ".png"
-                -- overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pipe-to-ground-" .. filename .. "/overlay-hr-pipe-to-ground-" .. filename .. ".png"
+                original_layer.hr_version.filename = "__color-coded-pipes__/graphics/pipe-to-ground/base-pipe-to-ground-" .. filename .. "/base-hr-pipe-to-ground-" .. filename .. ".png"
+                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/pipe-to-ground/overlay-pipe-to-ground-" .. filename .. "/overlay-hr-pipe-to-ground-" .. filename .. ".png"
                 overlay_layer.hr_version.tint = color
             end
             entity.pictures[property_name] = {}
@@ -289,11 +285,11 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             local original_layer = table.deepcopy(entity.animations[direction]) ---@type data.Animation
             local overlay_layer = table.deepcopy(entity.animations[direction]) ---@type data.Animation
             if overlay_layer.filename then
-                overlay_layer.filename = "__color-coded-pipes__/graphics/overlay-pump-" .. direction .. "/overlay-pump-" .. direction .. ".png"
+                overlay_layer.filename = "__color-coded-pipes__/graphics/pump/overlay-pump-" .. direction .. "/overlay-pump-" .. direction .. ".png"
                 overlay_layer.tint = color
             end
             if overlay_layer.hr_version then
-                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/overlay-pump-" .. direction .. "/overlay-hr-pump-" .. direction .. ".png"
+                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/pump/overlay-pump-" .. direction .. "/overlay-hr-pump-" .. direction .. ".png"
                 overlay_layer.hr_version.tint = color
             end
             entity.animations[direction] = { layers = { original_layer, overlay_layer } }
@@ -303,16 +299,12 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
         local shadow_sheet = table.deepcopy(entity.pictures.picture.sheets[2])
         local overlay_sheet = table.deepcopy(base_sheet)
         if overlay_sheet.filename then
-            -- base_sheet.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_base/base-storage-tank/base-hr-storage-tank.png"
-            overlay_sheet.filename = "__color-coded-pipes__/graphics/overlay-storage-tank/overlay-storage-tank.png"
-            -- overlay_sheet.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_overlay/overlay-storage-tank/overlay-storage-tank.png"
+            overlay_sheet.filename = "__color-coded-pipes__/graphics/storage-tank/overlay-storage-tank/overlay-storage-tank.png"
             overlay_sheet.tint = color
         end
         if overlay_sheet.hr_version then
-            overlay_sheet.hr_version.filename = "__color-coded-pipes__/graphics/overlay-storage-tank/overlay-hr-storage-tank.png"
-            -- overlay_sheet.hr_version.filename = "__color-coded-pipes__/graphics/compatibility/pipe_patch_overlay/overlay-storage-tank/overlay-hr-storage-tank.png"
+            overlay_sheet.hr_version.filename = "__color-coded-pipes__/graphics/storage-tank/overlay-storage-tank/overlay-hr-storage-tank.png"
             overlay_sheet.hr_version.tint = color
-            -- overlay_sheet.hr_version.height = overlay_sheet.hr_version.height + 10
         end
         entity.pictures.picture.sheets = {
             [1] = base_sheet,
