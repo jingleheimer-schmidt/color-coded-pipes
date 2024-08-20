@@ -9,8 +9,6 @@ local pipe_to_ground_filenames = color_coded_util.pipe_to_ground_filenames
 local recipe_order = color_coded_util.recipe_order
 local rgb_colors = color_coded_util.rgb_colors
 local replace_dash_with_underscore = color_coded_util.replace_dash_with_underscore
-local pipe_patch_filenames = color_coded_util.pipe_patch_filenames
-local pipe_to_ground_patch_filenames = color_coded_util.pipe_to_ground_patch_filenames
 
 
 ---------------------------------------------------
@@ -247,7 +245,6 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             local property_name = replace_dash_with_underscore(filename)
             local original_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
             local overlay_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
-            local apply_patch_overlay = pipe_patch_filenames[filename] and true or false
             if overlay_layer.filename then
                 original_layer.filename = "__color-coded-pipes__/graphics/pipe/base-pipe-" .. filename .. "/base-hr-pipe-" .. filename .. "@0.5x.png"
                 overlay_layer.filename = "__color-coded-pipes__/graphics/pipe/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. "@0.5x.png"
@@ -266,7 +263,6 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             local property_name = replace_dash_with_underscore(filename)
             local original_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
             local overlay_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
-            local apply_patch = pipe_to_ground_patch_filenames[filename] and true or false
             if overlay_layer.filename then
                 original_layer.filename = "__color-coded-pipes__/graphics/pipe-to-ground/base-pipe-to-ground-" .. filename .. "/base-hr-pipe-to-ground-" .. filename .. "@0.5x.png"
                 overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-to-ground/overlay-pipe-to-ground-" .. filename .. "/overlay-hr-pipe-to-ground-" .. filename .. "@0.5x.png"
