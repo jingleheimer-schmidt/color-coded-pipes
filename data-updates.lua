@@ -423,7 +423,7 @@ if settings.startup["color-coded-main-menu-simulations"].value then
                     }
                 end
             end
-
+            
         ]]
     end
 end
