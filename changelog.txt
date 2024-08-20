@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.0.8
+Date: 19AUG2024
+  Changes:
+    - patched pipe and pipe-to-ground graphics to make entities render correctly as ghosts
+    - restructured and organized graphics files and photoshop documents
+  Bugfixes:
+    - fixed graphical overlap issue when pipes of different colors are built next to eachother
+    - fixed graphical overlap issue when krastorio2, aai, or other mods that add a "pipe patch" are enabled
+---------------------------------------------------------------------------------------------------
 Version: 0.0.7
 Date: 03AUG2024
   Changes:
