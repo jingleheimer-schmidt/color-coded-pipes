@@ -42,7 +42,7 @@ local recipe_order = {
 ---@param setting string
 ---@return Color
 local function get_color(setting)
-    local value = settings.startup[setting].value ---@as Color
+    local value = settings.startup[setting].value --[[@as Color]]
     return value
 end
 
