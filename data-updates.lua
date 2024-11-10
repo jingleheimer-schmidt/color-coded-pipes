@@ -291,31 +291,31 @@ end
 -- create color-coded versions of pipes, pipe-to-ground, storage tanks, and pumps --
 ------------------------------------------------------------------------------------
 
-for name, color in pairs(rgb_colors) do
+for color_name, color in pairs(rgb_colors) do
     local show_rainbow_recipes = settings.startup["color-coded-pipes-show-rainbow-recipes"].value
     local show_fluid_recipes = settings.startup["color-coded-pipes-show-fluid-recipes"].value
-    local is_fluid_color = data.raw["fluid"][name] and true or false
+    local is_fluid_color = data.raw["fluid"][color_name] and true or false
     local is_rainbow_color = not is_fluid_color
     local built_from_base_item = (is_fluid_color and not show_fluid_recipes) or (is_rainbow_color and not show_rainbow_recipes) and true or false
 
-    create_color_overlay_entity("pipe", name, color, built_from_base_item)
-    create_color_overlay_item(name, color, "pipe")
-    create_color_overlay_recipe("pipe", name, built_from_base_item)
-
-    create_color_overlay_entity("pipe-to-ground", name, color, built_from_base_item)
-    create_color_overlay_item(name, color, "pipe-to-ground")
-    create_color_overlay_recipe("pipe-to-ground", name, built_from_base_item)
-
-    create_color_overlay_entity("storage-tank", name, color, built_from_base_item)
-    create_color_overlay_item(name, color, "storage-tank")
-    create_color_overlay_recipe("storage-tank", name, built_from_base_item)
-
-    create_color_overlay_entity("pump", name, color, built_from_base_item)
-    create_color_overlay_item(name, color, "pump")
-    create_color_overlay_recipe("pump", name, built_from_base_item)
+    create_color_overlay_entity("pipe", color_name, color, built_from_base_item)
+    create_color_overlay_item(color_name, color, "pipe")
+    create_color_overlay_recipe("pipe", color_name, built_from_base_item)
     create_color_overlay_corpse(color_name, color, "pipe")
+
+    create_color_overlay_entity("pipe-to-ground", color_name, color, built_from_base_item)
+    create_color_overlay_item(color_name, color, "pipe-to-ground")
+    create_color_overlay_recipe("pipe-to-ground", color_name, built_from_base_item)
     create_color_overlay_corpse(color_name, color, "pipe-to-ground")
+
+    create_color_overlay_entity("storage-tank", color_name, color, built_from_base_item)
+    create_color_overlay_item(color_name, color, "storage-tank")
+    create_color_overlay_recipe("storage-tank", color_name, built_from_base_item)
     create_color_overlay_corpse(color_name, color, "storage-tank")
+
+    create_color_overlay_entity("pump", color_name, color, built_from_base_item)
+    create_color_overlay_item(color_name, color, "pump")
+    create_color_overlay_recipe("pump", color_name, built_from_base_item)
     create_color_overlay_corpse(color_name, color, "pump")
 end
 
