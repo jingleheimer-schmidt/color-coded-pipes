@@ -200,6 +200,7 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
     entity.subgroup = get_subgroup(entity_type, name)
     entity.icons = create_color_overlay_icons(entity, color, entity_type)
     entity.localised_name = { "color-coded.name", { "entity-name." .. entity_type }, { "fluid-name." .. name } }
+    entity.corpse = name .. "-color-coded-" .. entity_type .. "-remnants"
     if entity.fluid_box.pipe_covers then
         for _, direction in pairs({ "north", "east", "south", "west" }) do
             local original_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
@@ -265,6 +266,26 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
     data:extend { entity }
 end
 
+local function create_color_overlay_corpse(color_name, color, entity_type)
+    local corpse = table.deepcopy(data.raw["corpse"][entity_type .. "-remnants"])
+    corpse.name = color_name .. "-color-coded-" .. entity_type .. "-remnants"
+    -- corpse.icons = create_color_overlay_icons(corpse, color, entity_type)
+    corpse.localised_name = { "color-coded.name", { "entity-name." .. entity_type }, { "fluid-name." .. color_name } }
+    corpse.animation_overlay = table.deepcopy(corpse.animation)
+    if corpse.animation_overlay.filename then
+        corpse.animation_overlay.filename = "__color-coded-pipes__/graphics/" .. entity_type .. "/overlay/overlay-" .. entity_type .. "-remnants.png"
+        corpse.animation_overlay.tint = color
+    else
+        for _, rotated_animation in pairs(corpse.animation_overlay) do
+            if rotated_animation.filename then
+                rotated_animation.filename = "__color-coded-pipes__/graphics/" .. entity_type .. "/overlay/overlay-" .. entity_type .. "-remnants.png"
+                rotated_animation.tint = color
+            end
+        end
+    end
+    data:extend { corpse }
+end
+
 
 ------------------------------------------------------------------------------------
 -- create color-coded versions of pipes, pipe-to-ground, storage tanks, and pumps --
@@ -292,6 +313,10 @@ for name, color in pairs(rgb_colors) do
     create_color_overlay_entity("pump", name, color, built_from_base_item)
     create_color_overlay_item(name, color, "pump")
     create_color_overlay_recipe("pump", name, built_from_base_item)
+    create_color_overlay_corpse(color_name, color, "pipe")
+    create_color_overlay_corpse(color_name, color, "pipe-to-ground")
+    create_color_overlay_corpse(color_name, color, "storage-tank")
+    create_color_overlay_corpse(color_name, color, "pump")
 end
 
 
