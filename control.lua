@@ -17,7 +17,7 @@ local function get_fluid_name(entity)
     local fluidbox = entity.fluidbox
     if fluidbox and fluidbox.valid then
         for index = 1, #fluidbox do
-            local contents = fluidbox.get_fluid_system_contents(index)
+            local contents = fluidbox.get_fluid_segment_contents(index)
             if contents then
                 local amount = 0
                 for name, count in pairs(contents) do
@@ -39,7 +39,7 @@ end
 local function paint_entity(player, entity, color)
     if not entity.valid then return end
     local pipe_type = entity.type
-    local planner_mod_enabled = game.active_mods["color-coded-pipe-planner"]
+    local planner_mod_enabled = script.active_mods["color-coded-pipe-planner"]
     local name = color .. "-color-coded-" .. pipe_type
     local force = entity.force
     local direction = entity.direction
@@ -80,7 +80,7 @@ end
 local function unpaint_entity(player, entity)
     if not entity.valid then return end
     local pipe_type = entity.type
-    local planner_mod_enabled = game.active_mods["color-coded-pipe-planner"]
+    local planner_mod_enabled = script.active_mods["color-coded-pipe-planner"]
     local force = entity.force
     local direction = entity.direction
     if planner_mod_enabled and player.mod_settings["color-coded-pipe-planner-bots-required"].value then
@@ -131,13 +131,13 @@ local function get_color_coded_names(type)
     }
     for _, color in pairs(rbg) do
         local prototype_name = color .. "-color-coded-" .. type
-        if game.entity_prototypes[prototype_name] then
+        if prototypes.entity[prototype_name] then
             table.insert(color_coded_names, prototype_name)
         end
     end
-    for _, fluid in pairs(game.fluid_prototypes) do
+    for _, fluid in pairs(prototypes.fluid) do
         local prototype_name = fluid.name .. "-color-coded-" .. type
-        if game.entity_prototypes[prototype_name] then
+        if prototypes.entity[prototype_name] then
             table.insert(color_coded_names, prototype_name)
         end
     end

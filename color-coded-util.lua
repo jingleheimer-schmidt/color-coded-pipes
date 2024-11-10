@@ -21,10 +21,10 @@ local pipe_filenames = {
 }
 
 local pipe_to_ground_filenames = {
-    "down",
-    "left",
-    "right",
-    "up",
+    "north",
+    "east",
+    "south",
+    "west",
 }
 
 local recipe_order = {
@@ -42,7 +42,7 @@ local recipe_order = {
 ---@param setting string
 ---@return Color
 local function get_color(setting)
-    local value = settings.startup[setting].value ---@as Color
+    local value = settings.startup[setting].value --[[@as Color]]
     return value
 end
 
@@ -59,11 +59,9 @@ local rgb_colors = { ---@type table<string, Color>
 }
 
 for _, fluid in pairs(data.raw["fluid"]) do
-    local has_base_color = fluid.base_color and fluid.base_color.r and fluid.base_color.g and fluid.base_color.b
-    local is_hidden = fluid.hidden
-    if has_base_color and not is_hidden then
+    if fluid.base_color and not fluid.hidden and not fluid.parameter then
         rgb_colors[fluid.name] = fluid.base_color
-        rgb_colors[fluid.name].a = 0.6
+        rgb_colors[fluid.name][4] = 0.6
     end
 end
 

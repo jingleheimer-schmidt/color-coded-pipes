@@ -88,7 +88,7 @@ end
 local function add_recipe_to_technology_effects(recipe_to_match, recipe_to_add)
     local added_to_technology = false
     for _, technology in pairs(data.raw["technology"]) do
-        local effect_tables = { technology.effects, technology.normal and technology.normal.effects, technology.expensive and technology.expensive.effects }
+        local effect_tables = { technology.effects, }
         for _, effect_table in pairs(effect_tables) do
             if effect_table then
                 for _, effect in pairs(effect_table) do
@@ -115,17 +115,14 @@ local function create_color_overlay_icons(prototype, color, type)
     local icon_base = {
         icon = prototype.icon,
         icon_size = prototype.icon_size,
-        icon_mipmaps = prototype.icon_mipmaps
     }
     local icon_overlay = {
         icon = overlay_path,
         icon_size = prototype.icon_size,
-        icon_mipmaps = prototype.icon_mipmaps,
         tint = color
     }
     if icons then
         icon_overlay.icon_size = icons[1].icon_size
-        icon_overlay.icon_mipmaps = icons[1].icon_mipmaps
         table.insert(icons, icon_overlay)
     else
         icons = { icon_base, icon_overlay }
@@ -139,10 +136,10 @@ end
 ----------------------------------------------
 
 -- create a color-coded version of an item
+---@param entity_type string
 ---@param name string
 ---@param color Color
----@param entity_type string
-local function create_color_overlay_item(name, color, entity_type)
+local function create_color_overlay_item(entity_type, name, color)
     local item = table.deepcopy(data.raw["item"][entity_type])
     if not item then
         log(entity_type .. " item not found")
@@ -168,36 +165,15 @@ local function create_color_overlay_recipe(base_recipe_name, name, built_from_ba
     if not new_recipe then log(base_recipe_name .. " recipe not found") return end
     local new_recipe_name = name .. "-color-coded-" .. base_recipe_name
     new_recipe.name = new_recipe_name
-    new_recipe.result = new_recipe.result and new_recipe_name or nil
-    new_recipe.results = new_recipe.results and { { type = "item", name = new_recipe_name, amount = 1 } } or nil
+    new_recipe.results = { { type = "item", name = new_recipe_name, amount = 1 } }
     if built_from_base_item then
         new_recipe.hidden = true
-    end
-    if new_recipe.normal then
-        new_recipe.normal.result = new_recipe.normal.result and new_recipe_name or nil
-        new_recipe.normal.results = new_recipe.normal.results and { { type = "item", name = new_recipe_name, amount = 1 } } or nil
-        if built_from_base_item then
-            new_recipe.normal.hidden = true
-        end
-    end
-    if new_recipe.expensive then
-        new_recipe.expensive.result = new_recipe.expensive.result and new_recipe_name or nil
-        new_recipe.expensive.results = new_recipe.expensive.results and { { type = "item", name = new_recipe_name, amount = 1 } } or nil
-        if built_from_base_item then
-            new_recipe.expensive.hidden = true
-        end
     end
     new_recipe.localised_name = { "color-coded.name", { "entity-name." .. base_recipe_name }, { "fluid-name." .. name } }
     if not built_from_base_item then
         local added_to_technology = add_recipe_to_technology_effects(base_recipe_name, new_recipe_name)
         if added_to_technology then
             new_recipe.enabled = false
-            if new_recipe.normal then
-                new_recipe.normal.enabled = false
-            end
-            if new_recipe.expensive then
-                new_recipe.expensive.enabled = false
-            end
         end
     end
     data:extend { new_recipe }
@@ -206,36 +182,33 @@ end
 
 -- create a color-coded version of a pipe, pipe-to-ground, pump, or storage tank
 ---@param entity_type string
----@param name string
+---@param color_name string
 ---@param color Color
 ---@param built_from_base_item boolean
-local function create_color_overlay_entity(entity_type, name, color, built_from_base_item)
+local function create_color_overlay_entity(entity_type, color_name, color, built_from_base_item)
     local entity = table.deepcopy(data.raw[entity_type][entity_type])
-    entity = entity ---@type data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype
+    entity = entity --[[@as data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype]]
     if not entity then log(entity_type .. " entity not found") return  end
-    local entity_name = name .. "-color-coded-" .. entity_type
+    local entity_name = color_name .. "-color-coded-" .. entity_type
     if built_from_base_item then
         entity.placeable_by = { item = entity.name, count = 1 }
     else
         entity.minable.result = entity_name
     end
     entity.name = entity_name
-    entity.order = get_order(entity, name)
-    entity.subgroup = get_subgroup(entity_type, name)
+    entity.order = get_order(entity, color_name)
+    entity.subgroup = get_subgroup(entity_type, color_name)
     entity.icons = create_color_overlay_icons(entity, color, entity_type)
-    entity.localised_name = { "color-coded.name", { "entity-name." .. entity_type }, { "fluid-name." .. name } }
+    entity.localised_name = { "color-coded.name", { "entity-name." .. entity_type }, { "fluid-name." .. color_name } }
+    entity.corpse = color_name .. "-color-coded-" .. entity_type .. "-remnants"
     if entity.fluid_box.pipe_covers then
         for _, direction in pairs({ "north", "east", "south", "west" }) do
             local original_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
             local overlay_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
             local shadow_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
             if overlay_layer.filename then
-                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-cover/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. "@0.5x.png"
+                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-covers/overlay/overlay-pipe-cover-" .. direction .. ".png"
                 overlay_layer.tint = color
-            end
-            if overlay_layer.hr_version then
-                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/pipe-cover/overlay-pipe-cover-" .. direction .. "/overlay-hr-pipe-cover-" .. direction .. ".png"
-                overlay_layer.hr_version.tint = color
             end
             entity.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
         end
@@ -246,14 +219,8 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             local original_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
             local overlay_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
             if overlay_layer.filename then
-                original_layer.filename = "__color-coded-pipes__/graphics/pipe/base-pipe-" .. filename .. "/base-hr-pipe-" .. filename .. "@0.5x.png"
-                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. "@0.5x.png"
+                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe/overlay/overlay-pipe-" .. filename .. ".png"
                 overlay_layer.tint = color
-            end
-            if overlay_layer.hr_version then
-                original_layer.hr_version.filename = "__color-coded-pipes__/graphics/pipe/base-pipe-" .. filename .. "/base-hr-pipe-" .. filename .. ".png"
-                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/pipe/overlay-pipe-" .. filename .. "/overlay-hr-pipe-" .. filename .. ".png"
-                overlay_layer.hr_version.tint = color
             end
             entity.pictures[property_name] = {}
             entity.pictures[property_name].layers = { original_layer, overlay_layer }
@@ -264,14 +231,8 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             local original_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
             local overlay_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
             if overlay_layer.filename then
-                original_layer.filename = "__color-coded-pipes__/graphics/pipe-to-ground/base-pipe-to-ground-" .. filename .. "/base-hr-pipe-to-ground-" .. filename .. "@0.5x.png"
-                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-to-ground/overlay-pipe-to-ground-" .. filename .. "/overlay-hr-pipe-to-ground-" .. filename .. "@0.5x.png"
+                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-to-ground/overlay/overlay-pipe-to-ground-" .. filename .. ".png"
                 overlay_layer.tint = color
-            end
-            if overlay_layer.hr_version then
-                original_layer.hr_version.filename = "__color-coded-pipes__/graphics/pipe-to-ground/base-pipe-to-ground-" .. filename .. "/base-hr-pipe-to-ground-" .. filename .. ".png"
-                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/pipe-to-ground/overlay-pipe-to-ground-" .. filename .. "/overlay-hr-pipe-to-ground-" .. filename .. ".png"
-                overlay_layer.hr_version.tint = color
             end
             entity.pictures[property_name] = {}
             entity.pictures[property_name].layers = { original_layer, overlay_layer }
@@ -281,12 +242,8 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
             local original_layer = table.deepcopy(entity.animations[direction]) ---@type data.Animation
             local overlay_layer = table.deepcopy(entity.animations[direction]) ---@type data.Animation
             if overlay_layer.filename then
-                overlay_layer.filename = "__color-coded-pipes__/graphics/pump/overlay-pump-" .. direction .. "/overlay-pump-" .. direction .. ".png"
+                overlay_layer.filename = "__color-coded-pipes__/graphics/pump/overlay/overlay-pump-" .. direction .. ".png"
                 overlay_layer.tint = color
-            end
-            if overlay_layer.hr_version then
-                overlay_layer.hr_version.filename = "__color-coded-pipes__/graphics/pump/overlay-pump-" .. direction .. "/overlay-hr-pump-" .. direction .. ".png"
-                overlay_layer.hr_version.tint = color
             end
             entity.animations[direction] = { layers = { original_layer, overlay_layer } }
         end
@@ -295,12 +252,8 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
         local shadow_sheet = table.deepcopy(entity.pictures.picture.sheets[2])
         local overlay_sheet = table.deepcopy(base_sheet)
         if overlay_sheet.filename then
-            overlay_sheet.filename = "__color-coded-pipes__/graphics/storage-tank/overlay-storage-tank/overlay-storage-tank.png"
+            overlay_sheet.filename = "__color-coded-pipes__/graphics/storage-tank/overlay/overlay-storage-tank.png"
             overlay_sheet.tint = color
-        end
-        if overlay_sheet.hr_version then
-            overlay_sheet.hr_version.filename = "__color-coded-pipes__/graphics/storage-tank/overlay-storage-tank/overlay-hr-storage-tank.png"
-            overlay_sheet.hr_version.tint = color
         end
         entity.pictures.picture.sheets = {
             [1] = base_sheet,
@@ -311,33 +264,60 @@ local function create_color_overlay_entity(entity_type, name, color, built_from_
     data:extend { entity }
 end
 
+---@param entity_name string
+---@param color_name string
+---@param color Color
+local function create_color_overlay_corpse(entity_name, color_name, color)
+    local corpse = table.deepcopy(data.raw["corpse"][entity_name .. "-remnants"])
+    corpse.name = color_name .. "-color-coded-" .. entity_name .. "-remnants"
+    -- corpse.icons = create_color_overlay_icons(corpse, color, entity_type)
+    corpse.localised_name = { "color-coded.name", { "entity-name." .. entity_name }, { "fluid-name." .. color_name } }
+    corpse.animation_overlay = table.deepcopy(corpse.animation)
+    if corpse.animation_overlay.filename then
+        corpse.animation_overlay.filename = "__color-coded-pipes__/graphics/" .. entity_name .. "/overlay/overlay-" .. entity_name .. "-remnants.png"
+        corpse.animation_overlay.tint = color
+    else
+        for _, rotated_animation in pairs(corpse.animation_overlay) do
+            if rotated_animation.filename then
+                rotated_animation.filename = "__color-coded-pipes__/graphics/" .. entity_name .. "/overlay/overlay-" .. entity_name .. "-remnants.png"
+                rotated_animation.tint = color
+            end
+        end
+    end
+    data:extend { corpse }
+end
+
 
 ------------------------------------------------------------------------------------
 -- create color-coded versions of pipes, pipe-to-ground, storage tanks, and pumps --
 ------------------------------------------------------------------------------------
 
-for name, color in pairs(rgb_colors) do
+for color_name, color in pairs(rgb_colors) do
     local show_rainbow_recipes = settings.startup["color-coded-pipes-show-rainbow-recipes"].value
     local show_fluid_recipes = settings.startup["color-coded-pipes-show-fluid-recipes"].value
-    local is_fluid_color = data.raw["fluid"][name] and true or false
+    local is_fluid_color = data.raw["fluid"][color_name] and true or false
     local is_rainbow_color = not is_fluid_color
     local built_from_base_item = (is_fluid_color and not show_fluid_recipes) or (is_rainbow_color and not show_rainbow_recipes) and true or false
 
-    create_color_overlay_entity("pipe", name, color, built_from_base_item)
-    create_color_overlay_item(name, color, "pipe")
-    create_color_overlay_recipe("pipe", name, built_from_base_item)
+    create_color_overlay_entity("pipe", color_name, color, built_from_base_item)
+    create_color_overlay_item("pipe", color_name, color)
+    create_color_overlay_recipe("pipe", color_name, built_from_base_item)
+    create_color_overlay_corpse("pipe", color_name, color)
 
-    create_color_overlay_entity("pipe-to-ground", name, color, built_from_base_item)
-    create_color_overlay_item(name, color, "pipe-to-ground")
-    create_color_overlay_recipe("pipe-to-ground", name, built_from_base_item)
+    create_color_overlay_entity("pipe-to-ground", color_name, color, built_from_base_item)
+    create_color_overlay_item("pipe-to-ground", color_name, color)
+    create_color_overlay_recipe("pipe-to-ground", color_name, built_from_base_item)
+    create_color_overlay_corpse("pipe-to-ground", color_name, color)
 
-    create_color_overlay_entity("storage-tank", name, color, built_from_base_item)
-    create_color_overlay_item(name, color, "storage-tank")
-    create_color_overlay_recipe("storage-tank", name, built_from_base_item)
+    create_color_overlay_entity("storage-tank", color_name, color, built_from_base_item)
+    create_color_overlay_item("storage-tank", color_name, color)
+    create_color_overlay_recipe("storage-tank", color_name, built_from_base_item)
+    create_color_overlay_corpse("storage-tank", color_name, color)
 
-    create_color_overlay_entity("pump", name, color, built_from_base_item)
-    create_color_overlay_item(name, color, "pump")
-    create_color_overlay_recipe("pump", name, built_from_base_item)
+    create_color_overlay_entity("pump", color_name, color, built_from_base_item)
+    create_color_overlay_item("pump", color_name, color)
+    create_color_overlay_recipe("pump", color_name, built_from_base_item)
+    create_color_overlay_corpse("pump", color_name, color)
 end
 
 
@@ -345,85 +325,95 @@ end
 -- add color-coded pipes to the main menu simulations --
 --------------------------------------------------------
 
+local init_script = [[
+
+local function get_fluid_name(entity)
+    local fluid_name = ""
+    local fluidbox = entity.fluidbox
+    if fluidbox and fluidbox.valid then
+        for index = 1, #fluidbox do
+            local contents = fluidbox.get_fluid_segment_contents(index)
+            if contents then
+                local amount = 0
+                for name, count in pairs(contents) do
+                    if count > amount then
+                        amount = count
+                        fluid_name = name
+                    end
+                end
+            end
+        end
+    end
+    return fluid_name
+end
+for _, surface in pairs(game.surfaces) do
+    local original_pipes = surface.find_entities_filtered { name = "pipe" }
+    for _, pipe in pairs(original_pipes) do
+        local fluid_name = get_fluid_name(pipe)
+        if fluid_name ~= "" then
+            surface.create_entity {
+                name = fluid_name .. "-color-coded-pipe",
+                position = pipe.position,
+                force = pipe.force,
+                direction = pipe.direction,
+                fluidbox = pipe.fluidbox,
+                fast_replace = true,
+                spill = false
+            }
+        end
+    end
+    local original_pipe_to_grounds = surface.find_entities_filtered { name = "pipe-to-ground" }
+    for _, pipe_to_ground in pairs(original_pipe_to_grounds) do
+        local fluid_name = get_fluid_name(pipe_to_ground)
+        if fluid_name ~= "" then
+            surface.create_entity {
+                name = fluid_name .. "-color-coded-pipe-to-ground",
+                position = pipe_to_ground.position,
+                force = pipe_to_ground.force,
+                direction = pipe_to_ground.direction,
+                fluidbox = pipe_to_ground.fluidbox,
+                fast_replace = true,
+                spill = false
+            }
+        end
+    end
+    local original_storage_tanks = surface.find_entities_filtered { name = "storage-tank" }
+    for _, storage_tank in pairs(original_storage_tanks) do
+        local fluid_name = get_fluid_name(storage_tank)
+        if fluid_name ~= "" then
+            surface.create_entity {
+                name = fluid_name .. "-color-coded-storage-tank",
+                position = storage_tank.position,
+                force = storage_tank.force,
+                direction = storage_tank.direction,
+                fluidbox = storage_tank.fluidbox,
+                fast_replace = true,
+                spill = false
+            }
+        end
+    end
+    local original_pumps = surface.find_entities_filtered { name = "pump" }
+    for _, pump in pairs(original_pumps) do
+        local fluid_name = get_fluid_name(pump)
+        if fluid_name ~= "" then
+            surface.create_entity {
+                name = fluid_name .. "-color-coded-pump",
+                position = pump.position,
+                force = pump.force,
+                direction = pump.direction,
+                fluidbox = pump.fluidbox,
+                fast_replace = true,
+                spill = false
+            }
+        end
+    end
+end
+
+]]
+
 if settings.startup["color-coded-main-menu-simulations"].value then
     for _, simulation in pairs(data.raw["utility-constants"]["default"].main_menu_simulations) do
         simulation.init = simulation.init or ""
-        simulation.init = simulation.init .. [[
-            
-            local function get_fluid_name(entity)
-                local fluid_name = "crude-oil"
-                local fluidbox = entity.fluidbox
-                if fluidbox and fluidbox.valid then
-                    for index = 1, #fluidbox do
-                        local contents = fluidbox.get_fluid_system_contents(index)
-                        if contents then
-                            local amount = 0
-                            for name, count in pairs(contents) do
-                                if count > amount then
-                                    amount = count
-                                    fluid_name = name
-                                end
-                            end
-                        end
-                    end
-                end
-                return fluid_name
-            end
-            for _, surface in pairs(game.surfaces) do
-                local original_pipes = surface.find_entities_filtered{name="pipe"}
-                for _, pipe in pairs(original_pipes) do
-                    local fluid_name = get_fluid_name(pipe)
-                    surface.create_entity{
-                        name = fluid_name .. "-color-coded-pipe",
-                        position = pipe.position,
-                        force = pipe.force,
-                        direction = pipe.direction,
-                        fluidbox = pipe.fluidbox,
-                        fast_replace = true,
-                        spill = false
-                    }
-                end
-                local original_pipe_to_grounds = surface.find_entities_filtered{name="pipe-to-ground"}
-                for _, pipe_to_ground in pairs(original_pipe_to_grounds) do
-                    local fluid_name = get_fluid_name(pipe_to_ground)
-                    surface.create_entity{
-                        name = fluid_name .. "-color-coded-pipe-to-ground",
-                        position = pipe_to_ground.position,
-                        force = pipe_to_ground.force,
-                        direction = pipe_to_ground.direction,
-                        fluidbox = pipe_to_ground.fluidbox,
-                        fast_replace = true,
-                        spill = false
-                    }
-                end
-                local original_storage_tanks = surface.find_entities_filtered{name="storage-tank"}
-                for _, storage_tank in pairs(original_storage_tanks) do
-                    local fluid_name = get_fluid_name(storage_tank)
-                    surface.create_entity{
-                        name = fluid_name .. "-color-coded-storage-tank",
-                        position = storage_tank.position,
-                        force = storage_tank.force,
-                        direction = storage_tank.direction,
-                        fluidbox = storage_tank.fluidbox,
-                        fast_replace = true,
-                        spill = false
-                    }
-                end
-                local original_pumps = surface.find_entities_filtered{name="pump"}
-                for _, pump in pairs(original_pumps) do
-                    local fluid_name = get_fluid_name(pump)
-                    surface.create_entity{
-                        name = fluid_name .. "-color-coded-pump",
-                        position = pump.position,
-                        force = pump.force,
-                        direction = pump.direction,
-                        fluidbox = pump.fluidbox,
-                        fast_replace = true,
-                        spill = false
-                    }
-                end
-            end
-            
-        ]]
+        simulation.init = simulation.init .. init_script
     end
 end
