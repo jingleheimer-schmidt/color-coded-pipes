@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 10NOV2024
+  Changes:
+    - updated to support Factorio 2.0
+    - updated overlay masks for new pipe, pipe-to-ground, pump, and storage-tank graphics
+    - removed base patch graphics layer
+---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 08OCT2024
   Changes:
