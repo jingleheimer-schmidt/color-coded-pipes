@@ -21,10 +21,10 @@ local pipe_filenames = {
 }
 
 local pipe_to_ground_filenames = {
-    "down",
-    "left",
-    "right",
-    "up",
+    "north",
+    "east",
+    "south",
+    "west",
 }
 
 local recipe_order = {
