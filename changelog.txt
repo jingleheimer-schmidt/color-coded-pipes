@@ -7,6 +7,8 @@ Date: ????
   Bugfixes:
     - fixed that Color Coded Pipes was inadvertently changing the alpha value of fluid colors
     - fixed that some factoriopedia simulations showed base entities instead of color coded entities
+  Locale:
+    - updated German (de) locale from Crowdin
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 10NOV2024
