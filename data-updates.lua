@@ -201,6 +201,9 @@ local function create_color_overlay_entity(entity_type, color_name, color, built
     entity.icons = create_color_overlay_icons(entity, color, entity_type)
     entity.localised_name = { "color-coded.name", { "entity-name." .. entity_type }, { "fluid-name." .. color_name } }
     entity.corpse = color_name .. "-color-coded-" .. entity_type .. "-remnants"
+    if data.raw["fluid"][color_name] then
+        entity.npt_compat = { mod = "color-coded-pipes", ignore = true }
+    end
     if entity.fluid_box.pipe_covers then
         for _, direction in pairs({ "north", "east", "south", "west" }) do
             local original_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
