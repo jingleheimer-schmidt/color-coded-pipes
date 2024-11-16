@@ -54,8 +54,10 @@ data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = fast_replaceab
 -- just a couple helper functions --
 ------------------------------------
 
+---@alias color_coded_prototypes data.ItemPrototype | data.PipePrototype | data.PipeToGroundPrototype | data.PumpPrototype | data.StorageTankPrototype | data.CorpsePrototype
+
 -- get the order for a color-coded item or entity
----@param item data.ItemPrototype | data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype
+---@param item color_coded_prototypes
 ---@param color_name string?
 ---@return string
 local function get_order(item, color_name)
@@ -108,7 +110,7 @@ end
 
 
 -- create icons for a color-coded item or entity
----@param prototype data.ItemPrototype | data.PipePrototype | data.PipeToGroundPrototype | data.PumpPrototype | data.StorageTankPrototype
+---@param prototype color_coded_prototypes
 ---@param color Color
 ---@param type string
 ---@return data.IconData
