@@ -308,7 +308,8 @@ end
 local function create_color_overlay_corpse(entity_name, color_name, color, built_from_base_item)
     local corpse = table.deepcopy(data.raw["corpse"][entity_name .. "-remnants"])
     corpse.name = color_name .. "-color-coded-" .. entity_name .. "-remnants"
-    -- corpse.icons = create_color_overlay_icons(corpse, color, entity_type)
+    corpse.icons = create_color_overlay_icons(corpse, color, entity_name)
+    corpse.order = get_order(corpse, color_name)
     corpse.localised_name = { "color-coded.name", { "entity-name." .. entity_name }, { "fluid-name." .. color_name } }
     corpse.animation_overlay = table.deepcopy(corpse.animation)
     if corpse.animation_overlay.filename then
