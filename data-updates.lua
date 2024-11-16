@@ -15,6 +15,9 @@ local replace_dash_with_underscore = color_coded_util.replace_dash_with_undersco
 -- create subgroups for the color-coded variants --
 ---------------------------------------------------
 
+---@param name_suffix string
+---@param order_suffix string
+---@param fluid boolean
 local function create_subgroup(name_suffix, order_suffix, fluid)
     local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
     if not subgroup then
