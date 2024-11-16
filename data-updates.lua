@@ -190,22 +190,22 @@ end
 ---@param color Color
 ---@param built_from_base_item boolean
 local function create_color_overlay_recipe(base_name, color_name, color, built_from_base_item)
-    local new_recipe = table.deepcopy(data.raw["recipe"][base_name])
-    if not new_recipe then log(base_name .. " recipe not found") return end
+    local color_coded_recipe = table.deepcopy(data.raw["recipe"][base_name])
+    if not color_coded_recipe then log(base_name .. " recipe not found") return end
     local new_recipe_name = color_name .. "-color-coded-" .. base_name
-    new_recipe.name = new_recipe_name
-    new_recipe.results = { { type = "item", name = new_recipe_name, amount = 1 } }
+    color_coded_recipe.name = new_recipe_name
+    color_coded_recipe.results = { { type = "item", name = new_recipe_name, amount = 1 } }
     if built_from_base_item then
-        new_recipe.hidden = true
+        color_coded_recipe.hidden = true
     end
-    new_recipe.localised_name = { "color-coded.name", { "entity-name." .. base_name }, { "fluid-name." .. color_name } }
+    color_coded_recipe.localised_name = { "color-coded.name", { "entity-name." .. base_name }, { "fluid-name." .. color_name } }
     if not built_from_base_item then
         local added_to_technology = add_recipe_to_technology_effects(base_name, new_recipe_name)
         if added_to_technology then
-            new_recipe.enabled = false
+            color_coded_recipe.enabled = false
         end
     end
-    data:extend { new_recipe }
+    data:extend { color_coded_recipe }
 end
 
 
