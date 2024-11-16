@@ -4,6 +4,8 @@ Date: ????
   Changes:
     - enhanced compatibility with No Pipe Touching mod
     - re-added 0.0.7 migration script
+  Bugfixes:
+    - fixed that Color Coded Pipes was inadvertently changing the alpha value of fluid colors
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 10NOV2024
