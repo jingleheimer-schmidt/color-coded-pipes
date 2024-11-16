@@ -131,6 +131,30 @@ local function create_color_overlay_icons(prototype, color, type)
 end
 
 
+---@param base_name string
+---@param color_coded_name string
+---@param simulation data.SimulationDefinition
+local function update_factoriopedia_simulation(base_name, color_coded_name, simulation)
+    simulation.init = simulation.init or ""
+    simulation.init = simulation.init .. [[
+        for _, surface in pairs(game.surfaces) do
+            local original_entities = surface.find_entities_filtered { name = "]] .. base_name .. [[" }
+            for _, original_entity in pairs(original_entities) do
+                surface.create_entity {
+                    name = "]] .. color_coded_name .. [[",
+                    position = original_entity.position,
+                    force = original_entity.force,
+                    direction = original_entity.direction,
+                    fluidbox = original_entity.fluidbox,
+                    fast_replace = true,
+                    spill = false
+                }
+            end
+        end
+    ]]
+end
+
+
 ----------------------------------------------
 -- functions to create color-coded variants --
 ----------------------------------------------
@@ -203,6 +227,9 @@ local function create_color_overlay_entity(entity_type, color_name, color, built
     entity.corpse = color_name .. "-color-coded-" .. entity_type .. "-remnants"
     if data.raw["fluid"][color_name] then
         entity.npt_compat = { mod = "color-coded-pipes", ignore = true }
+    end
+    if entity.factoriopedia_simulation then
+        update_factoriopedia_simulation(entity_type, entity_name, entity.factoriopedia_simulation)
     end
     if entity.fluid_box.pipe_covers then
         for _, direction in pairs({ "north", "east", "south", "west" }) do
