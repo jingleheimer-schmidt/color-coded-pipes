@@ -2,6 +2,7 @@
 Version: 1.0.1
 Date: ????
   Changes:
+    - enhanced compatibility with No Pipe Touching mod
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 10NOV2024
