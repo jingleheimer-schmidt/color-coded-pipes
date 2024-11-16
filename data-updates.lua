@@ -330,12 +330,13 @@ end
 -- create color-coded versions of pipes, pipe-to-ground, storage tanks, and pumps --
 ------------------------------------------------------------------------------------
 
+local hide_rainbow_recipes = not settings.startup["color-coded-pipes-show-rainbow-recipes"].value
+local hide_fluid_recipes = not settings.startup["color-coded-pipes-show-fluid-recipes"].value
+
 for color_name, color in pairs(rgb_colors) do
-    local show_rainbow_recipes = settings.startup["color-coded-pipes-show-rainbow-recipes"].value
-    local show_fluid_recipes = settings.startup["color-coded-pipes-show-fluid-recipes"].value
     local is_fluid_color = data.raw["fluid"][color_name] and true or false
     local is_rainbow_color = not is_fluid_color
-    local built_from_base_item = (is_fluid_color and not show_fluid_recipes) or (is_rainbow_color and not show_rainbow_recipes) and true or false
+    local built_from_base_item = (hide_rainbow_recipes and is_rainbow_color) or (hide_fluid_recipes and is_fluid_color)
 
     for _, base_name in pairs { "pipe", "pipe-to-ground", "storage-tank", "pump" } do
         create_color_overlay_entity(base_name, color_name, color, built_from_base_item)
