@@ -182,6 +182,9 @@ local function create_color_overlay_item(base_name, color_name, color, built_fro
     item.icons = create_color_overlay_icons(item, color, base_name)
     item.order = get_order(item, color_name)
     item.subgroup = get_subgroup(base_name, color_name)
+    if built_from_base_item then
+        item.hidden = true
+    end
     data:extend { item }
 end
 
@@ -222,7 +225,8 @@ local function create_color_overlay_entity(base_name, color_name, color, built_f
     if not entity then log(base_name .. " entity not found") return  end
     local entity_name = color_name .. "-color-coded-" .. base_name
     if built_from_base_item then
-        entity.placeable_by = { item = entity.name, count = 1 }
+        entity.placeable_by = { item = base_name, count = 1 }
+        entity.hidden = true
     else
         entity.minable.result = entity_name
     end
