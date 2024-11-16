@@ -160,42 +160,44 @@ end
 ----------------------------------------------
 
 -- create a color-coded version of an item
----@param entity_type string
----@param name string
+---@param base_name string
+---@param color_name string
 ---@param color Color
-local function create_color_overlay_item(entity_type, name, color)
-    local item = table.deepcopy(data.raw["item"][entity_type])
+---@param built_from_base_item boolean
+local function create_color_overlay_item(base_name, color_name, color, built_from_base_item)
+    local item = table.deepcopy(data.raw["item"][base_name])
     if not item then
-        log(entity_type .. " item not found")
+        log(base_name .. " item not found")
         return
     end
-    local item_name = name .. "-color-coded-" .. entity_type
+    local item_name = color_name .. "-color-coded-" .. base_name
     item.name = item_name
     item.place_result = item_name
-    item.localised_name = { "color-coded.name", { "entity-name." .. entity_type }, { "fluid-name." .. name } }
-    item.icons = create_color_overlay_icons(item, color, entity_type)
-    item.order = get_order(item, name)
-    item.subgroup = get_subgroup(entity_type, name)
+    item.localised_name = { "color-coded.name", { "entity-name." .. base_name }, { "fluid-name." .. color_name } }
+    item.icons = create_color_overlay_icons(item, color, base_name)
+    item.order = get_order(item, color_name)
+    item.subgroup = get_subgroup(base_name, color_name)
     data:extend { item }
 end
 
 
 -- create a color-coded version of a recipe
----@param base_recipe_name string
----@param name string
+---@param base_name string
+---@param color_name string
+---@param color Color
 ---@param built_from_base_item boolean
-local function create_color_overlay_recipe(base_recipe_name, name, built_from_base_item)
-    local new_recipe = table.deepcopy(data.raw["recipe"][base_recipe_name])
-    if not new_recipe then log(base_recipe_name .. " recipe not found") return end
-    local new_recipe_name = name .. "-color-coded-" .. base_recipe_name
+local function create_color_overlay_recipe(base_name, color_name, color, built_from_base_item)
+    local new_recipe = table.deepcopy(data.raw["recipe"][base_name])
+    if not new_recipe then log(base_name .. " recipe not found") return end
+    local new_recipe_name = color_name .. "-color-coded-" .. base_name
     new_recipe.name = new_recipe_name
     new_recipe.results = { { type = "item", name = new_recipe_name, amount = 1 } }
     if built_from_base_item then
         new_recipe.hidden = true
     end
-    new_recipe.localised_name = { "color-coded.name", { "entity-name." .. base_recipe_name }, { "fluid-name." .. name } }
+    new_recipe.localised_name = { "color-coded.name", { "entity-name." .. base_name }, { "fluid-name." .. color_name } }
     if not built_from_base_item then
-        local added_to_technology = add_recipe_to_technology_effects(base_recipe_name, new_recipe_name)
+        local added_to_technology = add_recipe_to_technology_effects(base_name, new_recipe_name)
         if added_to_technology then
             new_recipe.enabled = false
         end
@@ -205,15 +207,15 @@ end
 
 
 -- create a color-coded version of a pipe, pipe-to-ground, pump, or storage tank
----@param entity_type string
+---@param base_name string
 ---@param color_name string
 ---@param color Color
 ---@param built_from_base_item boolean
-local function create_color_overlay_entity(entity_type, color_name, color, built_from_base_item)
-    local entity = table.deepcopy(data.raw[entity_type][entity_type])
+local function create_color_overlay_entity(base_name, color_name, color, built_from_base_item)
+    local entity = table.deepcopy(data.raw[base_name][base_name])
     entity = entity --[[@as data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype]]
-    if not entity then log(entity_type .. " entity not found") return  end
-    local entity_name = color_name .. "-color-coded-" .. entity_type
+    if not entity then log(base_name .. " entity not found") return  end
+    local entity_name = color_name .. "-color-coded-" .. base_name
     if built_from_base_item then
         entity.placeable_by = { item = entity.name, count = 1 }
     else
@@ -221,15 +223,15 @@ local function create_color_overlay_entity(entity_type, color_name, color, built
     end
     entity.name = entity_name
     entity.order = get_order(entity, color_name)
-    entity.subgroup = get_subgroup(entity_type, color_name)
-    entity.icons = create_color_overlay_icons(entity, color, entity_type)
-    entity.localised_name = { "color-coded.name", { "entity-name." .. entity_type }, { "fluid-name." .. color_name } }
-    entity.corpse = color_name .. "-color-coded-" .. entity_type .. "-remnants"
+    entity.subgroup = get_subgroup(base_name, color_name)
+    entity.icons = create_color_overlay_icons(entity, color, base_name)
+    entity.localised_name = { "color-coded.name", { "entity-name." .. base_name }, { "fluid-name." .. color_name } }
+    entity.corpse = color_name .. "-color-coded-" .. base_name .. "-remnants"
     if data.raw["fluid"][color_name] then
         entity.npt_compat = { mod = "color-coded-pipes", ignore = true }
     end
     if entity.factoriopedia_simulation then
-        update_factoriopedia_simulation(entity_type, entity_name, entity.factoriopedia_simulation)
+        update_factoriopedia_simulation(base_name, entity_name, entity.factoriopedia_simulation)
     end
     if entity.fluid_box.pipe_covers then
         for _, direction in pairs({ "north", "east", "south", "west" }) do
@@ -243,7 +245,7 @@ local function create_color_overlay_entity(entity_type, color_name, color, built
             entity.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
         end
     end
-    if entity_type == "pipe" then
+    if base_name == "pipe" then
         for _, filename in pairs(pipe_filenames) do
             local property_name = replace_dash_with_underscore(filename)
             local original_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
@@ -255,7 +257,7 @@ local function create_color_overlay_entity(entity_type, color_name, color, built
             entity.pictures[property_name] = {}
             entity.pictures[property_name].layers = { original_layer, overlay_layer }
         end
-    elseif entity_type == "pipe-to-ground" then
+    elseif base_name == "pipe-to-ground" then
         for _, filename in pairs(pipe_to_ground_filenames) do
             local property_name = replace_dash_with_underscore(filename)
             local original_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
@@ -267,7 +269,7 @@ local function create_color_overlay_entity(entity_type, color_name, color, built
             entity.pictures[property_name] = {}
             entity.pictures[property_name].layers = { original_layer, overlay_layer }
         end
-    elseif entity_type == "pump" then
+    elseif base_name == "pump" then
         for _, direction in pairs({ "north", "east", "south", "west" }) do
             local original_layer = table.deepcopy(entity.animations[direction]) ---@type data.Animation
             local overlay_layer = table.deepcopy(entity.animations[direction]) ---@type data.Animation
@@ -277,7 +279,7 @@ local function create_color_overlay_entity(entity_type, color_name, color, built
             end
             entity.animations[direction] = { layers = { original_layer, overlay_layer } }
         end
-    elseif entity_type == "storage-tank" then
+    elseif base_name == "storage-tank" then
         local base_sheet = table.deepcopy(entity.pictures.picture.sheets[1])
         local shadow_sheet = table.deepcopy(entity.pictures.picture.sheets[2])
         local overlay_sheet = table.deepcopy(base_sheet)
@@ -297,7 +299,8 @@ end
 ---@param entity_name string
 ---@param color_name string
 ---@param color Color
-local function create_color_overlay_corpse(entity_name, color_name, color)
+---@param built_from_base_item boolean
+local function create_color_overlay_corpse(entity_name, color_name, color, built_from_base_item)
     local corpse = table.deepcopy(data.raw["corpse"][entity_name .. "-remnants"])
     corpse.name = color_name .. "-color-coded-" .. entity_name .. "-remnants"
     -- corpse.icons = create_color_overlay_icons(corpse, color, entity_type)
@@ -331,9 +334,9 @@ for color_name, color in pairs(rgb_colors) do
 
     for _, base_name in pairs { "pipe", "pipe-to-ground", "storage-tank", "pump" } do
         create_color_overlay_entity(base_name, color_name, color, built_from_base_item)
-        create_color_overlay_item(base_name, color_name, color)
-        create_color_overlay_recipe(base_name, color_name, built_from_base_item)
-        create_color_overlay_corpse(base_name, color_name, color)
+        create_color_overlay_item(base_name, color_name, color, built_from_base_item)
+        create_color_overlay_recipe(base_name, color_name, color, built_from_base_item)
+        create_color_overlay_corpse(base_name, color_name, color, built_from_base_item)
     end
 
 end
