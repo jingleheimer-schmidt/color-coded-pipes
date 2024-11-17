@@ -226,7 +226,7 @@ local function create_color_overlay_entity(base_name, color_name, color, built_f
     local entity_name = color_name .. "-color-coded-" .. base_name
     if built_from_base_item then
         entity.placeable_by = { item = base_name, count = 1 }
-        entity.hidden = true
+        entity.hidden_in_factoriopedia = true
     else
         entity.minable.result = entity_name
     end
