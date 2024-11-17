@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 16NOV2024
+  Changes:
+    - enhanced compatibility with No Pipe Touching mod
+    - re-added 0.0.7 migration script
+    - added colors to the corpse icons
+  Bugfixes:
+    - fixed that Color Coded Pipes was inadvertently changing the alpha value of fluid colors
+    - fixed that some factoriopedia simulations showed base entities instead of color coded entities
+    - fixed that hidden color coded pipes were visible in factoriopedia
+  Locale:
+    - updated German (de) locale from Crowdin
+---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 10NOV2024
   Changes:

@@ -60,7 +60,7 @@ local rgb_colors = { ---@type table<string, Color>
 
 for _, fluid in pairs(data.raw["fluid"]) do
     if fluid.base_color and not fluid.hidden and not fluid.parameter then
-        rgb_colors[fluid.name] = fluid.base_color
+        rgb_colors[fluid.name] = table.deepcopy(fluid.base_color)
         rgb_colors[fluid.name][4] = 0.6
     end
 end
