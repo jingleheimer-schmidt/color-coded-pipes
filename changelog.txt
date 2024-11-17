@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
-Date: ????
+Date: 16NOV2024
   Changes:
     - enhanced compatibility with No Pipe Touching mod
     - re-added 0.0.7 migration script
