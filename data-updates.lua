@@ -221,6 +221,7 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
             color_coded_recipe.enabled = false
         end
     end
+    color_coded_recipe.icons = data.raw["item"][new_recipe_name].icons
     data:extend { color_coded_recipe }
 end
 
