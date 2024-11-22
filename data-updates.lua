@@ -30,10 +30,10 @@ local function create_subgroup(name_suffix, order_suffix, fluid)
 end
 
 local group_sorting = {
-    { entity_type = "pipe",           order = "a" },
-    { entity_type = "pipe-to-ground", order = "b" },
-    { entity_type = "pump",           order = "c" },
-    { entity_type = "storage-tank",   order = "d" }
+    { entity_name = "pipe",           order = "a" },
+    { entity_name = "pipe-to-ground", order = "b" },
+    { entity_name = "pump",           order = "c" },
+    { entity_name = "storage-tank",   order = "d" }
 }
 
 if mods["pipe_plus"] then
@@ -42,8 +42,8 @@ if mods["pipe_plus"] then
 end
 
 for _, group in pairs(group_sorting) do
-    create_subgroup(group.entity_type, group.order, false)
-    create_subgroup(group.entity_type, group.order .. "[fluid]", true)
+    create_subgroup(group.entity_name, group.order, false)
+    create_subgroup(group.entity_name, group.order .. "[fluid]", true)
 end
 
 
