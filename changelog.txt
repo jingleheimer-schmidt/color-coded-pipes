@@ -2,6 +2,7 @@
 Version: 1.0.2
 Date: ????
   Changes:
+    - cleaned up the storage tank overlay mask
   Bugfixes:
     - added proper handling for fluids with colors defined in the 1-255 range
 ---------------------------------------------------------------------------------------------------
