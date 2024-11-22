@@ -170,11 +170,12 @@ end
 ----------------------------------------------
 
 -- create a color-coded version of an item
+---@param base_type string
 ---@param base_name string
 ---@param color_name string
 ---@param color Color
 ---@param built_from_base_item boolean
-local function create_color_overlay_item(base_name, color_name, color, built_from_base_item)
+local function create_color_overlay_item(base_type, base_name, color_name, color, built_from_base_item)
     local item = table.deepcopy(data.raw["item"][base_name])
     if not item then
         log(base_name .. " item not found")
@@ -195,11 +196,12 @@ end
 
 
 -- create a color-coded version of a recipe
+---@param base_type string
 ---@param base_name string
 ---@param color_name string
 ---@param color Color
 ---@param built_from_base_item boolean
-local function create_color_overlay_recipe(base_name, color_name, color, built_from_base_item)
+local function create_color_overlay_recipe(base_type, base_name, color_name, color, built_from_base_item)
     local color_coded_recipe = table.deepcopy(data.raw["recipe"][base_name])
     if not color_coded_recipe then log(base_name .. " recipe not found") return end
     local new_recipe_name = color_name .. "-color-coded-" .. base_name
@@ -339,11 +341,12 @@ local function create_color_overlay_entity(base_type, base_name, color_name, col
     data:extend { entity }
 end
 
+---@param base_type string
 ---@param base_name string
 ---@param color_name string
 ---@param color Color
 ---@param built_from_base_item boolean
-local function create_color_overlay_corpse(base_name, color_name, color, built_from_base_item)
+local function create_color_overlay_corpse(base_type, base_name, color_name, color, built_from_base_item)
     local corpse = table.deepcopy(data.raw["corpse"][base_name .. "-remnants"])
     corpse.name = color_name .. "-color-coded-" .. base_name .. "-remnants"
     corpse.icons = create_color_overlay_icons(corpse, color, base_name)
