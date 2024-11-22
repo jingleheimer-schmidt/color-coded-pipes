@@ -46,7 +46,8 @@ local function get_color(setting)
     return value
 end
 
-local rgb_colors = { ---@type table<string, Color>
+---@type table<string, Color>
+local rgb_colors = {
     red = get_color("color-coded-pipes-red"),
     orange = get_color("color-coded-pipes-orange"),
     yellow = get_color("color-coded-pipes-yellow"),
