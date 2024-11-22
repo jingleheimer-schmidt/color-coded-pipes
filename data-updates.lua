@@ -305,24 +305,24 @@ local function create_color_overlay_entity(base_name, color_name, color, built_f
     data:extend { entity }
 end
 
----@param entity_name string
+---@param base_name string
 ---@param color_name string
 ---@param color Color
 ---@param built_from_base_item boolean
-local function create_color_overlay_corpse(entity_name, color_name, color, built_from_base_item)
-    local corpse = table.deepcopy(data.raw["corpse"][entity_name .. "-remnants"])
-    corpse.name = color_name .. "-color-coded-" .. entity_name .. "-remnants"
-    corpse.icons = create_color_overlay_icons(corpse, color, entity_name)
+local function create_color_overlay_corpse(base_name, color_name, color, built_from_base_item)
+    local corpse = table.deepcopy(data.raw["corpse"][base_name .. "-remnants"])
+    corpse.name = color_name .. "-color-coded-" .. base_name .. "-remnants"
+    corpse.icons = create_color_overlay_icons(corpse, color, base_name)
     corpse.order = get_order(corpse, color_name)
-    corpse.localised_name = { "color-coded.name", { "entity-name." .. entity_name }, { "fluid-name." .. color_name } }
+    corpse.localised_name = { "color-coded.name", { "entity-name." .. base_name }, { "fluid-name." .. color_name } }
     corpse.animation_overlay = table.deepcopy(corpse.animation)
     if corpse.animation_overlay.filename then
-        corpse.animation_overlay.filename = "__color-coded-pipes__/graphics/" .. entity_name .. "/overlay/overlay-" .. entity_name .. "-remnants.png"
+        corpse.animation_overlay.filename = "__color-coded-pipes__/graphics/" .. base_name .. "/overlay/overlay-" .. base_name .. "-remnants.png"
         corpse.animation_overlay.tint = color
     else
         for _, rotated_animation in pairs(corpse.animation_overlay) do
             if rotated_animation.filename then
-                rotated_animation.filename = "__color-coded-pipes__/graphics/" .. entity_name .. "/overlay/overlay-" .. entity_name .. "-remnants.png"
+                rotated_animation.filename = "__color-coded-pipes__/graphics/" .. base_name .. "/overlay/overlay-" .. base_name .. "-remnants.png"
                 rotated_animation.tint = color
             end
         end
