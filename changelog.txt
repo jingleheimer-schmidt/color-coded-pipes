@@ -2,7 +2,7 @@
 Version: 1.0.2
 Date: ????
   Features:
-    - added color coded variants of pipes from the Pipe Plus mod
+    - added color coded variants and remnants for pipes from the Pipe Plus mod
   Changes:
     - cleaned up the storage tank overlay mask
   Bugfixes:

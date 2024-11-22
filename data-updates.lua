@@ -349,11 +349,20 @@ end
 ---@param built_from_base_item boolean
 local function create_color_overlay_corpse(base_type, base_name, color_name, color, built_from_base_item)
     local corpse = table.deepcopy(data.raw["corpse"][base_name .. "-remnants"])
+    local remnant_uses_base_corpse = false
+    if not corpse then
+        corpse = table.deepcopy(data.raw["corpse"][base_type .. "-remnants"])
+        remnant_uses_base_corpse = true
+    end
+    if not corpse then return end
     corpse.name = color_name .. "-color-coded-" .. base_name .. "-remnants"
     corpse.icons = create_color_overlay_icons(corpse, color, base_name)
     corpse.order = get_order(corpse, color_name)
     corpse.localised_name = { "color-coded.name", { "entity-name." .. base_name }, { "fluid-name." .. color_name } }
     corpse.animation_overlay = table.deepcopy(corpse.animation)
+    if remnant_uses_base_corpse then
+        base_name = base_type
+    end
     if corpse.animation_overlay.filename then
         corpse.animation_overlay.filename = "__color-coded-pipes__/graphics/" .. base_name .. "/overlay/overlay-" .. base_name .. "-remnants.png"
         corpse.animation_overlay.tint = color
