@@ -199,7 +199,11 @@ local function create_color_overlay_recipe(base_name, color_name, color, built_f
     if not color_coded_recipe then log(base_name .. " recipe not found") return end
     local new_recipe_name = color_name .. "-color-coded-" .. base_name
     color_coded_recipe.name = new_recipe_name
-    color_coded_recipe.results = { { type = "item", name = new_recipe_name, amount = 1 } }
+    for _, result in pairs(color_coded_recipe.results) do
+        if result.name == base_name then
+            result.name = new_recipe_name
+        end
+    end
     if built_from_base_item then
         color_coded_recipe.hidden = true
     end

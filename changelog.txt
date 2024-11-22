@@ -5,6 +5,8 @@ Date: ????
     - cleaned up the storage tank overlay mask
   Bugfixes:
     - added proper handling for fluids with colors defined in the 1-255 range
+    - fixed that pipe-to-ground recipes produced only produced 1 item instead of 2
+    - fixed that changes to the base recipe results by other mods were ignored
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 16NOV2024
