@@ -1,4 +1,6 @@
 
+local util = require("util")
+
 local pipe_filenames = {
     "corner-down-left",
     "corner-down-right",
@@ -61,8 +63,8 @@ local rgb_colors = {
 
 for _, fluid in pairs(data.raw["fluid"]) do
     if fluid.base_color and not fluid.hidden and not fluid.parameter then
-        rgb_colors[fluid.name] = table.deepcopy(fluid.base_color)
-        rgb_colors[fluid.name][4] = 0.6
+        local base_color = util.get_color_with_alpha(fluid.base_color, 0.6, true)
+        rgb_colors[fluid.name] = table.deepcopy(base_color)
     end
 end
 

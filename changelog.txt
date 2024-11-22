@@ -2,6 +2,8 @@
 Version: 1.0.2
 Date: ????
   Changes:
+  Bugfixes:
+    - added proper handling for fluids with colors defined in the 1-255 range
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 16NOV2024
