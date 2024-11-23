@@ -184,7 +184,9 @@ local function create_color_overlay_item(base_type, base_name, color_name, color
     local item_name = color_name .. "-color-coded-" .. base_name
     item.name = item_name
     item.place_result = item_name
-    item.localised_name = { "color-coded.name", { "entity-name." .. base_name }, { "fluid-name." .. color_name } }
+    local localised_name = item.localised_name
+    if not localised_name then localised_name = { "entity-name." .. base_name } end
+    item.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
     item.icons = create_color_overlay_icons(item, color, base_name)
     item.order = get_order(item, color_name)
     item.subgroup = get_subgroup(base_name, color_name)
@@ -214,7 +216,9 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
     if built_from_base_item then
         color_coded_recipe.hidden = true
     end
-    color_coded_recipe.localised_name = { "color-coded.name", { "entity-name." .. base_name }, { "fluid-name." .. color_name } }
+    local localised_name = color_coded_recipe.localised_name
+    if not localised_name then localised_name = { "entity-name." .. base_name } end
+    color_coded_recipe.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
     if not built_from_base_item then
         local added_to_technology = add_recipe_to_technology_effects(base_name, new_recipe_name)
         if added_to_technology then
@@ -247,7 +251,9 @@ local function create_color_overlay_entity(base_type, base_name, color_name, col
     entity.order = get_order(entity, color_name)
     entity.subgroup = get_subgroup(base_name, color_name)
     entity.icons = create_color_overlay_icons(entity, color, base_name)
-    entity.localised_name = { "color-coded.name", { "entity-name." .. base_name }, { "fluid-name." .. color_name } }
+    local localised_name = entity.localised_name
+    if not localised_name then localised_name = { "entity-name." .. base_name } end
+    entity.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
     entity.corpse = color_name .. "-color-coded-" .. base_name .. "-remnants"
     if data.raw["fluid"][color_name] then
         entity.npt_compat = { mod = "color-coded-pipes", ignore = true }
@@ -358,7 +364,9 @@ local function create_color_overlay_corpse(base_type, base_name, color_name, col
     corpse.name = color_name .. "-color-coded-" .. base_name .. "-remnants"
     corpse.icons = create_color_overlay_icons(corpse, color, base_name)
     corpse.order = get_order(corpse, color_name)
-    corpse.localised_name = { "color-coded.name", { "entity-name." .. base_name }, { "fluid-name." .. color_name } }
+    local localised_name = corpse.localised_name
+    if not localised_name then localised_name = { "entity-name." .. base_name } end
+    corpse.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
     corpse.animation_overlay = table.deepcopy(corpse.animation)
     if remnant_uses_base_corpse then
         base_name = base_type

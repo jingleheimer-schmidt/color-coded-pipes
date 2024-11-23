@@ -10,6 +10,7 @@ Date: ????
     - fixed that pipe-to-ground recipes produced only produced 1 item instead of 2
     - fixed that changes to the base recipe results by other mods were ignored
     - fixed that recipe icons were not color-coded if other mods added icons to the recipe
+    - fixed that color coded pipes did not always capture existing localised names
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 16NOV2024
