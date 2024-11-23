@@ -141,17 +141,17 @@ local function create_color_overlay_icons(prototype, color, type)
 end
 
 
----@param base_name string
----@param color_coded_name string
+---@param old_entity_name string
+---@param new_entity_name string
 ---@param simulation data.SimulationDefinition
-local function update_factoriopedia_simulation(base_name, color_coded_name, simulation)
+local function update_factoriopedia_simulation(old_entity_name, new_entity_name, simulation)
     simulation.init = simulation.init or ""
     simulation.init = simulation.init .. [[
         for _, surface in pairs(game.surfaces) do
-            local original_entities = surface.find_entities_filtered { name = "]] .. base_name .. [[" }
+            local original_entities = surface.find_entities_filtered { name = "]] .. old_entity_name .. [[" }
             for _, original_entity in pairs(original_entities) do
                 surface.create_entity {
-                    name = "]] .. color_coded_name .. [[",
+                    name = "]] .. new_entity_name .. [[",
                     position = original_entity.position,
                     force = original_entity.force,
                     direction = original_entity.direction,
