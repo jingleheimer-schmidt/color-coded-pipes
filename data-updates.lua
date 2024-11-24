@@ -360,18 +360,14 @@ local function create_color_overlay_entity(base_type, base_name, color_name, col
             entity.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
         end
     end
-    if base_name == "pipe" then
-        add_overlay_to_pipe(entity, "pipe", color)
-    elseif base_name == "pipe-to-ground" then
-        add_overlay_to_pipe_to_ground(entity, "pipe-to-ground", color)
-    elseif base_name == "pump" then
-        add_overlay_to_pump(entity, "pump", color)
-    elseif base_name == "storage-tank" then
-        add_overlay_to_storage_tank(entity, "storage-tank", color)
-    elseif base_name == "pipe-to-ground-2" then
-        add_overlay_to_pipe_to_ground(entity, "pipe-to-ground-2", color)
-    elseif base_name == "pipe-to-ground-3" then
-        add_overlay_to_pipe_to_ground(entity, "pipe-to-ground-3", color)
+    if base_type == "pipe" then
+        add_overlay_to_pipe(entity, base_name, color)
+    elseif base_type == "pipe-to-ground" then
+        add_overlay_to_pipe_to_ground(entity, base_name, color)
+    elseif base_type == "pump" then
+        add_overlay_to_pump(entity, base_name, color)
+    elseif base_type == "storage-tank" then
+        add_overlay_to_storage_tank(entity, base_name, color)
     end
     data:extend { entity }
 end
