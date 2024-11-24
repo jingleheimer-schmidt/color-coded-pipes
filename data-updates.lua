@@ -316,6 +316,7 @@ local function add_overlay_to_storage_tank(prototype, name, color)
     }
 end
 
+
 -- create a color-coded version of a pipe, pipe-to-ground, pump, or storage tank
 ---@param base_type string
 ---@param base_name string
@@ -374,6 +375,7 @@ local function create_color_overlay_entity(base_type, base_name, color_name, col
     end
     data:extend { entity }
 end
+
 
 ---@param base_type string
 ---@param base_name string
