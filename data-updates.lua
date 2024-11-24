@@ -246,6 +246,76 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
 end
 
 
+---@param prototype color_coded_prototypes
+---@param name string
+---@param color Color
+local function add_overlay_to_pipe(prototype, name, color)
+    for _, filename in pairs(pipe_filenames) do
+        local property_name = replace_dash_with_underscore(filename)
+        local original_layer = table.deepcopy(prototype.pictures[property_name]) ---@type data.Sprite
+        local overlay_layer = table.deepcopy(prototype.pictures[property_name]) ---@type data.Sprite
+        if overlay_layer.filename then
+            overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. "-" .. filename .. ".png"
+            overlay_layer.tint = color
+        end
+        prototype.pictures[property_name] = {}
+        prototype.pictures[property_name].layers = { original_layer, overlay_layer }
+    end
+end
+
+
+---@param prototype color_coded_prototypes
+---@param name string
+---@param color Color
+local function add_overlay_to_pipe_to_ground(prototype, name, color)
+    for _, filename in pairs(pipe_to_ground_filenames) do
+        local property_name = replace_dash_with_underscore(filename)
+        local original_layer = table.deepcopy(prototype.pictures[property_name]) ---@type data.Sprite
+        local overlay_layer = table.deepcopy(prototype.pictures[property_name]) ---@type data.Sprite
+        if overlay_layer.filename then
+            overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. "-" .. filename .. ".png"
+            overlay_layer.tint = color
+        end
+        prototype.pictures[property_name] = {}
+        prototype.pictures[property_name].layers = { original_layer, overlay_layer }
+    end
+end
+
+
+---@param prototype color_coded_prototypes
+---@param name string
+---@param color Color
+local function add_overlay_to_pump(prototype, name, color)
+    for _, direction in pairs({ "north", "east", "south", "west" }) do
+        local original_layer = table.deepcopy(prototype.animations[direction]) ---@type data.Animation
+        local overlay_layer = table.deepcopy(prototype.animations[direction]) ---@type data.Animation
+        if overlay_layer.filename then
+            overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. "-" .. direction .. ".png"
+            overlay_layer.tint = color
+        end
+        prototype.animations[direction] = { layers = { original_layer, overlay_layer } }
+    end
+end
+
+
+---@param prototype color_coded_prototypes
+---@param name string
+---@param color Color
+local function add_overlay_to_storage_tank(prototype, name, color)
+    local base_sheet = table.deepcopy(prototype.pictures.picture.sheets[1])
+    local shadow_sheet = table.deepcopy(prototype.pictures.picture.sheets[2])
+    local overlay_sheet = table.deepcopy(base_sheet)
+    if overlay_sheet.filename then
+        overlay_sheet.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. ".png"
+        overlay_sheet.tint = color
+    end
+    prototype.pictures.picture.sheets = {
+        [1] = base_sheet,
+        [2] = overlay_sheet,
+        [3] = shadow_sheet
+    }
+end
+
 -- create a color-coded version of a pipe, pipe-to-ground, pump, or storage tank
 ---@param base_type string
 ---@param base_name string
@@ -290,76 +360,17 @@ local function create_color_overlay_entity(base_type, base_name, color_name, col
         end
     end
     if base_name == "pipe" then
-        for _, filename in pairs(pipe_filenames) do
-            local property_name = replace_dash_with_underscore(filename)
-            local original_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
-            local overlay_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
-            if overlay_layer.filename then
-                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe/overlay/overlay-pipe-" .. filename .. ".png"
-                overlay_layer.tint = color
-            end
-            entity.pictures[property_name] = {}
-            entity.pictures[property_name].layers = { original_layer, overlay_layer }
-        end
+        add_overlay_to_pipe(entity, "pipe", color)
     elseif base_name == "pipe-to-ground" then
-        for _, filename in pairs(pipe_to_ground_filenames) do
-            local property_name = replace_dash_with_underscore(filename)
-            local original_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
-            local overlay_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
-            if overlay_layer.filename then
-                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-to-ground/overlay/overlay-pipe-to-ground-" .. filename .. ".png"
-                overlay_layer.tint = color
-            end
-            entity.pictures[property_name] = {}
-            entity.pictures[property_name].layers = { original_layer, overlay_layer }
-        end
+        add_overlay_to_pipe_to_ground(entity, "pipe-to-ground", color)
     elseif base_name == "pump" then
-        for _, direction in pairs({ "north", "east", "south", "west" }) do
-            local original_layer = table.deepcopy(entity.animations[direction]) ---@type data.Animation
-            local overlay_layer = table.deepcopy(entity.animations[direction]) ---@type data.Animation
-            if overlay_layer.filename then
-                overlay_layer.filename = "__color-coded-pipes__/graphics/pump/overlay/overlay-pump-" .. direction .. ".png"
-                overlay_layer.tint = color
-            end
-            entity.animations[direction] = { layers = { original_layer, overlay_layer } }
-        end
+        add_overlay_to_pump(entity, "pump", color)
     elseif base_name == "storage-tank" then
-        local base_sheet = table.deepcopy(entity.pictures.picture.sheets[1])
-        local shadow_sheet = table.deepcopy(entity.pictures.picture.sheets[2])
-        local overlay_sheet = table.deepcopy(base_sheet)
-        if overlay_sheet.filename then
-            overlay_sheet.filename = "__color-coded-pipes__/graphics/storage-tank/overlay/overlay-storage-tank.png"
-            overlay_sheet.tint = color
-        end
-        entity.pictures.picture.sheets = {
-            [1] = base_sheet,
-            [2] = overlay_sheet,
-            [3] = shadow_sheet
-        }
+        add_overlay_to_storage_tank(entity, "storage-tank", color)
     elseif base_name == "pipe-to-ground-2" then
-        for _, filename in pairs(pipe_to_ground_filenames) do
-            local property_name = replace_dash_with_underscore(filename)
-            local original_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
-            local overlay_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
-            if overlay_layer.filename then
-                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-to-ground-2/overlay/overlay-pipe-to-ground-2-" .. filename .. ".png"
-                overlay_layer.tint = color
-            end
-            entity.pictures[property_name] = {}
-            entity.pictures[property_name].layers = { original_layer, overlay_layer }
-        end
+        add_overlay_to_pipe_to_ground(entity, "pipe-to-ground-2", color)
     elseif base_name == "pipe-to-ground-3" then
-        for _, filename in pairs(pipe_to_ground_filenames) do
-            local property_name = replace_dash_with_underscore(filename)
-            local original_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
-            local overlay_layer = table.deepcopy(entity.pictures[property_name]) ---@type data.Sprite
-            if overlay_layer.filename then
-                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-to-ground-3/overlay/overlay-pipe-to-ground-3-" .. filename .. ".png"
-                overlay_layer.tint = color
-            end
-            entity.pictures[property_name] = {}
-            entity.pictures[property_name].layers = { original_layer, overlay_layer }
-        end
+        add_overlay_to_pipe_to_ground(entity, "pipe-to-ground-3", color)
     end
     data:extend { entity }
 end
