@@ -272,7 +272,7 @@ local function create_color_overlay_entity(base_type, base_name, color_name, col
     entity.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
     entity.corpse = color_name .. "-color-coded-" .. base_name .. "-remnants"
     if data.raw["fluid"][color_name] then
-        entity.npt_compat = { mod = "color-coded-pipes", ignore = true }
+        entity.npt_compat = { mod = "color-coded-pipes", tag = color_name }
     end
     if entity.factoriopedia_simulation then
         update_factoriopedia_simulation(base_name, entity_name, entity.factoriopedia_simulation)
