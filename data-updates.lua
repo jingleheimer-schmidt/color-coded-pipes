@@ -348,8 +348,7 @@ end
 ---@param color Color
 ---@param built_from_base_item boolean
 local function create_color_overlay_entity(base_type, base_name, color_name, color, built_from_base_item)
-    local entity = table.deepcopy(data.raw[base_type][base_name])
-    entity = entity --[[@as data.PipePrototype | data.PipeToGroundPrototype | data.StorageTankPrototype | data.PumpPrototype]]
+    local entity = table.deepcopy(data.raw[base_type][base_name]) --[[@as color_coded_prototypes]]
     if not entity then log(base_name .. " entity not found") return  end
     local entity_name = color_name .. "-color-coded-" .. base_name
     if built_from_base_item then
@@ -469,9 +468,9 @@ for color_name, color in pairs(rgb_colors) do
     end
 
     for _, base in pairs(base_pipes) do
-        create_color_overlay_entity(base.type, base.name, color_name, color, built_from_base_item)
         create_color_overlay_item(base.type, base.name, color_name, color, built_from_base_item)
         create_color_overlay_recipe(base.type, base.name, color_name, color, built_from_base_item)
+        create_color_overlay_entity(base.type, base.name, color_name, color, built_from_base_item)
         create_color_overlay_corpse(base.type, base.name, color_name, color, built_from_base_item)
     end
 
