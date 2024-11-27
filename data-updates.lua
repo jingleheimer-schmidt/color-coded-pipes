@@ -40,6 +40,11 @@ if mods["pipe_plus"] then
     table.insert(group_sorting, { entity_name = "pipe-to-ground-2", order = "b-2" })
     table.insert(group_sorting, { entity_name = "pipe-to-ground-3", order = "b-3" })
 end
+if mods["Flow Control"] then
+    table.insert(group_sorting, { entity_name = "pipe-junction", order = "b-4" })
+    table.insert(group_sorting, { entity_name = "pipe-elbow", order = "b-5" })
+    table.insert(group_sorting, { entity_name = "pipe-straight", order = "b-6" })
+end
 
 for _, group in pairs(group_sorting) do
     create_subgroup(group.entity_name, group.order, false)
@@ -309,18 +314,30 @@ end
 ---@param name string
 ---@param color Color
 local function add_overlay_to_storage_tank(prototype, name, color)
-    local base_sheet = table.deepcopy(prototype.pictures.picture.sheets[1])
-    local shadow_sheet = table.deepcopy(prototype.pictures.picture.sheets[2])
-    local overlay_sheet = table.deepcopy(base_sheet)
-    if overlay_sheet.filename then
-        overlay_sheet.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. ".png"
-        overlay_sheet.tint = color
+    if prototype.pictures.picture.sheets then
+        local base_sheet = table.deepcopy(prototype.pictures.picture.sheets[1])
+        local shadow_sheet = table.deepcopy(prototype.pictures.picture.sheets[2])
+        local overlay_sheet = table.deepcopy(base_sheet)
+        if overlay_sheet.filename then
+            overlay_sheet.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. ".png"
+            overlay_sheet.tint = color
+        end
+        prototype.pictures.picture.sheets = {
+            [1] = base_sheet,
+            [2] = overlay_sheet,
+            [3] = shadow_sheet
+        }
+    else
+        for _, direction in pairs({ "north", "east", "south", "west" }) do
+            local original_layer = table.deepcopy(prototype.pictures.picture[direction]) ---@type data.Sprite
+            local overlay_layer = table.deepcopy(prototype.pictures.picture[direction]) ---@type data.Sprite
+            if overlay_layer.filename then
+                overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. "-" .. direction .. ".png"
+                overlay_layer.tint = color
+            end
+            prototype.pictures.picture[direction] = { layers = { original_layer, overlay_layer } }
+        end
     end
-    prototype.pictures.picture.sheets = {
-        [1] = base_sheet,
-        [2] = overlay_sheet,
-        [3] = shadow_sheet
-    }
 end
 
 
@@ -388,8 +405,14 @@ end
 local function create_color_overlay_corpse(base_type, base_name, color_name, color, built_from_base_item)
     local corpse = table.deepcopy(data.raw["corpse"][base_name .. "-remnants"])
     local remnant_uses_base_corpse = false
+    local corpse_mapping = {
+        ["pipe-elbow"] = "pipe",
+        ["pipe-junction"] = "pipe",
+        ["pipe-straight"] = "pipe",
+    }
     if not corpse then
-        corpse = table.deepcopy(data.raw["corpse"][base_type .. "-remnants"])
+        local remnant_name = corpse_mapping[base_name] or base_type
+        corpse = table.deepcopy(data.raw["corpse"][remnant_name .. "-remnants"])
         remnant_uses_base_corpse = true
     end
     if not corpse then return end
@@ -401,7 +424,7 @@ local function create_color_overlay_corpse(base_type, base_name, color_name, col
     corpse.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
     corpse.animation_overlay = table.deepcopy(corpse.animation)
     if remnant_uses_base_corpse then
-        base_name = base_type
+        base_name = corpse_mapping[base_name] or base_type
     end
     if corpse.animation_overlay.filename then
         corpse.animation_overlay.filename = "__color-coded-pipes__/graphics/" .. base_name .. "/overlay/overlay-" .. base_name .. "-remnants.png"
@@ -438,6 +461,11 @@ for color_name, color in pairs(rgb_colors) do
     if mods["pipe_plus"] then
         table.insert(base_pipes, { type = "pipe-to-ground", name = "pipe-to-ground-2" })
         table.insert(base_pipes, { type = "pipe-to-ground", name = "pipe-to-ground-3" })
+    end
+    if mods["Flow Control"] then
+        table.insert(base_pipes, { type = "storage-tank", name = "pipe-elbow" })
+        table.insert(base_pipes, { type = "storage-tank", name = "pipe-junction" })
+        table.insert(base_pipes, { type = "storage-tank", name = "pipe-straight" })
     end
 
     for _, base in pairs(base_pipes) do

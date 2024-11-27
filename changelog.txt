@@ -2,6 +2,7 @@
 Version: 1.0.3
 Date: ????
   Changes:
+    - added color coded variants and remnants for pipes from the Flow Control mod
     - updated compatibility with No Pipe Touching mod
     - updated item/recipe/entity sorting and subgroup order
 ---------------------------------------------------------------------------------------------------
