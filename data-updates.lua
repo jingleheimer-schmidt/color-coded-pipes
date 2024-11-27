@@ -23,8 +23,8 @@ local function create_subgroup(name_suffix, order_suffix, fluid)
     if not subgroup then
         log("subgroup not found")
     else
-        subgroup.name = (fluid and "fluid-" or "") .. "color-coded-" .. name_suffix
-        subgroup.order = subgroup.order .. order_suffix
+        subgroup.name = (fluid and "fluid-" or "rainbow-") .. "color-coded-" .. name_suffix
+        subgroup.order = subgroup.order .. (fluid and "-b[fluid]" or "-a[rainbow]") .. order_suffix
         data:extend { subgroup }
     end
 end
@@ -43,7 +43,7 @@ end
 
 for _, group in pairs(group_sorting) do
     create_subgroup(group.entity_name, group.order, false)
-    create_subgroup(group.entity_name, group.order .. "[fluid]", true)
+    create_subgroup(group.entity_name, group.order, true)
 end
 
 
@@ -67,6 +67,13 @@ data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = fast_replaceab
 ---@return string
 local function get_order(item, color_name)
     local order = item.order or ""
+    local base_name = item.name:match("color%-coded%-(.*)") or item.name
+    if order == "" then
+        order = data.raw["recipe"][base_name] and data.raw["recipe"][base_name].order or ""
+    end
+    if order == "" then
+        order = data.raw["item"][base_name] and data.raw["item"][base_name].order or ""
+    end
     local fluid = data.raw["fluid"][color_name]
     if fluid then
         order = order .. "-" .. (fluid.order or "")
@@ -86,7 +93,7 @@ local function get_subgroup(type, name)
     if data.raw["fluid"][name] then
         return "fluid-color-coded-" .. type
     else
-        return "color-coded-" .. type
+        return "rainbow-color-coded-" .. type
     end
 end
 

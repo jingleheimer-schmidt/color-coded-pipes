@@ -30,15 +30,15 @@ local pipe_to_ground_filenames = {
 }
 
 local recipe_order = {
-    ["red"] = "a",
-    ["orange"] = "b",
-    ["yellow"] = "c",
-    ["green"] = "d",
-    ["blue"] = "e",
-    ["purple"] = "f",
-    ["pink"] = "g",
-    ["black"] = "h",
-    ["white"] = "i",
+    ["red"] = "a[red]",
+    ["orange"] = "b[orange]",
+    ["yellow"] = "c[yellow]",
+    ["green"] = "d[green]",
+    ["blue"] = "e[blue]",
+    ["purple"] = "f[purple]",
+    ["pink"] = "g[pink]",
+    ["black"] = "h[black]",
+    ["white"] = "i[white]",
 }
 
 ---@param setting string
