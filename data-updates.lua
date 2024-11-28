@@ -177,22 +177,6 @@ local function update_factoriopedia_simulation(old_entity_name, new_entity_name,
 end
 
 
-local pipe_plus_pipes = {
-    { type = "pipe-to-ground", name = "pipe-to-ground-2" },
-    { type = "pipe-to-ground", name = "pipe-to-ground-3" },
-}
-if mods["pipe_plus"] then
-    for _, pipe in pairs(pipe_plus_pipes) do
-        local entity = data.raw[pipe.type][pipe.name]
-        if entity then
-            local simulation = entity.factoriopedia_simulation
-            if simulation then
-                update_factoriopedia_simulation(pipe.type, pipe.name, simulation)
-            end
-        end
-    end
-end
-
 ----------------------------------------------
 -- functions to create color-coded variants --
 ----------------------------------------------
