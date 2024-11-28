@@ -251,7 +251,7 @@ local function add_overlay_to_pipe(prototype, name, color)
         local original_layer = table.deepcopy(prototype.pictures[property_name]) ---@type data.Sprite
         local overlay_layer = table.deepcopy(prototype.pictures[property_name]) ---@type data.Sprite
         if overlay_layer.filename then
-            overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. "-" .. filename .. ".png"
+            overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay-" .. name .. "-" .. filename .. ".png"
             overlay_layer.tint = color
         end
         prototype.pictures[property_name] = {}
@@ -269,7 +269,7 @@ local function add_overlay_to_pipe_to_ground(prototype, name, color)
         local original_layer = table.deepcopy(prototype.pictures[property_name]) ---@type data.Sprite
         local overlay_layer = table.deepcopy(prototype.pictures[property_name]) ---@type data.Sprite
         if overlay_layer.filename then
-            overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. "-" .. filename .. ".png"
+            overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay-" .. name .. "-" .. filename .. ".png"
             overlay_layer.tint = color
         end
         prototype.pictures[property_name] = {}
@@ -286,7 +286,7 @@ local function add_overlay_to_pump(prototype, name, color)
         local original_layer = table.deepcopy(prototype.animations[direction]) ---@type data.Animation
         local overlay_layer = table.deepcopy(prototype.animations[direction]) ---@type data.Animation
         if overlay_layer.filename then
-            overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. "-" .. direction .. ".png"
+            overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay-" .. name .. "-" .. direction .. ".png"
             overlay_layer.tint = color
         end
         prototype.animations[direction] = { layers = { original_layer, overlay_layer } }
@@ -303,7 +303,7 @@ local function add_overlay_to_storage_tank(prototype, name, color)
         local shadow_sheet = table.deepcopy(prototype.pictures.picture.sheets[2])
         local overlay_sheet = table.deepcopy(base_sheet)
         if overlay_sheet.filename then
-            overlay_sheet.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. ".png"
+            overlay_sheet.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay-" .. name .. ".png"
             overlay_sheet.tint = color
         end
         prototype.pictures.picture.sheets = {
@@ -316,7 +316,7 @@ local function add_overlay_to_storage_tank(prototype, name, color)
             local original_layer = table.deepcopy(prototype.pictures.picture[direction]) ---@type data.Sprite
             local overlay_layer = table.deepcopy(prototype.pictures.picture[direction]) ---@type data.Sprite
             if overlay_layer.filename then
-                overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay/overlay-" .. name .. "-" .. direction .. ".png"
+                overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay-" .. name .. "-" .. direction .. ".png"
                 overlay_layer.tint = color
             end
             prototype.pictures.picture[direction] = { layers = { original_layer, overlay_layer } }
@@ -361,7 +361,7 @@ local function create_color_overlay_entity(base_type, base_name, color_name, col
             local overlay_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[1]) ---@type data.Sprite
             local shadow_layer = table.deepcopy(entity.fluid_box.pipe_covers[direction].layers[2]) ---@type data.Sprite
             if overlay_layer.filename then
-                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-covers/overlay/overlay-pipe-cover-" .. direction .. ".png"
+                overlay_layer.filename = "__color-coded-pipes__/graphics/pipe-covers/overlay-pipe-cover-" .. direction .. ".png"
                 overlay_layer.tint = color
             end
             entity.fluid_box.pipe_covers[direction].layers = { shadow_layer, original_layer, overlay_layer }
@@ -410,12 +410,12 @@ local function create_color_overlay_corpse(base_type, base_name, color_name, col
         base_name = corpse_mapping[base_name] or base_type
     end
     if corpse.animation_overlay.filename then
-        corpse.animation_overlay.filename = "__color-coded-pipes__/graphics/" .. base_name .. "/overlay/overlay-" .. base_name .. "-remnants.png"
+        corpse.animation_overlay.filename = "__color-coded-pipes__/graphics/" .. base_name .. "/overlay-" .. base_name .. "-remnants.png"
         corpse.animation_overlay.tint = color
     else
         for _, rotated_animation in pairs(corpse.animation_overlay) do
             if rotated_animation.filename then
-                rotated_animation.filename = "__color-coded-pipes__/graphics/" .. base_name .. "/overlay/overlay-" .. base_name .. "-remnants.png"
+                rotated_animation.filename = "__color-coded-pipes__/graphics/" .. base_name .. "/overlay-" .. base_name .. "-remnants.png"
                 rotated_animation.tint = color
             end
         end

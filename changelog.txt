@@ -2,6 +2,7 @@
 Version: 1.0.4
   Changes:
     - added updated color coded remnants for the Pipe Plus mod
+    - moved overlay graphics files to their base folder
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 27NOV2024
