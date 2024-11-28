@@ -200,6 +200,7 @@ local function create_color_overlay_item(base_type, base_name, color_name, color
     if not localised_name then localised_name = { "entity-name." .. base_name } end
     item.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
     item.icons = create_color_overlay_icons(item, color, base_name)
+    item.icon = nil
     item.order = get_order(item, color_name)
     item.subgroup = get_subgroup(base_name, color_name)
     if built_from_base_item then
@@ -238,6 +239,7 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
         end
     end
     color_coded_recipe.icons = data.raw["item"][new_recipe_name].icons
+    color_coded_recipe.icon = nil
     data:extend { color_coded_recipe }
 end
 
@@ -321,6 +323,9 @@ local function add_overlay_to_storage_tank(prototype, name, color)
             end
             prototype.pictures.picture[direction] = { layers = { original_layer, overlay_layer } }
         end
+        prototype.pictures.fluid_background = nil
+        prototype.pictures.window_background = nil
+        prototype.pictures.flow_sprite = nil
     end
 end
 
@@ -345,6 +350,7 @@ local function create_color_overlay_entity(base_type, base_name, color_name, col
     entity.order = get_order(entity, color_name)
     entity.subgroup = get_subgroup(base_name, color_name)
     entity.icons = create_color_overlay_icons(entity, color, base_name)
+    entity.icon = nil
     local localised_name = entity.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
     entity.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
@@ -401,6 +407,7 @@ local function create_color_overlay_corpse(base_type, base_name, color_name, col
     if not corpse then return end
     corpse.name = color_name .. "-color-coded-" .. base_name .. "-remnants"
     corpse.icons = create_color_overlay_icons(corpse, color, base_name)
+    corpse.icon = nil
     corpse.order = get_order(corpse, color_name)
     local localised_name = corpse.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end

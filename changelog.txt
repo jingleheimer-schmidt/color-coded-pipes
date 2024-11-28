@@ -3,6 +3,7 @@ Version: 1.0.4
   Changes:
     - added updated color coded remnants for the Pipe Plus mod
     - moved overlay graphics files to their base folder
+    - removed unused prototype properties to reduce PrototypeLoader warnings
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 27NOV2024
