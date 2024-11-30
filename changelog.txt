@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 29NOV2024
+  Changes:
+    - added color coded variants and remnants for pipes from the Storage Tank Mk2 mod
+    - updated compatibility with No Pipe Touching mod to include rainbow colored pipes
+---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: 28NOV2024
   Changes:
