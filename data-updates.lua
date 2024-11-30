@@ -45,6 +45,9 @@ if mods["Flow Control"] then
     table.insert(group_sorting, { entity_name = "pipe-elbow", order = "b-5" })
     table.insert(group_sorting, { entity_name = "pipe-straight", order = "b-6" })
 end
+if mods["StorageTank2_2_0"] then
+    table.insert(group_sorting, { entity_name = "storage-tank2", order = "d-2" })
+end
 
 for _, group in pairs(group_sorting) do
     create_subgroup(group.entity_name, group.order, false)
@@ -313,6 +316,14 @@ local function add_overlay_to_storage_tank(prototype, name, color)
             [2] = overlay_sheet,
             [3] = shadow_sheet
         }
+    elseif prototype.pictures.picture.layers then
+        local original_layer = table.deepcopy(prototype.pictures.picture.layers[1]) ---@type data.Sprite
+        local overlay_layer = table.deepcopy(prototype.pictures.picture.layers[1]) ---@type data.Sprite
+        if overlay_layer.filename then
+            overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay-" .. name .. ".png"
+            overlay_layer.tint = color
+        end
+        prototype.pictures.picture.layers = { original_layer, overlay_layer }
     else
         for _, direction in pairs({ "north", "east", "south", "west" }) do
             local original_layer = table.deepcopy(prototype.pictures.picture[direction]) ---@type data.Sprite
@@ -456,6 +467,9 @@ for color_name, color in pairs(rgb_colors) do
         table.insert(base_pipes, { type = "storage-tank", name = "pipe-elbow" })
         table.insert(base_pipes, { type = "storage-tank", name = "pipe-junction" })
         table.insert(base_pipes, { type = "storage-tank", name = "pipe-straight" })
+    end
+    if mods["StorageTank2_2_0"] then
+        table.insert(base_pipes, { type = "storage-tank", name = "storage-tank2" })
     end
 
     for _, base in pairs(base_pipes) do
