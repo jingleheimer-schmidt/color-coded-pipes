@@ -210,9 +210,8 @@ local function unpaint_pipes(event)
 end
 
 local function add_commands()
-    commands.add_command("paint-pipes", "- replace base game pipes with colored versions matching their contents",
-        paint_pipes)
-    commands.add_command("unpaint-pipes", "- replace colored pipes with base game versions", unpaint_pipes)
+    commands.add_command("paint-pipes", "<color mode: fluid|rainbow>, <bots required: true|false> - replace pipes with color-coded versions", paint_pipes)
+    commands.add_command("unpaint-pipes", "<bots required: true|false> - replace color-coded pipes with their base versions", unpaint_pipes)
 end
 
 local function reset_technology_effects()
