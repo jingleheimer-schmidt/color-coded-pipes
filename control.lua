@@ -19,7 +19,7 @@ local function get_fluid_name(entity)
     if fluidbox and fluidbox.valid then
         for index = 1, #fluidbox do
             local contents = fluidbox.get_fluid_segment_contents(index)
-            if contents then
+            if contents and next(contents) then
                 local amount = 0
                 for name, count in pairs(contents) do
                     if count > amount then
