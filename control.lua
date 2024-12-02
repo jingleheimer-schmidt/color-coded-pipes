@@ -1,4 +1,5 @@
 
+local util = require("util")
 local fluid_to_color_map = {
     ["water"] = "blue",
     ["crude-oil"] = "black",
