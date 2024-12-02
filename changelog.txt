@@ -2,6 +2,9 @@
 Version: 1.0.6
 Date: ????
   Changes:
+    - updated /paint-pipes and /unpaint-pipes chat commands to support modded pipes
+    - updated /paint-pipes to include optional <color mode: fluid|rainbow> and <bots required: true|false> parameters
+    - updated /unpaint-pipes to include optional <bots required: true|false> parameter
     - updated main menu simulation integration to use the /paint-pipes command with "fluid, false" parameter
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.5
