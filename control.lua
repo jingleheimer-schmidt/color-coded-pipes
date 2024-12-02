@@ -35,91 +35,101 @@ local function get_fluid_name(entity)
 end
 
 ---@param player LuaPlayer
----@param entity LuaEntity
----@param color string
-local function paint_entity(player, entity, color)
-    if not entity.valid then return end
-    local pipe_type = entity.type
-    local planner_mod_enabled = script.active_mods["color-coded-pipe-planner"]
-    local name = color .. "-color-coded-" .. pipe_type
-    local force = entity.force
-    local direction = entity.direction
-    if planner_mod_enabled and player.mod_settings["color-coded-pipe-planner-bots-required"].value then
-        entity.order_upgrade {
-            force = force,
-            -- target = fluid_name .. "-" .. pipe_type,
-            target = name,
-            player = player,
-            direction = direction
-        }
-    else
-        local surface = entity.surface
-        local position = entity.position
-        if surface.can_fast_replace {
-                name = name,
-                position = position,
-                direction = direction,
+---@param pipe LuaEntity
+---@param bots_required boolean
+---@param planner_mode string
+local function paint_pipe(player, pipe, bots_required, planner_mode)
+    if not pipe.valid then return end
+    local fluid_name = get_fluid_name(pipe)
+    local pipe_name = pipe.name
+    local prefix = ((planner_mode == "fluid") and fluid_name) or fluid_to_color_map[fluid_name] or fluid_name
+    local start_index, end_index = pipe_name:find(prefix .. "-color-coded-", 1, true)
+    local pipe_color_needs_update = not (start_index and end_index)
+    if pipe_color_needs_update then start_index, end_index = pipe_name:find("-color-coded-", 1, true) end
+    local unpainted_pipe_name = pipe_color_needs_update and pipe_name:sub((end_index or 0) + 1) or pipe_name
+    if fluid_name and fluid_name ~= "" and pipe_color_needs_update then
+        local name = prefix .. "-color-coded-" .. unpainted_pipe_name
+        local force = pipe.force
+        local direction = pipe.direction
+        if bots_required then
+            pipe.order_upgrade {
                 force = force,
-            } then
-            local replacement_entity = surface.create_entity {
-                name = name,
-                position = entity.position,
-                force = entity.force,
-                direction = entity.direction,
-                fluidbox = entity.fluidbox,
-                fast_replace = true,
-                spill = false,
-                player = nil,
+                target = name,
+                player = player,
+                direction = direction
             }
-            replacement_entity.last_user = player
+        else
+            local surface = pipe.surface
+            local position = pipe.position
+            if surface.can_fast_replace {
+                    name = name,
+                    position = position,
+                    direction = direction,
+                    force = force,
+                } then
+                local entity = player.surface.create_entity {
+                    name = name,
+                    position = position,
+                    force = force,
+                    direction = direction,
+                    fluidbox = pipe.fluidbox,
+                    fast_replace = true,
+                    spill = false,
+                    player = nil,
+                }
+                entity.last_user = player
+            end
         end
     end
 end
 
 ---@param player LuaPlayer
----@param entity LuaEntity
-local function unpaint_entity(player, entity)
-    if not entity.valid then return end
-    local pipe_type = entity.type
-    local planner_mod_enabled = script.active_mods["color-coded-pipe-planner"]
-    local force = entity.force
-    local direction = entity.direction
-    if planner_mod_enabled and player.mod_settings["color-coded-pipe-planner-bots-required"].value then
-        entity.order_upgrade {
-            force = force,
-            target = pipe_type,
-            player = player,
-            direction = direction
-        }
-    else
-        local surface = entity.surface
-        local position = entity.position
-        if surface.can_fast_replace {
-                name = pipe_type,
-                position = position,
-                direction = direction,
+---@param pipe LuaEntity
+---@param bots_required boolean
+local function unpaint_pipe(player, pipe, bots_required)
+    if not pipe.valid then return end
+    local start_index, end_index = pipe.name:find("-color-coded-", 1, true)
+    if start_index and end_index then
+        local force = pipe.force
+        local direction = pipe.direction
+        local target_name = pipe.name:sub(end_index + 1)
+        if bots_required then
+            pipe.order_upgrade {
                 force = force,
-            } then
-            local replacement_entity = surface.create_entity {
-                name = pipe_type,
-                position = position,
-                force = force,
+                target = target_name,
+                player = player,
                 direction = direction,
-                fluidbox = entity.fluidbox,
-                fast_replace = true,
-                spill = false,
-                player = nil,
             }
-            replacement_entity.last_user = player
+        else
+            local surface = pipe.surface
+            local position = pipe.position
+            if surface.can_fast_replace {
+                    name = target_name,
+                    position = position,
+                    direction = direction,
+                    force = force,
+                } then
+                local entity = player.surface.create_entity {
+                    name = target_name,
+                    position = position,
+                    force = force,
+                    direction = direction,
+                    fluidbox = pipe.fluidbox,
+                    fast_replace = true,
+                    spill = false,
+                    player = nil,
+                }
+                entity.last_user = player
+            end
         end
     end
 end
 
----@param type string
+---@param names string[]
 ---@return string[]
-local function get_color_coded_names(type)
-    local color_coded_names = { type }
-    local rbg = {
+local function color_coded(names)
+    local color_coded_names = util.table.deepcopy(names)
+    local colors = {
         "red",
         "orange",
         "yellow",
@@ -130,21 +140,42 @@ local function get_color_coded_names(type)
         "black",
         "white",
     }
-    for _, color in pairs(rbg) do
-        local prototype_name = color .. "-color-coded-" .. type
-        if prototypes.entity[prototype_name] then
-            table.insert(color_coded_names, prototype_name)
+    local fluids = prototypes.fluid
+    for _, name in pairs(names) do
+        for _, color in pairs(colors) do
+            local prototype_name = color .. "-color-coded-" .. name
+            if prototypes.entity[prototype_name] then
+                table.insert(color_coded_names, prototype_name)
+            end
         end
-    end
-    for _, fluid in pairs(prototypes.fluid) do
-        local prototype_name = fluid.name .. "-color-coded-" .. type
-        if prototypes.entity[prototype_name] then
-            table.insert(color_coded_names, prototype_name)
+        for _, fluid in pairs(fluids) do
+            local prototype_name = fluid.name .. "-color-coded-" .. name
+            if prototypes.entity[prototype_name] then
+                table.insert(color_coded_names, prototype_name)
+            end
         end
     end
     return color_coded_names
 end
 
+local base_entity_names = {
+    "pipe",
+    "pipe-to-ground",
+    "storage-tank",
+    "pump",
+}
+if script.active_mods["pipe_plus"] then
+    table.insert(base_entity_names, "pipe-to-ground-2")
+    table.insert(base_entity_names, "pipe-to-ground-3")
+end
+if script.active_mods["Flow Control"] then
+    table.insert(base_entity_names, "pipe-elbow")
+    table.insert(base_entity_names, "pipe-junction")
+    table.insert(base_entity_names, "pipe-straight")
+end
+if script.active_mods["StorageTank2_2_0"] then
+    table.insert(base_entity_names, "storage-tank2")
+end
 
 ---@param event CustomCommandData
 local function paint_pipes(event)
@@ -154,37 +185,12 @@ local function paint_pipes(event)
     if not player then return end
     local surface = player.surface
     local force = player.force
-    local found_pipes = surface.find_entities_filtered { name = get_color_coded_names("pipe"), force = force }
-    local found_underground_pipes = surface.find_entities_filtered { name = get_color_coded_names("pipe-to-ground"), force = force }
-    local found_pumps = surface.find_entities_filtered { name = get_color_coded_names("pump"), force = force }
-    local found_storage_tanks = surface.find_entities_filtered { name = get_color_coded_names("storage-tank"), force = force }
-    for _, pipe in pairs(found_pipes) do
-        local fluid_name = get_fluid_name(pipe)
-        local pipe_color = fluid_to_color_map[fluid_name]
-        if pipe_color and pipe.valid then
-            paint_entity(player, pipe, pipe_color)
-        end
-    end
-    for _, pipe in pairs(found_underground_pipes) do
-        local fluid_name = get_fluid_name(pipe)
-        local pipe_color = fluid_to_color_map[fluid_name]
-        if pipe_color and pipe.valid then
-            paint_entity(player, pipe, pipe_color)
-        end
-    end
-    for _, pump in pairs(found_pumps) do
-        local fluid_name = get_fluid_name(pump)
-        local pipe_color = fluid_to_color_map[fluid_name]
-        if pipe_color and pump.valid then
-            paint_entity(player, pump, pipe_color)
-        end
-    end
-    for _, storage_tank in pairs(found_storage_tanks) do
-        local fluid_name = get_fluid_name(storage_tank)
-        local pipe_color = fluid_to_color_map[fluid_name]
-        if pipe_color and storage_tank.valid then
-            paint_entity(player, storage_tank, pipe_color)
-        end
+    local parameter = event.parameter or ""
+    local planner_mode, bots_required = parameter:match("([^,%s]+)[,%s]*([^,%s]*)")
+    bots_required = (bots_required == "true") and true or false
+    local found_entities = surface.find_entities_filtered { name = color_coded(base_entity_names), force = force }
+    for _, entity in pairs(found_entities) do
+        paint_pipe(player, entity, bots_required, planner_mode)
     end
 end
 
@@ -196,21 +202,10 @@ local function unpaint_pipes(event)
     if not player then return end
     local surface = player.surface
     local force = player.force
-    local found_pipes = surface.find_entities_filtered { name = get_color_coded_names("pipe"), force = force }
-    local found_underground_pipes = surface.find_entities_filtered { name = get_color_coded_names("pipe-to-ground"), force = force }
-    local found_pumps = surface.find_entities_filtered { name = get_color_coded_names("pump"), force = force }
-    local found_storage_tanks = surface.find_entities_filtered { name = get_color_coded_names("storage-tank"), force = force }
-    for _, pipe in pairs(found_pipes) do
-        unpaint_entity(player, pipe)
-    end
-    for _, pipe in pairs(found_underground_pipes) do
-        unpaint_entity(player, pipe)
-    end
-    for _, pump in pairs(found_pumps) do
-        unpaint_entity(player, pump)
-    end
-    for _, storage_tank in pairs(found_storage_tanks) do
-        unpaint_entity(player, storage_tank)
+    local bots_required = event.parameter == "true" and true or false
+    local found_entities = surface.find_entities_filtered { name = color_coded(base_entity_names), force = force }
+    for _, entity in pairs(found_entities) do
+        unpaint_pipe(player, entity, bots_required)
     end
 end
 
