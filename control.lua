@@ -220,9 +220,16 @@ local function reset_technology_effects()
     end
 end
 
+local function update_simulation()
+    if game.simulation then
+        paint_pipes { player_index = 1, parameter = "fluid, true", name = "paint-pipes", tick = game.tick }
+    end
+end
+
 script.on_init(function()
     add_commands()
     reset_technology_effects()
+    update_simulation()
 end)
 
 script.on_load(function()

@@ -2,6 +2,7 @@
 Version: 1.0.6
 Date: ????
   Changes:
+    - updated main menu simulation integration to use the /paint-pipes command with "fluid, false" parameter
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.5
 Date: 29NOV2024
