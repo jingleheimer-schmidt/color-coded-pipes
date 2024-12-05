@@ -58,6 +58,28 @@ end
 ----------------------------------------------------------------------------------------------------------------
 -- add a fast_replaceable_group to the base storage tank so that all the color-coded storage tanks inherit it --
 ----------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------
+--- list of base pipes to create color-coded variants of ---
+------------------------------------------------------------
+
+local base_pipes = {
+    { type = "pipe",           name = "pipe" },
+    { type = "pipe-to-ground", name = "pipe-to-ground" },
+    { type = "storage-tank",   name = "storage-tank" },
+    { type = "pump",           name = "pump" },
+}
+if mods["pipe_plus"] then
+    table.insert(base_pipes, { type = "pipe-to-ground", name = "pipe-to-ground-2" })
+    table.insert(base_pipes, { type = "pipe-to-ground", name = "pipe-to-ground-3" })
+end
+if mods["Flow Control"] then
+    table.insert(base_pipes, { type = "storage-tank", name = "pipe-elbow" })
+    table.insert(base_pipes, { type = "storage-tank", name = "pipe-junction" })
+    table.insert(base_pipes, { type = "storage-tank", name = "pipe-straight" })
+end
+if mods["StorageTank2_2_0"] then
+    table.insert(base_pipes, { type = "storage-tank", name = "storage-tank2" })
+end
 
 local fast_replaceable_group = data.raw["storage-tank"]["storage-tank"].fast_replaceable_group or "storage-tank"
 data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = fast_replaceable_group
@@ -453,24 +475,6 @@ for color_name, color in pairs(rgb_colors) do
     local is_fluid_color = data.raw["fluid"][color_name] and true or false
     local is_rainbow_color = not is_fluid_color
     local built_from_base_item = (hide_rainbow_recipes and is_rainbow_color) or (hide_fluid_recipes and is_fluid_color)
-    local base_pipes = {
-        { type = "pipe",           name = "pipe" },
-        { type = "pipe-to-ground", name = "pipe-to-ground" },
-        { type = "storage-tank",   name = "storage-tank" },
-        { type = "pump",           name = "pump" },
-    }
-    if mods["pipe_plus"] then
-        table.insert(base_pipes, { type = "pipe-to-ground", name = "pipe-to-ground-2" })
-        table.insert(base_pipes, { type = "pipe-to-ground", name = "pipe-to-ground-3" })
-    end
-    if mods["Flow Control"] then
-        table.insert(base_pipes, { type = "storage-tank", name = "pipe-elbow" })
-        table.insert(base_pipes, { type = "storage-tank", name = "pipe-junction" })
-        table.insert(base_pipes, { type = "storage-tank", name = "pipe-straight" })
-    end
-    if mods["StorageTank2_2_0"] then
-        table.insert(base_pipes, { type = "storage-tank", name = "storage-tank2" })
-    end
 
     for _, base in pairs(base_pipes) do
         create_color_overlay_item(base.type, base.name, color_name, color, built_from_base_item)
