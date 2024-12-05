@@ -55,9 +55,6 @@ for _, group in pairs(group_sorting) do
 end
 
 
-----------------------------------------------------------------------------------------------------------------
--- add a fast_replaceable_group to the base storage tank so that all the color-coded storage tanks inherit it --
-----------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------
 --- list of base pipes to create color-coded variants of ---
 ------------------------------------------------------------
@@ -81,8 +78,18 @@ if mods["StorageTank2_2_0"] then
     table.insert(base_pipes, { type = "storage-tank", name = "storage-tank2" })
 end
 
-local fast_replaceable_group = data.raw["storage-tank"]["storage-tank"].fast_replaceable_group or "storage-tank"
-data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = fast_replaceable_group
+
+-------------------------------------------------------------------------------------------------
+-- add a fast_replaceable_group to the base pipes so that all the color-coded pipes inherit it --
+-------------------------------------------------------------------------------------------------
+
+for _, base in pairs(base_pipes) do
+    local entity = data.raw[base.type][base.name]
+    if entity then
+        local fast_replaceable_group = entity.fast_replaceable_group or base.name
+        data.raw[base.type][base.name].fast_replaceable_group = fast_replaceable_group
+    end
+end
 
 
 ------------------------------------
