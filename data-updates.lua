@@ -12,6 +12,34 @@ local replace_dash_with_underscore = color_coded_util.replace_dash_with_undersco
 local append = color_coded_util.append
 
 
+------------------------------------------------------------
+--- list of base pipes to create color-coded variants of ---
+------------------------------------------------------------
+
+local base_entities = {
+    { type = "pipe",           name = "pipe",           order = "a-1" },
+    { type = "pipe-to-ground", name = "pipe-to-ground", order = "b-1" },
+    { type = "pump",           name = "pump",           order = "c-1" },
+    { type = "storage-tank",   name = "storage-tank",   order = "d-1" },
+}
+local pipe_plus_entities = {
+    { type = "pipe-to-ground", name = "pipe-to-ground-2", order = "b-2" },
+    { type = "pipe-to-ground", name = "pipe-to-ground-3", order = "b-3" },
+}
+local flow_control_entities = {
+    { type = "storage-tank", name = "pipe-elbow",    order = "b-5" },
+    { type = "storage-tank", name = "pipe-junction", order = "b-4" },
+    { type = "storage-tank", name = "pipe-straight", order = "b-6" },
+}
+local storage_tank_2_2_0_entities = {
+    { type = "storage-tank", name = "storage-tank2", order = "d-2" },
+}
+
+if mods["pipe_plus"] then append(base_entities, pipe_plus_entities) end
+if mods["Flow Control"] then append(base_entities, flow_control_entities) end
+if mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entities) end
+
+
 ---------------------------------------------------
 -- create subgroups for the color-coded variants --
 ---------------------------------------------------
@@ -30,53 +58,9 @@ local function create_subgroup(name_suffix, order_suffix, fluid)
     end
 end
 
-local group_sorting = {
-    { entity_name = "pipe",           order = "a-1" },
-    { entity_name = "pipe-to-ground", order = "b-1" },
-    { entity_name = "pump",           order = "c-1" },
-    { entity_name = "storage-tank",   order = "d-1" }
-}
-
-if mods["pipe_plus"] then
-    table.insert(group_sorting, { entity_name = "pipe-to-ground-2", order = "b-2" })
-    table.insert(group_sorting, { entity_name = "pipe-to-ground-3", order = "b-3" })
-end
-if mods["Flow Control"] then
-    table.insert(group_sorting, { entity_name = "pipe-junction", order = "b-4" })
-    table.insert(group_sorting, { entity_name = "pipe-elbow", order = "b-5" })
-    table.insert(group_sorting, { entity_name = "pipe-straight", order = "b-6" })
-end
-if mods["StorageTank2_2_0"] then
-    table.insert(group_sorting, { entity_name = "storage-tank2", order = "d-2" })
-end
-
-for _, group in pairs(group_sorting) do
-    create_subgroup(group.entity_name, group.order, false)
-    create_subgroup(group.entity_name, group.order, true)
-end
-
-
-------------------------------------------------------------
---- list of base pipes to create color-coded variants of ---
-------------------------------------------------------------
-
-    { type = "pipe",           name = "pipe" },
-    { type = "pipe-to-ground", name = "pipe-to-ground" },
-    { type = "storage-tank",   name = "storage-tank" },
-    { type = "pump",           name = "pump" },
-local base_entities = {
-}
-if mods["pipe_plus"] then
-    table.insert(base_pipes, { type = "pipe-to-ground", name = "pipe-to-ground-2" })
-    table.insert(base_pipes, { type = "pipe-to-ground", name = "pipe-to-ground-3" })
-end
-if mods["Flow Control"] then
-    table.insert(base_pipes, { type = "storage-tank", name = "pipe-elbow" })
-    table.insert(base_pipes, { type = "storage-tank", name = "pipe-junction" })
-    table.insert(base_pipes, { type = "storage-tank", name = "pipe-straight" })
-end
-if mods["StorageTank2_2_0"] then
-    table.insert(base_pipes, { type = "storage-tank", name = "storage-tank2" })
+for _, group in pairs(base_entities) do
+    create_subgroup(group.name, group.order, false)
+    create_subgroup(group.name, group.order, true)
 end
 
 
