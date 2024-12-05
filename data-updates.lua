@@ -6,7 +6,7 @@
 local color_coded_util = require("color-coded-util")
 local pipe_filenames = color_coded_util.pipe_filenames
 local pipe_to_ground_filenames = color_coded_util.pipe_to_ground_filenames
-local recipe_order = color_coded_util.recipe_order
+local color_order = color_coded_util.recipe_order
 local rgb_colors = color_coded_util.rgb_colors
 local replace_dash_with_underscore = color_coded_util.replace_dash_with_underscore
 local append = color_coded_util.append
@@ -92,8 +92,8 @@ local function get_order(item, color_name)
     if fluid then
         order = order .. "-" .. (fluid.order or "")
     end
-    if recipe_order[color_name] then
-        order = order .. "-" .. (recipe_order[color_name] or "")
+    if color_order[color_name] then
+        order = order .. "-" .. (color_order[color_name] or "")
     end
     return order
 end
