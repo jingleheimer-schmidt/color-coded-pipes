@@ -44,23 +44,15 @@ if mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entiti
 -- create subgroups for the color-coded variants --
 ---------------------------------------------------
 
----@param name_suffix string
----@param order_suffix string
----@param fluid boolean
-local function create_subgroup(name_suffix, order_suffix, fluid)
-    local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-    if not subgroup then
-        log("subgroup not found")
-    else
-        subgroup.name = (fluid and "fluid-" or "rainbow-") .. "color-coded-" .. name_suffix
-        subgroup.order = subgroup.order .. (fluid and "-b[fluid]" or "-a[rainbow]") .. order_suffix
-        data:extend { subgroup }
-    end
-end
-
 for _, group in pairs(base_entities) do
-    create_subgroup(group.name, group.order, false)
-    create_subgroup(group.name, group.order, true)
+    for _, prefix in pairs({ "fluid-", "rainbow-" }) do
+        local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+        if subgroup then
+            subgroup.name = prefix .. "color-coded-" .. group.name
+            subgroup.order = subgroup.order .. (prefix == "fluid-" and "-b[fluid]" or "-a[rainbow]") .. group.order
+            data:extend { subgroup }
+        end
+    end
 end
 
 
