@@ -574,7 +574,9 @@ end
 
 if settings.startup["color-coded-main-menu-simulations"].value then
     for _, simulation in pairs(data.raw["utility-constants"]["default"].main_menu_simulations) do
-        simulation.init = simulation.init or ""
-        simulation.init = simulation.init .. init_script
+        simulation.mods = simulation.mods or {}
+        table.insert(simulation.mods, "color-coded-pipes")
+        -- simulation.init = simulation.init or ""
+        -- simulation.init = simulation.init .. init_script
     end
 end
