@@ -1,12 +1,3 @@
-local color_mode = {
-    type = "string-setting",
-    name = "color-coded-pipes-color-mode",
-    setting_type = "startup",
-    default_value = "colorized",
-    allowed_values = { "weathered", "colorized" },
-    hidden = true,
-    order = "0",
-}
 
 local menu_simulations = {
     type = "bool-setting",
