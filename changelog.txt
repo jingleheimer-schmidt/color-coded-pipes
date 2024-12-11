@@ -2,6 +2,7 @@
 Version: 1.1.1
 Date: ????
   Changes:
+    - removed .psd files from the mod package distribution
   Bugfixes:
     - fixed that hidden color coded pipes could not be used to upgrade existing pipes
 ---------------------------------------------------------------------------------------------------
