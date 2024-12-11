@@ -4,6 +4,7 @@ Date: ????
   Changes:
     - added recipe ingredients mod setting to choose between mirroring the base recipe or using the base item as the ingredient
     - removed .psd files from the mod package distribution
+    - restructured and simplified subgroup and order logic
     - removed hidden legacy color mode mod setting
   Bugfixes:
     - fixed that hidden color coded pipes could not be used to upgrade existing pipes
