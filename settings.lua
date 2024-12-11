@@ -23,8 +23,17 @@ local fluid_recipes = {
     hidden = false,
     order = "20",
 }
+local recipe_ingrediants = {
+    type = "string-setting",
+    name = "color-coded-pipes-recipe-ingrediants",
+    setting_type = "startup",
+    default_value = "base-ingrediants",
+    allowed_values = { "base-ingrediants", "base-item" },
+    hidden = false,
+    order = "30",
+}
 
-data:extend { color_mode, menu_simulations, rainbow_recipes, fluid_recipes }
+data:extend { menu_simulations, rainbow_recipes, fluid_recipes, recipe_ingrediants }
 
 local a = 0.6
 local rgb_colors = {
