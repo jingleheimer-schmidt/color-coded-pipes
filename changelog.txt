@@ -6,6 +6,7 @@ Date: ????
     - removed .psd files from the mod package distribution
     - restructured and simplified subgroup and order logic
     - removed hidden legacy color mode mod setting
+    - removed legacy main menu simulation script
   Bugfixes:
     - fixed that hidden color coded pipes could not be used to upgrade existing pipes
 ---------------------------------------------------------------------------------------------------
