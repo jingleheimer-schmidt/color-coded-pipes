@@ -6,61 +6,67 @@
 local color_coded_util = require("color-coded-util")
 local pipe_filenames = color_coded_util.pipe_filenames
 local pipe_to_ground_filenames = color_coded_util.pipe_to_ground_filenames
-local recipe_order = color_coded_util.recipe_order
+local color_order = color_coded_util.recipe_order
 local rgb_colors = color_coded_util.rgb_colors
 local replace_dash_with_underscore = color_coded_util.replace_dash_with_underscore
+local append = color_coded_util.append
+
+
+------------------------------------------------------------
+--- list of base pipes to create color-coded variants of ---
+------------------------------------------------------------
+
+local base_entities = {
+    { type = "pipe",           name = "pipe",           order = "-a[1]" },
+    { type = "pipe-to-ground", name = "pipe-to-ground", order = "-b[1]" },
+    { type = "pump",           name = "pump",           order = "-c[1]" },
+    { type = "storage-tank",   name = "storage-tank",   order = "-d[1]" },
+}
+local pipe_plus_entities = {
+    { type = "pipe-to-ground", name = "pipe-to-ground-2", order = "-b[2]" },
+    { type = "pipe-to-ground", name = "pipe-to-ground-3", order = "-b[3]" },
+}
+local flow_control_entities = {
+    { type = "storage-tank", name = "pipe-elbow",    order = "-b[5]" },
+    { type = "storage-tank", name = "pipe-junction", order = "-b[4]" },
+    { type = "storage-tank", name = "pipe-straight", order = "-b[6]" },
+}
+local storage_tank_2_2_0_entities = {
+    { type = "storage-tank", name = "storage-tank2", order = "-d[2]" },
+}
+
+if mods["pipe_plus"] then append(base_entities, pipe_plus_entities) end
+if mods["Flow Control"] then append(base_entities, flow_control_entities) end
+if mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entities) end
 
 
 ---------------------------------------------------
 -- create subgroups for the color-coded variants --
 ---------------------------------------------------
 
----@param name_suffix string
----@param order_suffix string
----@param fluid boolean
-local function create_subgroup(name_suffix, order_suffix, fluid)
-    local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
-    if not subgroup then
-        log("subgroup not found")
-    else
-        subgroup.name = (fluid and "fluid-" or "rainbow-") .. "color-coded-" .. name_suffix
-        subgroup.order = subgroup.order .. (fluid and "-b[fluid]" or "-a[rainbow]") .. order_suffix
-        data:extend { subgroup }
+for _, group in pairs(base_entities) do
+    for _, prefix in pairs({ "fluid-", "rainbow-" }) do
+        local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+        if subgroup then
+            subgroup.name = prefix .. "color-coded-" .. group.name
+            subgroup.order = subgroup.order .. (prefix == "fluid-" and "-b[fluid]" or "-a[rainbow]") .. group.order
+            data:extend { subgroup }
+        end
     end
 end
 
-local group_sorting = {
-    { entity_name = "pipe",           order = "a-1" },
-    { entity_name = "pipe-to-ground", order = "b-1" },
-    { entity_name = "pump",           order = "c-1" },
-    { entity_name = "storage-tank",   order = "d-1" }
-}
 
-if mods["pipe_plus"] then
-    table.insert(group_sorting, { entity_name = "pipe-to-ground-2", order = "b-2" })
-    table.insert(group_sorting, { entity_name = "pipe-to-ground-3", order = "b-3" })
+-------------------------------------------------------------------------------------------------
+-- add a fast_replaceable_group to the base pipes so that all the color-coded pipes inherit it --
+-------------------------------------------------------------------------------------------------
+
+for _, base in pairs(base_entities) do
+    local entity = data.raw[base.type][base.name]
+    if entity then
+        local fast_replaceable_group = entity.fast_replaceable_group or base.name
+        data.raw[base.type][base.name].fast_replaceable_group = fast_replaceable_group
+    end
 end
-if mods["Flow Control"] then
-    table.insert(group_sorting, { entity_name = "pipe-junction", order = "b-4" })
-    table.insert(group_sorting, { entity_name = "pipe-elbow", order = "b-5" })
-    table.insert(group_sorting, { entity_name = "pipe-straight", order = "b-6" })
-end
-if mods["StorageTank2_2_0"] then
-    table.insert(group_sorting, { entity_name = "storage-tank2", order = "d-2" })
-end
-
-for _, group in pairs(group_sorting) do
-    create_subgroup(group.entity_name, group.order, false)
-    create_subgroup(group.entity_name, group.order, true)
-end
-
-
-----------------------------------------------------------------------------------------------------------------
--- add a fast_replaceable_group to the base storage tank so that all the color-coded storage tanks inherit it --
-----------------------------------------------------------------------------------------------------------------
-
-local fast_replaceable_group = data.raw["storage-tank"]["storage-tank"].fast_replaceable_group or "storage-tank"
-data.raw["storage-tank"]["storage-tank"].fast_replaceable_group = fast_replaceable_group
 
 
 ------------------------------------
@@ -86,8 +92,8 @@ local function get_order(item, color_name)
     if fluid then
         order = order .. "-" .. (fluid.order or "")
     end
-    if recipe_order[color_name] then
-        order = order .. "-" .. (recipe_order[color_name] or "")
+    if color_order[color_name] then
+        order = order .. "-" .. (color_order[color_name] or "")
     end
     return order
 end
@@ -207,7 +213,7 @@ local function create_color_overlay_item(base_type, base_name, color_name, color
     item.order = get_order(item, color_name)
     item.subgroup = get_subgroup(base_name, color_name)
     if built_from_base_item then
-        item.hidden = true
+        item.hidden_in_factoriopedia = true
     end
     data:extend { item }
 end
@@ -230,7 +236,11 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
         end
     end
     if built_from_base_item then
-        color_coded_recipe.hidden = true
+        color_coded_recipe.hidden_in_factoriopedia = true
+    end
+    local recipe_ingredients_type = settings.startup["color-coded-pipes-recipe-ingrediants"].value
+    if recipe_ingredients_type == "base-item" then
+        color_coded_recipe.ingredients = { { type = "item", name = base_name, amount = 1 } }
     end
     local localised_name = color_coded_recipe.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
@@ -453,26 +463,8 @@ for color_name, color in pairs(rgb_colors) do
     local is_fluid_color = data.raw["fluid"][color_name] and true or false
     local is_rainbow_color = not is_fluid_color
     local built_from_base_item = (hide_rainbow_recipes and is_rainbow_color) or (hide_fluid_recipes and is_fluid_color)
-    local base_pipes = {
-        { type = "pipe",           name = "pipe" },
-        { type = "pipe-to-ground", name = "pipe-to-ground" },
-        { type = "storage-tank",   name = "storage-tank" },
-        { type = "pump",           name = "pump" },
-    }
-    if mods["pipe_plus"] then
-        table.insert(base_pipes, { type = "pipe-to-ground", name = "pipe-to-ground-2" })
-        table.insert(base_pipes, { type = "pipe-to-ground", name = "pipe-to-ground-3" })
-    end
-    if mods["Flow Control"] then
-        table.insert(base_pipes, { type = "storage-tank", name = "pipe-elbow" })
-        table.insert(base_pipes, { type = "storage-tank", name = "pipe-junction" })
-        table.insert(base_pipes, { type = "storage-tank", name = "pipe-straight" })
-    end
-    if mods["StorageTank2_2_0"] then
-        table.insert(base_pipes, { type = "storage-tank", name = "storage-tank2" })
-    end
 
-    for _, base in pairs(base_pipes) do
+    for _, base in pairs(base_entities) do
         create_color_overlay_item(base.type, base.name, color_name, color, built_from_base_item)
         create_color_overlay_recipe(base.type, base.name, color_name, color, built_from_base_item)
         create_color_overlay_entity(base.type, base.name, color_name, color, built_from_base_item)
@@ -486,97 +478,9 @@ end
 -- add color-coded pipes to the main menu simulations --
 --------------------------------------------------------
 
-local init_script = [[
-
-local function get_fluid_name(entity)
-    local fluid_name = ""
-    local fluidbox = entity.fluidbox
-    if fluidbox and fluidbox.valid then
-        for index = 1, #fluidbox do
-            local contents = fluidbox.get_fluid_segment_contents(index)
-            if contents then
-                local amount = 0
-                for name, count in pairs(contents) do
-                    if count > amount then
-                        amount = count
-                        fluid_name = name
-                    end
-                end
-            end
-        end
-    end
-    return fluid_name
-end
-for _, surface in pairs(game.surfaces) do
-    local original_pipes = surface.find_entities_filtered { name = "pipe" }
-    for _, pipe in pairs(original_pipes) do
-        local fluid_name = get_fluid_name(pipe)
-        if fluid_name ~= "" then
-            surface.create_entity {
-                name = fluid_name .. "-color-coded-pipe",
-                position = pipe.position,
-                force = pipe.force,
-                direction = pipe.direction,
-                fluidbox = pipe.fluidbox,
-                fast_replace = true,
-                spill = false
-            }
-        end
-    end
-    local original_pipe_to_grounds = surface.find_entities_filtered { name = "pipe-to-ground" }
-    for _, pipe_to_ground in pairs(original_pipe_to_grounds) do
-        local fluid_name = get_fluid_name(pipe_to_ground)
-        if fluid_name ~= "" then
-            surface.create_entity {
-                name = fluid_name .. "-color-coded-pipe-to-ground",
-                position = pipe_to_ground.position,
-                force = pipe_to_ground.force,
-                direction = pipe_to_ground.direction,
-                fluidbox = pipe_to_ground.fluidbox,
-                fast_replace = true,
-                spill = false
-            }
-        end
-    end
-    local original_storage_tanks = surface.find_entities_filtered { name = "storage-tank" }
-    for _, storage_tank in pairs(original_storage_tanks) do
-        local fluid_name = get_fluid_name(storage_tank)
-        if fluid_name ~= "" then
-            surface.create_entity {
-                name = fluid_name .. "-color-coded-storage-tank",
-                position = storage_tank.position,
-                force = storage_tank.force,
-                direction = storage_tank.direction,
-                fluidbox = storage_tank.fluidbox,
-                fast_replace = true,
-                spill = false
-            }
-        end
-    end
-    local original_pumps = surface.find_entities_filtered { name = "pump" }
-    for _, pump in pairs(original_pumps) do
-        local fluid_name = get_fluid_name(pump)
-        if fluid_name ~= "" then
-            surface.create_entity {
-                name = fluid_name .. "-color-coded-pump",
-                position = pump.position,
-                force = pump.force,
-                direction = pump.direction,
-                fluidbox = pump.fluidbox,
-                fast_replace = true,
-                spill = false
-            }
-        end
-    end
-end
-
-]]
-
 if settings.startup["color-coded-main-menu-simulations"].value then
     for _, simulation in pairs(data.raw["utility-constants"]["default"].main_menu_simulations) do
         simulation.mods = simulation.mods or {}
         table.insert(simulation.mods, "color-coded-pipes")
-        -- simulation.init = simulation.init or ""
-        -- simulation.init = simulation.init .. init_script
     end
 end
