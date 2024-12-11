@@ -213,7 +213,7 @@ local function create_color_overlay_item(base_type, base_name, color_name, color
     item.order = get_order(item, color_name)
     item.subgroup = get_subgroup(base_name, color_name)
     if built_from_base_item then
-        item.hidden = true
+        item.hidden_in_factoriopedia = true
     end
     data:extend { item }
 end
@@ -236,7 +236,7 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
         end
     end
     if built_from_base_item then
-        color_coded_recipe.hidden = true
+        color_coded_recipe.hidden_in_factoriopedia = true
     end
     local localised_name = color_coded_recipe.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
