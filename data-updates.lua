@@ -48,7 +48,7 @@ local item_group = table.deepcopy(data.raw["item-group"]["logistics"])
 item_group.name = "color-coded-pipes"
 item_group.order = "g-pipes"
 item_group.icon = "__color-coded-pipes__/crafting-menu-icon.png"
-item_group.icon_size = 1024
+item_group.icon_size = 200
 item_group.localised_name = { "item-group-name.color-coded-pipes" }
 item_group.localised_description = { "item-group-description.color-coded-pipes" }
 data:extend { item_group }
