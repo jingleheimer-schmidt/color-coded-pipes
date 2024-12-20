@@ -489,6 +489,31 @@ for color_name, color in pairs(rgb_colors) do
 end
 
 
+-----------------------------------------------
+-- move base item recipes to color-coded tab --
+-----------------------------------------------
+
+if settings.startup["color-coded-pipes-regroup-recipes"].value then
+    for _, base in pairs(base_entities) do
+        local base_recipe = data.raw["recipe"][base.name]
+        local base_item = data.raw["item"][base.name]
+        if base_recipe or base_item then
+            local subgroup_name = base_item and base_item.subgroup or base_recipe and base_recipe.subgroup
+            local subgroup = subgroup_name and data.raw["item-subgroup"][subgroup_name]
+            if subgroup then
+                local color_coded_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+                color_coded_subgroup.name = "color-coded-" .. subgroup.name
+                color_coded_subgroup.group = "color-coded-pipes"
+                color_coded_subgroup.order = "a[1]" .. subgroup.order
+                data:extend { color_coded_subgroup }
+                if base_recipe then base_recipe.subgroup = color_coded_subgroup.name end
+                if base_item then base_item.subgroup = color_coded_subgroup.name end
+            end
+        end
+    end
+end
+
+
 --------------------------------------------------------
 -- add color-coded pipes to the main menu simulations --
 --------------------------------------------------------
