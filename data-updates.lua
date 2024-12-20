@@ -17,22 +17,22 @@ local append = color_coded_util.append
 ------------------------------------------------------------
 
 local base_entities = {
-    { type = "pipe",           name = "pipe",           order = "-a[1]" },
-    { type = "pipe-to-ground", name = "pipe-to-ground", order = "-b[1]" },
-    { type = "pump",           name = "pump",           order = "-c[1]" },
-    { type = "storage-tank",   name = "storage-tank",   order = "-d[1]" },
+    { type = "storage-tank",   name = "storage-tank",   order = "-a[1]" },
+    { type = "pipe",           name = "pipe",           order = "-b[1]" },
+    { type = "pipe-to-ground", name = "pipe-to-ground", order = "-c[1]" },
+    { type = "pump",           name = "pump",           order = "-d[1]" },
 }
 local pipe_plus_entities = {
-    { type = "pipe-to-ground", name = "pipe-to-ground-2", order = "-b[2]" },
-    { type = "pipe-to-ground", name = "pipe-to-ground-3", order = "-b[3]" },
+    { type = "pipe-to-ground", name = "pipe-to-ground-2", order = "-c[2]" },
+    { type = "pipe-to-ground", name = "pipe-to-ground-3", order = "-c[3]" },
 }
 local flow_control_entities = {
-    { type = "storage-tank", name = "pipe-elbow",    order = "-b[5]" },
-    { type = "storage-tank", name = "pipe-junction", order = "-b[4]" },
-    { type = "storage-tank", name = "pipe-straight", order = "-b[6]" },
+    { type = "storage-tank", name = "pipe-elbow",    order = "-c[5]" },
+    { type = "storage-tank", name = "pipe-junction", order = "-c[4]" },
+    { type = "storage-tank", name = "pipe-straight", order = "-c[6]" },
 }
 local storage_tank_2_2_0_entities = {
-    { type = "storage-tank", name = "storage-tank2", order = "-d[2]" },
+    { type = "storage-tank", name = "storage-tank2", order = "-a[2]" },
 }
 
 if mods["pipe_plus"] then append(base_entities, pipe_plus_entities) end
@@ -47,10 +47,16 @@ if mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entiti
 local item_group = table.deepcopy(data.raw["item-group"]["logistics"])
 item_group.name = "color-coded-pipes"
 item_group.order = "g-pipes"
-item_group.icon = "__color-coded-pipes__/crafting-menu-icon.png"
-item_group.icon_size = 200
+item_group.icons = { { icon = "__color-coded-pipes__/crafting-menu-icon.png", icon_size = 200 } }
 item_group.localised_name = { "item-group-name.color-coded-pipes" }
 item_group.localised_description = { "item-group-description.color-coded-pipes" }
+local regroup_recipes = settings.startup["color-coded-pipes-regroup-recipes"].value
+local show_rainbow_recipes = settings.startup["color-coded-pipes-show-rainbow-recipes"].value
+local show_fluid_recipes = settings.startup["color-coded-pipes-show-fluid-recipes"].value
+if regroup_recipes and not (show_rainbow_recipes or show_fluid_recipes) then
+    item_group.icons[1].icon = "__color-coded-pipes__/crafting-menu-icon-base.png"
+    item_group.localised_name = { "item-group-name.fluid-handling" }
+end
 data:extend { item_group }
 
 
@@ -486,6 +492,31 @@ for color_name, color in pairs(rgb_colors) do
         create_color_overlay_corpse(base.type, base.name, color_name, color, built_from_base_item)
     end
 
+end
+
+
+-----------------------------------------------
+-- move base item recipes to color-coded tab --
+-----------------------------------------------
+
+if settings.startup["color-coded-pipes-regroup-recipes"].value then
+    for _, base in pairs(base_entities) do
+        local base_recipe = data.raw["recipe"][base.name]
+        local base_item = data.raw["item"][base.name]
+        if base_recipe or base_item then
+            local subgroup_name = base_item and base_item.subgroup or base_recipe and base_recipe.subgroup
+            local subgroup = subgroup_name and data.raw["item-subgroup"][subgroup_name]
+            if subgroup then
+                local color_coded_subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+                color_coded_subgroup.name = "color-coded-" .. subgroup.name
+                color_coded_subgroup.group = "color-coded-pipes"
+                color_coded_subgroup.order = "a[1]" .. subgroup.order
+                data:extend { color_coded_subgroup }
+                if base_recipe then base_recipe.subgroup = color_coded_subgroup.name end
+                if base_item then base_item.subgroup = color_coded_subgroup.name end
+            end
+        end
+    end
 end
 
 
