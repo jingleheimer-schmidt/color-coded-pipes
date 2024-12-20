@@ -2,6 +2,7 @@
 Version: 1.2.0
 Date: ????
   Changes:
+    - moved color coded pipes to a dedicated tab in the crafting menu
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 11DEC2024
