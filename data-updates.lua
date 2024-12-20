@@ -47,10 +47,15 @@ if mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entiti
 local item_group = table.deepcopy(data.raw["item-group"]["logistics"])
 item_group.name = "color-coded-pipes"
 item_group.order = "g-pipes"
-item_group.icon = "__color-coded-pipes__/crafting-menu-icon.png"
-item_group.icon_size = 200
+item_group.icons = { { icon = "__color-coded-pipes__/crafting-menu-icon.png", icon_size = 200 } }
 item_group.localised_name = { "item-group-name.color-coded-pipes" }
 item_group.localised_description = { "item-group-description.color-coded-pipes" }
+local regroup_recipes = settings.startup["color-coded-pipes-regroup-recipes"].value
+local show_rainbow_recipes = settings.startup["color-coded-pipes-show-rainbow-recipes"].value
+local show_fluid_recipes = settings.startup["color-coded-pipes-show-fluid-recipes"].value
+if regroup_recipes and not (show_rainbow_recipes and show_fluid_recipes) then
+    item_group.icons[1].icon = "__color-coded-pipes__/crafting-menu-icon-base.png"
+end
 data:extend { item_group }
 
 
