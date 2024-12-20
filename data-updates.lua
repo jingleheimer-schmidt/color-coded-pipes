@@ -40,6 +40,20 @@ if mods["Flow Control"] then append(base_entities, flow_control_entities) end
 if mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entities) end
 
 
+---------------------------------------
+-- create the color-coded item group --
+---------------------------------------
+
+local item_group = table.deepcopy(data.raw["item-group"]["logistics"])
+item_group.name = "color-coded-pipes"
+item_group.order = "g-pipes"
+item_group.icon = "__color-coded-pipes__/crafting-menu-icon.png"
+item_group.icon_size = 200
+item_group.localised_name = { "item-group-name.color-coded-pipes" }
+item_group.localised_description = { "item-group-description.color-coded-pipes" }
+data:extend { item_group }
+
+
 ---------------------------------------------------
 -- create subgroups for the color-coded variants --
 ---------------------------------------------------
@@ -49,6 +63,7 @@ for _, group in pairs(base_entities) do
         local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
         if subgroup then
             subgroup.name = prefix .. "color-coded-" .. group.name
+            subgroup.group = "color-coded-pipes"
             subgroup.order = subgroup.order .. (prefix == "fluid-" and "-b[fluid]" or "-a[rainbow]") .. group.order
             data:extend { subgroup }
         end
