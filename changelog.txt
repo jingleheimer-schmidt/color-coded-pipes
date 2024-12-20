@@ -4,6 +4,7 @@ Date: ????
   Changes:
     - added mod setting to move base recipes to the color-coded crafting tab
     - re-ordered color coded recipes to more closely match the base recipe order
+    - added special icon and locale for the color coded crafting tab when base recipes are moved but all color coded recipes are hidden
   Locale:
     - updated locale to use sentence case
 ---------------------------------------------------------------------------------------------------
