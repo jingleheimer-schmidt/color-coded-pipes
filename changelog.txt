@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.1
-Date: ????
+Date: 20DEC2024
   Changes:
     - added mod setting to move base recipes to the color-coded crafting tab
     - re-ordered color coded recipes to more closely match the base recipe order
