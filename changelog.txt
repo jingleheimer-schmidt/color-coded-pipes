@@ -3,6 +3,8 @@ Version: 1.2.1
 Date: ????
   Changes:
     - added mod setting to move base recipes to the color-coded crafting tab
+  Locale:
+    - updated locale to use sentence case
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 19DEC2024
