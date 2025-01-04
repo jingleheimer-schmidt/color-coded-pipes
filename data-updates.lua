@@ -372,13 +372,13 @@ local function add_overlay_to_storage_tank(prototype, name, color)
             elseif overlay_layer.layers then
                 overlay_layer.layers[1].filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay-" .. name .. ".png"
                 overlay_layer.layers[1].tint = color
-                -- overlay_layer.layers[2] = nil
+                overlay_layer.layers[2] = nil
             end
             prototype.pictures.picture[direction] = { layers = { original_layer, overlay_layer } }
         end
-        prototype.pictures.fluid_background = nil
-        prototype.pictures.window_background = nil
-        prototype.pictures.flow_sprite = nil
+        -- prototype.pictures.fluid_background = nil
+        -- prototype.pictures.window_background = nil
+        -- prototype.pictures.flow_sprite = nil
     end
 end
 
