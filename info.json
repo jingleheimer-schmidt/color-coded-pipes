@@ -17,6 +17,9 @@
   "package": {
     "ignore": [
       "**/*.psd"
-    ]
+    ],
+    "sync_portal_details": true,
+    "no_git_tag": true,
+    "readme": "readme.md"
   }
 }
