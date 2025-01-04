@@ -54,7 +54,7 @@ if mods["zithorian-extra-storage-tanks-port"] then append(base_entities, zithori
 local item_group = table.deepcopy(data.raw["item-group"]["logistics"])
 item_group.name = "color-coded-pipes"
 item_group.order = "g-pipes"
-item_group.icons = { { icon = "__color-coded-pipes__/crafting-menu-icon.png", icon_size = 200 } }
+item_group.icons = { { icon = "__color-coded-pipes__/crafting-menu-icon.png", icon_size = 224 } }
 item_group.localised_name = { "item-group-name.color-coded-pipes" }
 item_group.localised_description = { "item-group-description.color-coded-pipes" }
 local regroup_recipes = settings.startup["color-coded-pipes-regroup-recipes"].value
