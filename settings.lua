@@ -4,7 +4,7 @@ local menu_simulations = {
     name = "color-coded-main-menu-simulations",
     setting_type = "startup",
     default_value = true,
-    hidden = false,
+    hidden = true,
     order = "0",
 }
 local rainbow_recipes = {

@@ -2,6 +2,7 @@
 Version: 1.2.2
 Date: ????
   Changes:
+    - hid the main menu simulation mod setting
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.1
 Date: 20DEC2024
