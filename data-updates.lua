@@ -54,14 +54,14 @@ if mods["zithorian-extra-storage-tanks-port"] then append(base_entities, zithori
 local item_group = table.deepcopy(data.raw["item-group"]["logistics"])
 item_group.name = "color-coded-pipes"
 item_group.order = "g-pipes"
-item_group.icons = { { icon = "__color-coded-pipes__/crafting-menu-icon.png", icon_size = 224 } }
+item_group.icons = { { icon = "__color-coded-pipes__/graphics/icons/crafting-menu-icon/crafting-menu-icon.png", icon_size = 224 } }
 item_group.localised_name = { "item-group-name.color-coded-pipes" }
 item_group.localised_description = { "item-group-description.color-coded-pipes" }
 local regroup_recipes = settings.startup["color-coded-pipes-regroup-recipes"].value
 local show_rainbow_recipes = settings.startup["color-coded-pipes-show-rainbow-recipes"].value
 local show_fluid_recipes = settings.startup["color-coded-pipes-show-fluid-recipes"].value
 if regroup_recipes and not (show_rainbow_recipes or show_fluid_recipes) then
-    item_group.icons[1].icon = "__color-coded-pipes__/crafting-menu-icon-base.png"
+    item_group.icons[1].icon = "__color-coded-pipes__/graphics/icons/crafting-menu-icon/crafting-menu-icon-base.png"
     item_group.localised_name = { "item-group-name.fluid-handling" }
 end
 data:extend { item_group }
