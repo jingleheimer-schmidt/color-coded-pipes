@@ -17,7 +17,7 @@ This mod includes hidden startup mod settings to define the colors of the rainbo
 
 This mod will create color coded versions of the pipes and fluid handling equipment from:
 - [Pipe Plus](https://mods.factorio.com/mod/pipe_plus)
-- [Flow Control](https://mods.factorio.com/mod/Flow Control)
+- [Flow Control](https://mods.factorio.com/mod/Flow%20Control)
 - [Storage Tank Mk2](https://mods.factorio.com/mod/StorageTank2_2_0)
 - [Zithorian's Extra Storage Tanks](https://mods.factorio.com/mod/zithorian-extra-storage-tanks-port)
 
