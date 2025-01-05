@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.2
-Date: ????
+Date: 2025-01-05
   Changes:
     - added color coded variants and remnants for tanks from Zithorian's Extra Storage Tanks for 2.0
     - updated crafting tab icon with custom art by Sacred Anarchy
