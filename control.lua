@@ -176,6 +176,12 @@ end
 if script.active_mods["StorageTank2_2_0"] then
     table.insert(base_entity_names, "storage-tank2")
 end
+if script.active_mods["zithorian-extra-storage-tanks-port"] then
+    table.insert(base_entity_names, "fluid-tank-1x1")
+    table.insert(base_entity_names, "fluid-tank-2x2")
+    table.insert(base_entity_names, "fluid-tank-3x4")
+    table.insert(base_entity_names, "fluid-tank-5x5")
+end
 
 ---@param event CustomCommandData
 local function paint_pipes(event)
