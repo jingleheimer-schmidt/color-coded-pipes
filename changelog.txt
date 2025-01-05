@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: ????
+  Changes:
+    - added color coded variants and remnants for tanks from Zithorian's Extra Storage Tanks for 2.0
+    - updated crafting tab icon with custom art by Sacred Anarchy
+    - hid the main menu simulation mod setting
+    - added optional dependencies for mods that can be color coded
+    - updated mod description
+  Locale:
+    - added ca, cs, ja, ko, pl, and zh-CN locales from Crowdin
+---------------------------------------------------------------------------------------------------
 Version: 1.2.1
 Date: 20DEC2024
   Changes:

@@ -34,10 +34,17 @@ local flow_control_entities = {
 local storage_tank_2_2_0_entities = {
     { type = "storage-tank", name = "storage-tank2", order = "-a[2]" },
 }
+local zithorian_extra_storage_tanks_entities = {
+    { type = "storage-tank", name = "fluid-tank-1x1", order = "-a[3]" },
+    { type = "storage-tank", name = "fluid-tank-2x2", order = "-a[4]" },
+    { type = "storage-tank", name = "fluid-tank-3x4", order = "-a[5]" },
+    { type = "storage-tank", name = "fluid-tank-5x5", order = "-a[6]" },
+}
 
 if mods["pipe_plus"] then append(base_entities, pipe_plus_entities) end
 if mods["Flow Control"] then append(base_entities, flow_control_entities) end
 if mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entities) end
+if mods["zithorian-extra-storage-tanks-port"] then append(base_entities, zithorian_extra_storage_tanks_entities) end
 
 
 ---------------------------------------
@@ -47,14 +54,14 @@ if mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entiti
 local item_group = table.deepcopy(data.raw["item-group"]["logistics"])
 item_group.name = "color-coded-pipes"
 item_group.order = "g-pipes"
-item_group.icons = { { icon = "__color-coded-pipes__/crafting-menu-icon.png", icon_size = 200 } }
+item_group.icons = { { icon = "__color-coded-pipes__/graphics/icons/crafting-menu-icon/crafting-menu-icon.png", icon_size = 224 } }
 item_group.localised_name = { "item-group-name.color-coded-pipes" }
 item_group.localised_description = { "item-group-description.color-coded-pipes" }
 local regroup_recipes = settings.startup["color-coded-pipes-regroup-recipes"].value
 local show_rainbow_recipes = settings.startup["color-coded-pipes-show-rainbow-recipes"].value
 local show_fluid_recipes = settings.startup["color-coded-pipes-show-fluid-recipes"].value
 if regroup_recipes and not (show_rainbow_recipes or show_fluid_recipes) then
-    item_group.icons[1].icon = "__color-coded-pipes__/crafting-menu-icon-base.png"
+    item_group.icons[1].icon = "__color-coded-pipes__/graphics/icons/crafting-menu-icon/crafting-menu-icon-base.png"
     item_group.localised_name = { "item-group-name.fluid-handling" }
 end
 data:extend { item_group }
@@ -362,12 +369,16 @@ local function add_overlay_to_storage_tank(prototype, name, color)
             if overlay_layer.filename then
                 overlay_layer.filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay-" .. name .. "-" .. direction .. ".png"
                 overlay_layer.tint = color
+            elseif overlay_layer.layers then
+                overlay_layer.layers[1].filename = "__color-coded-pipes__/graphics/" .. name .. "/overlay-" .. name .. ".png"
+                overlay_layer.layers[1].tint = color
+                overlay_layer.layers[2] = nil
             end
             prototype.pictures.picture[direction] = { layers = { original_layer, overlay_layer } }
         end
-        prototype.pictures.fluid_background = nil
-        prototype.pictures.window_background = nil
-        prototype.pictures.flow_sprite = nil
+        -- prototype.pictures.fluid_background = nil
+        -- prototype.pictures.window_background = nil
+        -- prototype.pictures.flow_sprite = nil
     end
 end
 
