@@ -258,9 +258,11 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
     if not color_coded_recipe then log(base_name .. " recipe not found") return end
     local new_recipe_name = color_name .. "-color-coded-" .. base_name
     color_coded_recipe.name = new_recipe_name
+    local result_count = 0
     for _, result in pairs(color_coded_recipe.results) do
         if result.name == base_name then
             result.name = new_recipe_name
+            result_count = result.amount or result.amount_max or 1
         end
     end
     if built_from_base_item then
@@ -268,7 +270,7 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
     end
     local recipe_ingredient_type = settings.startup["color-coded-pipes-recipe-ingredients"].value
     if recipe_ingredient_type == "base-item" then
-        color_coded_recipe.ingredients = { { type = "item", name = base_name, amount = 1 } }
+        color_coded_recipe.ingredients = { { type = "item", name = base_name, amount = result_count } }
     end
     local localised_name = color_coded_recipe.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
