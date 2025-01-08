@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.3
-Date: ????
+Date: 2025-01-08
   Bugfixes:
     - fixed incorrect ingredient count for recipes with multiple results when using base-item ingredients
 ---------------------------------------------------------------------------------------------------
