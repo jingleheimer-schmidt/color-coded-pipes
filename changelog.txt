@@ -2,7 +2,7 @@
 Version: 1.2.4
 Date: ????
   Locale:
-    - Updated Czech (cs) locale from Crowdin
+    - updated Czech (cs) locale from Crowdin
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.3
 Date: 2025-01-08
