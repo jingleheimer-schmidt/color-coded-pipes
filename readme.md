@@ -7,7 +7,7 @@
 - Recipes are sorted into their own tab in the crafting menu (with a custom icon designed by Sacred Anarchy!)
 - Recipes for rainbow and fluid colored pipes may be toggled independently in startup mod settings
 - Color coded recipes are unlocked from the same technology as their base versions
-- Includes /paint-pipes and /unpaint-pipes chat commands (use /help \<command> for advanced features)
+- Includes `/paint-pipes` and `/unpaint-pipes` chat commands (see `/help <command name>` for advanced features)
 
 ---------------------
 # Companion Mods
