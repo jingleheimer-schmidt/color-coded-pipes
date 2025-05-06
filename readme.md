@@ -12,7 +12,7 @@
 ---------------------
 # Companion Mods
 
-[Color Coded Pipe Planner](https://mods.factorio.com/mod/color-coded-pipe-planner) - Adds a pipe planner tool to automate color-coding your pipe existing networks
+[Color Coded Pipe Planner](https://mods.factorio.com/mod/color-coded-pipe-planner) - Adds a pipe planner tool to automate color-coding your existing pipe networks
 
 ---------------------
 # Compatibility
