@@ -5,8 +5,8 @@
 - Adds red, orange, yellow, green, blue, purple, pink, black, and white pipes, underground-pipes, pumps, and storage-tanks
 - Also includes pipe variants that perfectly match each fluid (compatible with all modded fluids)
 - Recipes are sorted into their own tab in the crafting menu (with a custom icon designed by Sacred Anarchy!)
-- Recipes for rainbow and fluid colored pipes may be toggled independently in startup mod settings
-- Color coded recipes are unlocked from the same technology as their base versions
+- Recipes for rainbow and fluid colored pipes can be toggled independently in startup mod settings
+- Color coded recipes are unlocked from the same technologies as their base versions
 - Includes `/paint-pipes` and `/unpaint-pipes` chat commands (see `/help <command name>` for advanced features)
 
 ---------------------
