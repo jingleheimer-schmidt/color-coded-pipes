@@ -2,6 +2,8 @@
 Version: 1.3.1
 Date: ????
   Changes:
+  Bugfixes:
+    - fixed recipes being visible when they were supposed to be hidden
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.0
 Date: 2025-05-06
