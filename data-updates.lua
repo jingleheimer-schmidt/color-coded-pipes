@@ -380,6 +380,9 @@ local function create_color_overlay_entity(base_type, base_name, color_name, col
     if mods["no-pipe-touching"] then
         entity.npt_compat = { mod = "color-coded-pipes", tag = color_name }
     end
+    if mods["piecewise-undergrounds"] and (base_type == "pipe-to-ground") then
+        entity.pu_compat = { associated_pipe = color_name .. "-color-coded-pipe" }
+    end
     if entity.factoriopedia_simulation then
         update_factoriopedia_simulation(base_name, entity_name, entity.factoriopedia_simulation)
     end

@@ -4,6 +4,7 @@ Date: ????
   Changes:
     - moved base_entities table to color-coded-util file
     - updated pump overlay mask to include piston casing
+    - added compatibility script for piecewise undergrounds mod
   Bugfixes:
     - fixed recipes being visible when they were supposed to be hidden
 ---------------------------------------------------------------------------------------------------
