@@ -7,24 +7,19 @@ local pipe_colors = constants.pipe_colors
 local paint_pipe = painting.paint_pipe
 local unpaint_pipe = painting.unpaint_pipe
 
----@param names string[]
----@return string[]
-local function color_coded(names)
-    local color_coded_names = util.table.deepcopy(names)
-    for _, name in pairs(names) do
+local function setup_storage()
+    storage.entity_names = {}
+    for _, entity_data in pairs(base_entities) do
+        table.insert(storage.entity_names, entity_data.name)
+    end
+    for _, name in pairs(storage.entity_names) do
         for color, _ in pairs(pipe_colors) do
             local prototype_name = color .. "-color-coded-" .. name
             if prototypes.entity[prototype_name] then
-                table.insert(color_coded_names, prototype_name)
+                table.insert(storage.entity_names, prototype_name)
             end
         end
     end
-    return color_coded_names
-end
-
-local base_names = {}
-for _, entity_data in pairs(base_entities) do
-    table.insert(base_names, entity_data.name)
 end
 
 ---@param event CustomCommandData
@@ -38,7 +33,7 @@ local function paint_pipes(event)
     local parameter = event.parameter or ""
     local planner_mode, bots_required = parameter:match("([^,%s]+)[,%s]*([^,%s]*)")
     bots_required = (bots_required == "true") and true or false
-    local found_entities = surface.find_entities_filtered { name = color_coded(base_names), force = force }
+    local found_entities = surface.find_entities_filtered { name = storage.entity_names, force = force }
     for _, entity in pairs(found_entities) do
         paint_pipe(player, entity, bots_required, planner_mode)
     end
@@ -53,7 +48,7 @@ local function unpaint_pipes(event)
     local surface = player.surface
     local force = player.force
     local bots_required = event.parameter == "true" and true or false
-    local found_entities = surface.find_entities_filtered { name = color_coded(base_names), force = force }
+    local found_entities = surface.find_entities_filtered { name = storage.entity_names, force = force }
     for _, entity in pairs(found_entities) do
         unpaint_pipe(player, entity, bots_required)
     end
@@ -94,6 +89,7 @@ local function add_automatic_underground_pipe_connector_support()
 end
 
 script.on_init(function()
+    setup_storage()
     add_commands()
     reset_technology_effects()
     update_simulation()
@@ -105,6 +101,7 @@ script.on_load(function()
 end)
 
 script.on_configuration_changed(function()
+    setup_storage()
     reset_technology_effects()
     add_automatic_underground_pipe_connector_support()
 end)
