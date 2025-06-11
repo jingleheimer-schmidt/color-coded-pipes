@@ -15,24 +15,42 @@ local fluid_to_color_map = {
 ---@param entity LuaEntity
 ---@return string
 local function get_fluid_name(entity)
-    local fluid_name = ""
     local fluidbox = entity.fluidbox
-    if fluidbox and fluidbox.valid then
-        for index = 1, #fluidbox do
-            local contents = fluidbox.get_fluid_segment_contents(index)
-            if contents and next(contents) then
-                local amount = 0
-                for name, count in pairs(contents) do
-                    if count > amount then
-                        amount = count
-                        fluid_name = name
-                    end
+    if not (fluidbox and fluidbox.valid) then return "" end
+
+    for i = 1, #fluidbox do
+        -- Try segment contents first
+        local contents = fluidbox.get_fluid_segment_contents(i)
+        if contents and next(contents) then
+            local max_name, max_amount = nil, 0
+            for name, count in pairs(contents) do
+                if count > max_amount then
+                    max_name, max_amount = name, count
                 end
-                break
             end
+            return max_name or ""
+        end
+
+        -- Fall back to fluidbox[i].name
+        local fluid = fluidbox[i]
+        if fluid and fluid.name then
+            return fluid.name
+        end
+
+        -- Try locked fluid
+        local locked = fluidbox.get_locked_fluid(i)
+        if locked then
+            return locked
+        end
+
+        -- Finally try filter
+        local filter = fluidbox.get_filter(i)
+        if filter and filter.name then
+            return filter.name
         end
     end
-    return fluid_name
+
+    return ""
 end
 
 ---@param player LuaPlayer

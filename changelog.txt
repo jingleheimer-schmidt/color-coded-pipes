@@ -9,6 +9,7 @@ Date: ????
     - updated pump overlay mask to include piston casing
   Bugfixes:
     - fixed recipes being visible when they were supposed to be hidden
+    - fixed that the /paint-pipes command couldn't determine fluid colors for pumps
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.0
 Date: 2025-05-06
