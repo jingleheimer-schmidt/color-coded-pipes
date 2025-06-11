@@ -78,7 +78,7 @@ local function paint_pipe(player, pipe, bots_required, planner_mode)
                     direction = direction,
                     force = force,
                 } then
-                local entity = player.surface.create_entity {
+                local entity = surface.create_entity {
                     name = name,
                     position = position,
                     force = force,
@@ -121,7 +121,7 @@ local function unpaint_pipe(player, pipe, bots_required)
                     direction = direction,
                     force = force,
                 } then
-                local entity = player.surface.create_entity {
+                local entity = surface.create_entity {
                     name = target_name,
                     position = position,
                     force = force,
