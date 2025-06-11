@@ -11,27 +11,9 @@ local unpaint_pipe = painting.unpaint_pipe
 ---@return string[]
 local function color_coded(names)
     local color_coded_names = util.table.deepcopy(names)
-    local colors = {
-        "red",
-        "orange",
-        "yellow",
-        "green",
-        "blue",
-        "purple",
-        "pink",
-        "black",
-        "white",
-    }
-    local fluids = prototypes.fluid
     for _, name in pairs(names) do
-        for _, color in pairs(colors) do
+        for color, _ in pairs(pipe_colors) do
             local prototype_name = color .. "-color-coded-" .. name
-            if prototypes.entity[prototype_name] then
-                table.insert(color_coded_names, prototype_name)
-            end
-        end
-        for _, fluid in pairs(fluids) do
-            local prototype_name = fluid.name .. "-color-coded-" .. name
             if prototypes.entity[prototype_name] then
                 table.insert(color_coded_names, prototype_name)
             end
@@ -40,29 +22,9 @@ local function color_coded(names)
     return color_coded_names
 end
 
-local base_entity_names = {
-    "pipe",
-    "pipe-to-ground",
-    "storage-tank",
-    "pump",
-}
-if script.active_mods["pipe_plus"] then
-    table.insert(base_entity_names, "pipe-to-ground-2")
-    table.insert(base_entity_names, "pipe-to-ground-3")
-end
-if script.active_mods["Flow Control"] then
-    table.insert(base_entity_names, "pipe-elbow")
-    table.insert(base_entity_names, "pipe-junction")
-    table.insert(base_entity_names, "pipe-straight")
-end
-if script.active_mods["StorageTank2_2_0"] then
-    table.insert(base_entity_names, "storage-tank2")
-end
-if script.active_mods["zithorian-extra-storage-tanks-port"] then
-    table.insert(base_entity_names, "fluid-tank-1x1")
-    table.insert(base_entity_names, "fluid-tank-2x2")
-    table.insert(base_entity_names, "fluid-tank-3x4")
-    table.insert(base_entity_names, "fluid-tank-5x5")
+local base_names = {}
+for _, entity_data in pairs(base_entities) do
+    table.insert(base_names, entity_data.name)
 end
 
 ---@param event CustomCommandData
@@ -76,7 +38,7 @@ local function paint_pipes(event)
     local parameter = event.parameter or ""
     local planner_mode, bots_required = parameter:match("([^,%s]+)[,%s]*([^,%s]*)")
     bots_required = (bots_required == "true") and true or false
-    local found_entities = surface.find_entities_filtered { name = color_coded(base_entity_names), force = force }
+    local found_entities = surface.find_entities_filtered { name = color_coded(base_names), force = force }
     for _, entity in pairs(found_entities) do
         paint_pipe(player, entity, bots_required, planner_mode)
     end
@@ -91,7 +53,7 @@ local function unpaint_pipes(event)
     local surface = player.surface
     local force = player.force
     local bots_required = event.parameter == "true" and true or false
-    local found_entities = surface.find_entities_filtered { name = color_coded(base_entity_names), force = force }
+    local found_entities = surface.find_entities_filtered { name = color_coded(base_names), force = force }
     for _, entity in pairs(found_entities) do
         unpaint_pipe(player, entity, bots_required)
     end
