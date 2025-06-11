@@ -3,14 +3,14 @@
 -- import util constants and functions --
 -----------------------------------------
 
-local color_coded_util = require("color-coded-util")
-local pipe_filenames = color_coded_util.pipe_filenames
-local pipe_to_ground_filenames = color_coded_util.pipe_to_ground_filenames
-local color_order = color_coded_util.recipe_order
-local rgb_colors = color_coded_util.rgb_colors
-local replace_dash_with_underscore = color_coded_util.replace_dash_with_underscore
-local append = color_coded_util.append
-local base_entities = color_coded_util.base_entities
+local constants = require("scripts.constants")
+local functions = require("scripts.functions")
+local pipe_filenames = constants.pipe_filenames
+local pipe_to_ground_filenames = constants.pipe_to_ground_filenames
+local color_order = constants.color_order
+local pipe_colors = constants.pipe_colors
+local replace_dash_with_underscore = functions.replace_dash_with_underscore
+local base_entities = constants.base_entities
 
 
 ---------------------------------------
@@ -133,14 +133,16 @@ end
 ---@param prototype color_coded_prototypes
 ---@param color Color
 ---@param type string
----@return data.IconData
+---@return (data.IconData)[]
 local function create_color_overlay_icons(prototype, color, type)
     local overlay_path = "__color-coded-pipes__/graphics/icons/overlay-" .. type .. "-icon/overlay-" .. type .. "-icon.png"
     local icons = prototype.icons
+    ---@type data.IconData
     local icon_base = {
         icon = prototype.icon,
         icon_size = prototype.icon_size,
     }
+    ---@type data.IconData
     local icon_overlay = {
         icon = overlay_path,
         icon_size = prototype.icon_size,
@@ -463,7 +465,7 @@ end
 local hide_rainbow_recipes = not settings.startup["color-coded-pipes-show-rainbow-recipes"].value
 local hide_fluid_recipes = not settings.startup["color-coded-pipes-show-fluid-recipes"].value
 
-for color_name, color in pairs(rgb_colors) do
+for color_name, color in pairs(pipe_colors) do
     local is_fluid_color = data.raw["fluid"][color_name] and true or false
     local is_rainbow_color = not is_fluid_color
     local built_from_base_item = (hide_rainbow_recipes and is_rainbow_color) or (hide_fluid_recipes and is_fluid_color)
