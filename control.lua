@@ -4,7 +4,7 @@ local constants = require("scripts.constants")
 local functions = require("scripts.functions")
 local fluid_to_color_map = constants.fluid_to_color_map
 local base_entities = constants.base_entities
-local rgb_colors = constants.rgb_colors
+local pipe_colors = constants.pipe_colors
 
 ---@param entity LuaEntity
 ---@return string
@@ -247,11 +247,10 @@ end
 
 local function add_automatic_underground_pipe_connector_support()
     if not script.active_mods["automatic-underground-pipe-connectors"] then return end
-    local colors = rgb_colors
     local new_undergrounds = {}
     for _, entity_data in pairs(base_entities) do
         if entity_data.type == "pipe-to-ground" then
-            for color_name, color in pairs(colors) do
+            for color_name, color in pairs(pipe_colors) do
                 local underground_name = color_name .. "-color-coded-" .. entity_data.name
                 local pipe_name = color_name .. "-color-coded-pipe"
                 new_undergrounds[underground_name] = { entity = pipe_name, item = pipe_name }

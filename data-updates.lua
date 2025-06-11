@@ -8,7 +8,7 @@ local functions = require("scripts.functions")
 local pipe_filenames = constants.pipe_filenames
 local pipe_to_ground_filenames = constants.pipe_to_ground_filenames
 local color_order = constants.color_order
-local rgb_colors = constants.rgb_colors
+local pipe_colors = constants.pipe_colors
 local replace_dash_with_underscore = functions.replace_dash_with_underscore
 local base_entities = constants.base_entities
 
@@ -463,7 +463,7 @@ end
 local hide_rainbow_recipes = not settings.startup["color-coded-pipes-show-rainbow-recipes"].value
 local hide_fluid_recipes = not settings.startup["color-coded-pipes-show-fluid-recipes"].value
 
-for color_name, color in pairs(rgb_colors) do
+for color_name, color in pairs(pipe_colors) do
     local is_fluid_color = data.raw["fluid"][color_name] and true or false
     local is_rainbow_color = not is_fluid_color
     local built_from_base_item = (hide_rainbow_recipes and is_rainbow_color) or (hide_fluid_recipes and is_fluid_color)

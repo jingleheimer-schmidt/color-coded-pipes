@@ -98,7 +98,7 @@ if active_mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0
 if active_mods["zithorian-extra-storage-tanks-port"] then append(base_entities, zithorian_extra_storage_tanks_entities) end
 
 ---@type table<string, Color>
-local rgb_colors = {
+local pipe_colors = {
     red = get_color("color-coded-pipes-red"),
     orange = get_color("color-coded-pipes-orange"),
     yellow = get_color("color-coded-pipes-yellow"),
@@ -115,7 +115,7 @@ if fluids then
     for _, fluid in pairs(fluids) do
         if fluid.base_color and not fluid.hidden and not fluid.parameter then
             local base_color = util.get_color_with_alpha(fluid.base_color, 0.6, true)
-            rgb_colors[fluid.name] = table.deepcopy(base_color)
+            pipe_colors[fluid.name] = table.deepcopy(base_color)
         end
     end
 end
@@ -138,6 +138,6 @@ return {
     pipe_patch_filenames = pipe_patch_filenames,
     pipe_to_ground_patch_filenames = pipe_to_ground_patch_filenames,
     base_entities = base_entities,
-    rgb_colors = rgb_colors,
+    pipe_colors = pipe_colors,
     fluid_to_color_map = fluid_to_color_map,
 }
