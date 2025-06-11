@@ -10,14 +10,11 @@ local unpaint_pipe = painting.unpaint_pipe
 local function setup_storage()
     storage.entity_names = {}
     for _, entity_data in pairs(base_entities) do
-        table.insert(storage.entity_names, entity_data.name)
-    end
-    for _, name in pairs(storage.entity_names) do
-        for color, _ in pairs(pipe_colors) do
-            local prototype_name = color .. "-color-coded-" .. name
-            if prototypes.entity[prototype_name] then
-                table.insert(storage.entity_names, prototype_name)
-            end
+        local entity_name = entity_data.name
+        if prototypes.entity[entity_name] then table.insert(storage.entity_names, entity_name) end
+        for color_name, _ in pairs(pipe_colors) do
+            local prototype_name = color_name .. "-color-coded-" .. entity_name
+            if prototypes.entity[prototype_name] then table.insert(storage.entity_names, prototype_name) end
         end
     end
 end
