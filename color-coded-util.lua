@@ -107,6 +107,7 @@ end
 --- list of base pipes to create color-coded variants of ---
 ------------------------------------------------------------
 
+---@type { type: string, name: string, order: string }[]
 local base_entities = {
     { type = "storage-tank",   name = "storage-tank",   order = "-a[1]" },
     { type = "pipe",           name = "pipe",           order = "-b[1]" },
