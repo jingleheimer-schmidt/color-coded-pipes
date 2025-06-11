@@ -3,9 +3,10 @@ Version: 1.3.1
 Date: ????
   Changes:
     - moved base_entities table to color-coded-util file
-    - updated pump overlay mask to include piston casing
     - added compatibility script for piecewise undergrounds mod
     - added compatibility for automatic-underground-pipe-connectors mod
+  Graphics:
+    - updated pump overlay mask to include piston casing
   Bugfixes:
     - fixed recipes being visible when they were supposed to be hidden
 ---------------------------------------------------------------------------------------------------
