@@ -133,14 +133,16 @@ end
 ---@param prototype color_coded_prototypes
 ---@param color Color
 ---@param type string
----@return data.IconData
+---@return (data.IconData)[]
 local function create_color_overlay_icons(prototype, color, type)
     local overlay_path = "__color-coded-pipes__/graphics/icons/overlay-" .. type .. "-icon/overlay-" .. type .. "-icon.png"
     local icons = prototype.icons
+    ---@type data.IconData
     local icon_base = {
         icon = prototype.icon,
         icon_size = prototype.icon_size,
     }
+    ---@type data.IconData
     local icon_overlay = {
         icon = overlay_path,
         icon_size = prototype.icon_size,
