@@ -511,5 +511,8 @@ if settings.startup["color-coded-main-menu-simulations"].value then
     for _, simulation in pairs(data.raw["utility-constants"]["default"].main_menu_simulations) do
         simulation.mods = simulation.mods or {}
         table.insert(simulation.mods, "color-coded-pipes")
+        if mods["automatic-underground-pipe-connectors"] then
+            table.insert(simulation.mods, "automatic-underground-pipe-connectors")
+        end
     end
 end

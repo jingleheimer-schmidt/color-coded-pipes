@@ -12,7 +12,8 @@
     "? pipe_plus",
     "? Flow Control",
     "? StorageTank2_2_0",
-    "? zithorian-extra-storage-tanks-port"
+    "? zithorian-extra-storage-tanks-port",
+    "? automatic-underground-pipe-connectors"
   ],
   "package": {
     "ignore": [

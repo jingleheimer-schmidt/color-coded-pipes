@@ -1,5 +1,6 @@
 
 local util = require("util")
+local color_coded_util = require("color-coded-util")
 local fluid_to_color_map = {
     ["water"] = "blue",
     ["crude-oil"] = "black",
@@ -232,10 +233,30 @@ local function update_simulation()
     end
 end
 
+local function add_automatic_underground_pipe_connector_support()
+    if not script.active_mods["automatic-underground-pipe-connectors"] then return end
+    local base_entities = color_coded_util.base_entities
+    local colors = color_coded_util.rgb_colors
+    local new_undergrounds = {}
+    for _, entity_data in pairs(base_entities) do
+        if entity_data.type == "pipe-to-ground" then
+            for color_name, color in pairs(colors) do
+                local underground_name = color_name .. "-color-coded-" .. entity_data.name
+                local pipe_name = color_name .. "-color-coded-pipe"
+                new_undergrounds[underground_name] = { entity = pipe_name, item = pipe_name }
+            end
+        end
+    end
+    if next(new_undergrounds) then
+        remote.call("automatic-underground-pipe-connectors", "add_undergrounds", new_undergrounds)
+    end
+end
+
 script.on_init(function()
     add_commands()
     reset_technology_effects()
     update_simulation()
+    add_automatic_underground_pipe_connector_support()
 end)
 
 script.on_load(function()
@@ -244,6 +265,7 @@ end)
 
 script.on_configuration_changed(function()
     reset_technology_effects()
+    add_automatic_underground_pipe_connector_support()
 end)
 
 
