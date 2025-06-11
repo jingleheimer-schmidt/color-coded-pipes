@@ -1,5 +1,8 @@
 
 local util = require("util")
+local functions = require("scripts.functions")
+local append = functions.append
+local get_color = functions.get_color
 
 local pipe_filenames = {
     "corner-down-left",
@@ -41,40 +44,6 @@ local recipe_order = {
     ["white"] = "i[white]",
 }
 
----@param setting string
----@return Color
-local function get_color(setting)
-    local value = settings.startup[setting].value --[[@as Color]]
-    return value
-end
-
----@type table<string, Color>
-local rgb_colors = {
-    red = get_color("color-coded-pipes-red"),
-    orange = get_color("color-coded-pipes-orange"),
-    yellow = get_color("color-coded-pipes-yellow"),
-    green = get_color("color-coded-pipes-green"),
-    blue = get_color("color-coded-pipes-blue"),
-    purple = get_color("color-coded-pipes-purple"),
-    pink = get_color("color-coded-pipes-pink"),
-    black = get_color("color-coded-pipes-black"),
-    white = get_color("color-coded-pipes-white"),
-}
-
-local fluids = data and data.raw and data.raw["fluid"] or game and game.fluid_prototypes
-if fluids then
-    for _, fluid in pairs(fluids) do
-        if fluid.base_color and not fluid.hidden and not fluid.parameter then
-            local base_color = util.get_color_with_alpha(fluid.base_color, 0.6, true)
-            rgb_colors[fluid.name] = table.deepcopy(base_color)
-        end
-    end
-end
-
-local function replace_dash_with_underscore(str)
-    return string.gsub(str, "-", "_")
-end
-
 local pipe_patch_filenames = {
     ["corner-up-left"] = "corner-up-left",
     ["corner-up-right"] = "corner-up-right",
@@ -91,20 +60,6 @@ local pipe_to_ground_patch_filenames = {
     ["down"] = "down",
     ["up"] = "up",
 }
-
-
---- Appends the contents of table_2 to table_1.
---- @generic T
---- @param table_1 T[] The first table to append to.
---- @param table_2 T[] The second table whose elements will be appended.
---- @return T[] - The combined table with elements from both input tables.
-local function append(table_1, table_2)
-    for _, value in pairs(table_2) do
-        table.insert(table_1, value)
-    end
-    return table_1
-end
-
 
 ------------------------------------------------------------
 --- list of base pipes to create color-coded variants of ---
@@ -142,14 +97,47 @@ if active_mods["Flow Control"] then append(base_entities, flow_control_entities)
 if active_mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entities) end
 if active_mods["zithorian-extra-storage-tanks-port"] then append(base_entities, zithorian_extra_storage_tanks_entities) end
 
+---@type table<string, Color>
+local rgb_colors = {
+    red = get_color("color-coded-pipes-red"),
+    orange = get_color("color-coded-pipes-orange"),
+    yellow = get_color("color-coded-pipes-yellow"),
+    green = get_color("color-coded-pipes-green"),
+    blue = get_color("color-coded-pipes-blue"),
+    purple = get_color("color-coded-pipes-purple"),
+    pink = get_color("color-coded-pipes-pink"),
+    black = get_color("color-coded-pipes-black"),
+    white = get_color("color-coded-pipes-white"),
+}
+
+local fluids = data and data.raw and data.raw["fluid"] or prototypes and prototypes.fluid
+if fluids then
+    for _, fluid in pairs(fluids) do
+        if fluid.base_color and not fluid.hidden and not fluid.parameter then
+            local base_color = util.get_color_with_alpha(fluid.base_color, 0.6, true)
+            rgb_colors[fluid.name] = table.deepcopy(base_color)
+        end
+    end
+end
+
+local fluid_to_color_map = {
+    ["water"] = "blue",
+    ["crude-oil"] = "black",
+    ["steam"] = "white",
+    ["heavy-oil"] = "red",
+    ["light-oil"] = "orange",
+    ["petroleum-gas"] = "purple",
+    ["sulfuric-acid"] = "yellow",
+    ["lubricant"] = "green",
+}
+
 return {
     pipe_filenames = pipe_filenames,
     pipe_to_ground_filenames = pipe_to_ground_filenames,
     recipe_order = recipe_order,
-    rgb_colors = rgb_colors,
-    replace_dash_with_underscore = replace_dash_with_underscore,
     pipe_patch_filenames = pipe_patch_filenames,
     pipe_to_ground_patch_filenames = pipe_to_ground_patch_filenames,
-    append = append,
     base_entities = base_entities,
+    rgb_colors = rgb_colors,
+    fluid_to_color_map = fluid_to_color_map,
 }

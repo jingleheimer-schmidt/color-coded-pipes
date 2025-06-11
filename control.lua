@@ -1,16 +1,10 @@
 
 local util = require("util")
-local color_coded_util = require("color-coded-util")
-local fluid_to_color_map = {
-    ["water"] = "blue",
-    ["crude-oil"] = "black",
-    ["steam"] = "white",
-    ["heavy-oil"] = "red",
-    ["light-oil"] = "orange",
-    ["petroleum-gas"] = "purple",
-    ["sulfuric-acid"] = "yellow",
-    ["lubricant"] = "green",
-}
+local constants = require("scripts.constants")
+local functions = require("scripts.functions")
+local fluid_to_color_map = constants.fluid_to_color_map
+local base_entities = constants.base_entities
+local rgb_colors = constants.rgb_colors
 
 ---@param entity LuaEntity
 ---@return string
@@ -253,8 +247,7 @@ end
 
 local function add_automatic_underground_pipe_connector_support()
     if not script.active_mods["automatic-underground-pipe-connectors"] then return end
-    local base_entities = color_coded_util.base_entities
-    local colors = color_coded_util.rgb_colors
+    local colors = rgb_colors
     local new_undergrounds = {}
     for _, entity_data in pairs(base_entities) do
         if entity_data.type == "pipe-to-ground" then

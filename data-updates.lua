@@ -3,14 +3,14 @@
 -- import util constants and functions --
 -----------------------------------------
 
-local color_coded_util = require("color-coded-util")
-local pipe_filenames = color_coded_util.pipe_filenames
-local pipe_to_ground_filenames = color_coded_util.pipe_to_ground_filenames
-local color_order = color_coded_util.recipe_order
-local rgb_colors = color_coded_util.rgb_colors
-local replace_dash_with_underscore = color_coded_util.replace_dash_with_underscore
-local append = color_coded_util.append
-local base_entities = color_coded_util.base_entities
+local constants = require("scripts.constants")
+local functions = require("scripts.functions")
+local pipe_filenames = constants.pipe_filenames
+local pipe_to_ground_filenames = constants.pipe_to_ground_filenames
+local color_order = constants.color_order
+local rgb_colors = constants.rgb_colors
+local replace_dash_with_underscore = functions.replace_dash_with_underscore
+local base_entities = constants.base_entities
 
 
 ---------------------------------------
