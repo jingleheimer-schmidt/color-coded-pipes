@@ -61,10 +61,13 @@ local rgb_colors = {
     white = get_color("color-coded-pipes-white"),
 }
 
-for _, fluid in pairs(data.raw["fluid"]) do
-    if fluid.base_color and not fluid.hidden and not fluid.parameter then
-        local base_color = util.get_color_with_alpha(fluid.base_color, 0.6, true)
-        rgb_colors[fluid.name] = table.deepcopy(base_color)
+local fluids = data and data.raw and data.raw["fluid"] or game and game.fluid_prototypes
+if fluids then
+    for _, fluid in pairs(fluids) do
+        if fluid.base_color and not fluid.hidden and not fluid.parameter then
+            local base_color = util.get_color_with_alpha(fluid.base_color, 0.6, true)
+            rgb_colors[fluid.name] = table.deepcopy(base_color)
+        end
     end
 end
 
@@ -133,10 +136,11 @@ local zithorian_extra_storage_tanks_entities = {
     { type = "storage-tank", name = "fluid-tank-5x5", order = "-a[6]" },
 }
 
-if mods["pipe_plus"] then append(base_entities, pipe_plus_entities) end
-if mods["Flow Control"] then append(base_entities, flow_control_entities) end
-if mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entities) end
-if mods["zithorian-extra-storage-tanks-port"] then append(base_entities, zithorian_extra_storage_tanks_entities) end
+local active_mods = mods or script and script.active_mods
+if active_mods["pipe_plus"] then append(base_entities, pipe_plus_entities) end
+if active_mods["Flow Control"] then append(base_entities, flow_control_entities) end
+if active_mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entities) end
+if active_mods["zithorian-extra-storage-tanks-port"] then append(base_entities, zithorian_extra_storage_tanks_entities) end
 
 return {
     pipe_filenames = pipe_filenames,
