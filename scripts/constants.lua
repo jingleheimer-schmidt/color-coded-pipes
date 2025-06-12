@@ -32,7 +32,7 @@ local pipe_to_ground_filenames = {
     "west",
 }
 
-local recipe_order = {
+local color_order = {
     ["red"] = "a[red]",
     ["orange"] = "b[orange]",
     ["yellow"] = "c[yellow]",
@@ -134,7 +134,7 @@ local fluid_to_color_map = {
 return {
     pipe_filenames = pipe_filenames,
     pipe_to_ground_filenames = pipe_to_ground_filenames,
-    recipe_order = recipe_order,
+    color_order = color_order,
     pipe_patch_filenames = pipe_patch_filenames,
     pipe_to_ground_patch_filenames = pipe_to_ground_patch_filenames,
     base_entities = base_entities,
