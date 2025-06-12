@@ -1,7 +1,7 @@
 
 local util = require("util")
-local constants = require("scripts.constants")
-local painting = require("scripts.painting")
+local constants = require("__color-coded-pipes__.scripts.constants")
+local painting = require("__color-coded-pipes__.scripts.painting")
 local base_entities = constants.base_entities
 local pipe_colors = constants.pipe_colors
 local paint_pipe = painting.paint_pipe

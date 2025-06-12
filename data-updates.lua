@@ -3,8 +3,8 @@
 -- import util constants and functions --
 -----------------------------------------
 
-local constants = require("scripts.constants")
-local functions = require("scripts.functions")
+local constants = require("__color-coded-pipes__.scripts.constants")
+local functions = require("__color-coded-pipes__.scripts.functions")
 local pipe_filenames = constants.pipe_filenames
 local pipe_to_ground_filenames = constants.pipe_to_ground_filenames
 local color_order = constants.color_order

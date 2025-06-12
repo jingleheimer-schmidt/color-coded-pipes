@@ -1,6 +1,6 @@
 
 local util = require("util")
-local functions = require("scripts.functions")
+local functions = require("__color-coded-pipes__.scripts.functions")
 local append = functions.append
 local get_color = functions.get_color
 
