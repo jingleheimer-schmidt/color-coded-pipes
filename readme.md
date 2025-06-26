@@ -13,6 +13,7 @@
 # Companion Mods
 
 [Color Coded Pipe Planner](https://mods.factorio.com/mod/color-coded-pipe-planner) - Adds a pipe planner tool to automate color-coding your existing pipe networks
+[Placeable Color Coded Pipes](https://mods.factorio.com/mod/placeable-color-coded-pipes) - Adds a GUI to quickly and easily select different colors
 
 ---------------------
 # Compatibility
@@ -27,9 +28,9 @@ This mod will create color coded versions of the pipes and fluid handling equipm
 - [Storage Tank Mk2](https://mods.factorio.com/mod/StorageTank2_2_0)
 - [Zithorian's Extra Storage Tanks](https://mods.factorio.com/mod/zithorian-extra-storage-tanks-port)
 
-Honorable mentions for:
-[No Pipe Touching](https://mods.factorio.com/mod/no-pipe-touching) if you want to place different color pipes directly next to each other
-[Placeable Color Coded Pipes](https://mods.factorio.com/mod/placeable-color-coded-pipes) if you want a textplates-like gui
+This mod includes explicit compatibility for:
+[No Pipe Touching](https://mods.factorio.com/mod/no-pipe-touching) - Allows building different color pipes directly next to each other without connecting.
+[Automatic Underground Pipe Connectors](https://mods.factorio.com/mod/automatic-underground-pipe-connectors) - Automatically place a pipe when two undergrounds are placed at a corner or one space apart.
 
 ---------------------
 # Translation
