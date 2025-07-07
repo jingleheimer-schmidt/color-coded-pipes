@@ -2,6 +2,8 @@
 Version: 1.4.1
 Date: ????
   Changes:
+  Locale:
+    - updated German (de) locale from Crowdin
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.0
 Date: 2025-06-13
