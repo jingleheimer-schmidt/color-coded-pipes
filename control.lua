@@ -56,9 +56,9 @@ local function build_color_name_cycles()
     storage.reverse_colors = {}
     local orders = {}
     for color_name in pairs(pipe_colors) do
-        local pipe_item = prototypes.item[color_name .. "-color-coded-pipe"]
-        if pipe_item then
-            orders[pipe_item.order] = color_name
+        local pipe_recipe = prototypes.recipe[color_name .. "-color-coded-pipe"]
+        if pipe_recipe and not pipe_recipe.hidden_in_factoriopedia then
+            orders[pipe_recipe.order] = color_name
         end
     end
 
@@ -80,34 +80,79 @@ end
 ---@param event EventData.CustomInputEvent
 local function on_custom_input(event)
     local input_name = event.input_name
-    local player_index = event.player_index
-    local player = game.get_player(player_index)
+    local player = game.get_player(event.player_index)
     if not (player and player.valid) then return end
-    if player.is_cursor_empty() then return end
-    local cursor_stack = player.cursor_stack
-    if not (cursor_stack and cursor_stack.valid_for_read) then return end
-    local item_name = cursor_stack.name
-    local color_name, item_type = item_name:match("^(.-)%-color%-coded%-(.+)$")
-    local target_color = nil
 
+    local item_name, item_type, color_name
+
+    if player.cursor_stack and player.cursor_stack.valid_for_read then
+        item_name = player.cursor_stack.name
+        color_name, item_type = item_name:match("^(.-)%-color%-coded%-(.+)$")
+    elseif player.cursor_ghost then
+        local ghost = player.cursor_ghost or ""
+        if type(ghost) == "string" then
+            item_name = ghost
+        elseif type(ghost.name) == "string" then
+            item_name = ghost.name
+        elseif type(ghost.name.name) == "string" then
+            item_name = ghost.name.name
+        end
+        color_name, item_type = item_name:match("^(.-)%-color%-coded%-(.+)$")
+    else
+        return
+    end
+
+    if not (color_name and item_type) then return end
+    local target_color
     if input_name == "color-coded-pipes-next-color" then
         target_color = storage.forward_colors[color_name]
     elseif input_name == "color-coded-pipes-previous-color" then
         target_color = storage.reverse_colors[color_name]
     end
+    if not target_color then return end
 
-    if target_color then
-        local target_name = target_color .. "-color-coded-" .. item_type
-        if prototypes.item[target_name] then
-            local inventory = player.get_main_inventory()
-            if inventory and inventory.valid then
-                local item_in_inventory = inventory.find_item_stack(target_name)
-                if item_in_inventory and cursor_stack.can_set_stack(item_in_inventory) then
-                    cursor_stack.swap_stack(item_in_inventory)
-                end
-            end
+    local target_name = target_color .. "-color-coded-" .. item_type
+    if not prototypes.item[target_name] then return end
+
+    local inventory = player.get_main_inventory()
+    if inventory and inventory.valid then
+        local found, stack_index = inventory.find_item_stack(target_name)
+        if found and player.cursor_stack.can_set_stack(found) then
+            local count = found.count
+            player.clear_cursor()
+            player.cursor_stack.swap_stack(found)
+            player.hand_location = { inventory = inventory.index, slot = stack_index or 1 }
+            player.create_local_flying_text {
+                text = { "", 
+                    "[item=" .. target_name .. "]",
+                    { "fluid-name." .. target_color },
+                    { "",
+                        " (",
+                        count,
+                        ")"
+                    },
+                },
+                create_at_cursor = true,
+            }
+            return
         end
     end
+
+    -- If item not in inventory, fallback to ghost cursor
+    player.clear_cursor()
+    player.cursor_ghost = target_name
+    player.create_local_flying_text {
+        text = { "",
+            "[item=" .. target_name .. "]",
+            { "fluid-name." .. target_color },
+            { "",
+                " (",
+                { "color-coded.ghost" },
+                ")"
+            },
+        },
+        create_at_cursor = true,
+    }
 end
 
 script.on_event("color-coded-pipes-next-color", on_custom_input)
