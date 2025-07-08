@@ -102,15 +102,11 @@ end
 ---@param color_name string
 ---@param item_count number?
 local function create_local_flying_text(player, item_name, color_name, item_count)
-    local color = pipe_colors[color_name]
-    local color_tag = string.format("[color=%.3f,%.3f,%.3f]", color.r, color.g, color.b)
     player.create_local_flying_text {
         text = {
             "",
             "[item=" .. item_name .. "]",
-            -- color_tag,
             { "fluid-name." .. color_name },
-            -- "[/color] (",
             " (",
             item_count or { "color-coded.ghost" },
             ")",
