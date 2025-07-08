@@ -96,6 +96,29 @@ local function get_color_coded_cursor_item(player)
     end
 end
 
+---@param player LuaPlayer
+---@param item_name string
+---@param color_name string
+---@param item_count number?
+local function create_local_flying_text(player, item_name, color_name, item_count)
+    local color = pipe_colors[color_name]
+    local color_tag = string.format("[color=%.3f,%.3f,%.3f]", color.r, color.g, color.b)
+    player.create_local_flying_text {
+        text = {
+            "",
+            "[item=" .. item_name .. "]",
+            -- color_tag,
+            { "fluid-name." .. color_name },
+            -- "[/color] (",
+            " (",
+            item_count or { "color-coded.ghost" },
+            ")",
+        },
+        create_at_cursor = true,
+        speed = 1,
+    }
+end
+
 ---@param event EventData.CustomInputEvent
 local function on_custom_input(event)
     local player = game.get_player(event.player_index)
@@ -119,36 +142,14 @@ local function on_custom_input(event)
             player.clear_cursor()
             player.cursor_stack.swap_stack(found)
             player.hand_location = { inventory = inventory.index, slot = slot or 1 }
-            player.create_local_flying_text {
-                text = { "", 
-                    "[item=" .. target_name .. "]",
-                    { "fluid-name." .. target_color },
-                    { "",
-                        " (",
-                        count,
-                        ")"
-                    },
-                },
-                create_at_cursor = true,
-            }
+            create_local_flying_text(player, target_name, target_color, count)
             return
         end
     end
 
     player.clear_cursor()
     player.cursor_ghost = target_name
-    player.create_local_flying_text {
-        text = { "",
-            "[item=" .. target_name .. "]",
-            { "fluid-name." .. target_color },
-            { "",
-                " (",
-                { "color-coded.ghost" },
-                ")"
-            },
-        },
-        create_at_cursor = true,
-    }
+    create_local_flying_text(player, target_name, target_color)
 end
 
 script.on_event("color-coded-pipes-next-color", on_custom_input)
