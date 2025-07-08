@@ -51,33 +51,30 @@ local function unpaint_pipes(event)
     end
 end
 
----@return table<string, string>, table<string, string>
-local function get_color_cycles(item_type)
-    local colors_by_order = {}
+local function build_color_name_cycles()
+    storage.forward_colors = {}
+    storage.reverse_colors = {}
+    local orders = {}
     for color_name in pairs(pipe_colors) do
-        local name = color_name .. "-color-coded-" .. item_type
-        if prototypes.item[name] then
-            local order = prototypes.item[name].order
-            colors_by_order[order] = name
+        local pipe_item = prototypes.item[color_name .. "-color-coded-pipe"]
+        if pipe_item then
+            orders[pipe_item.order] = color_name
         end
     end
 
     local sorted_orders = {}
-    for order in pairs(colors_by_order) do
+    for order in pairs(orders) do
         table.insert(sorted_orders, order)
     end
     table.sort(sorted_orders)
 
-    local cycle, reverse = {}, {}
     for i, order in ipairs(sorted_orders) do
-        local current = colors_by_order[order]
+        local current = orders[order]
         local next_index = (i % #sorted_orders) + 1
-        local next = colors_by_order[sorted_orders[next_index]]
-        cycle[current] = next
-        reverse[next] = current
+        local next_color = orders[sorted_orders[next_index]]
+        storage.forward_colors[current] = next_color
+        storage.reverse_colors[next_color] = current
     end
-
-    return cycle, reverse
 end
 
 ---@param event EventData.CustomInputEvent
@@ -87,48 +84,29 @@ local function on_custom_input(event)
     local player = game.get_player(player_index)
     if not (player and player.valid) then return end
     if player.is_cursor_empty() then return end
+    local cursor_stack = player.cursor_stack
+    if not (cursor_stack and cursor_stack.valid_for_read) then return end
+    local item_name = cursor_stack.name
+    local color_name, item_type = item_name:match("^(.-)%-color%-coded%-(.+)$")
+    local target_color = nil
+
     if input_name == "color-coded-pipes-next-color" then
-        local cursor_stack = player.cursor_stack
-        if cursor_stack and cursor_stack.valid_for_read then
-            local item_name = cursor_stack.name
-            if item_name:find("color-coded-", 1, true) then
-                local color_cycle = {}
-                local colors_by_order = {}
-                local item_type = item_name:match("^.+%-color%-coded%-(.+)$")
-                for color_name, _ in pairs(pipe_colors) do
-                    local prototype_name = color_name .. "-color-coded-" .. item_type
-                    if prototypes.item[prototype_name] then
-                        local order = prototypes.item[prototype_name].order
-                        colors_by_order[order] = prototype_name
-                    end
-                end
-                local sorted_orders = {}
-                for order in pairs(colors_by_order) do
-                    table.insert(sorted_orders, order)
-                end
-                table.sort(sorted_orders)
-                for i, order in ipairs(sorted_orders) do
-                    local current = colors_by_order[order]
-                    local next_index = (i % #sorted_orders) + 1
-                    local next_prototype = colors_by_order[sorted_orders[next_index]]
-                    color_cycle[current] = next_prototype
-                end
-                local next_color = color_cycle[item_name]
-                if next_color and prototypes.item[next_color] then
-                    local inventory = player.get_main_inventory()
-                    if inventory and inventory.valid then
-                        local item_in_inventory = inventory.find_item_stack(next_color)
-                        if item_in_inventory then
-                            if player.cursor_stack.can_set_stack(item_in_inventory) then
-                                player.cursor_stack.swap_stack(item_in_inventory)
-                            end
-                        end
-                    end
+        target_color = storage.forward_colors[color_name]
+    elseif input_name == "color-coded-pipes-previous-color" then
+        target_color = storage.reverse_colors[color_name]
+    end
+
+    if target_color then
+        local target_name = target_color .. "-color-coded-" .. item_type
+        if prototypes.item[target_name] then
+            local inventory = player.get_main_inventory()
+            if inventory and inventory.valid then
+                local item_in_inventory = inventory.find_item_stack(target_name)
+                if item_in_inventory and cursor_stack.can_set_stack(item_in_inventory) then
+                    cursor_stack.swap_stack(item_in_inventory)
                 end
             end
         end
-    elseif input_name == "color-coded-pipes-previous-color" then
-        game.print("Previous color input received")
     end
 end
 
@@ -175,6 +153,7 @@ script.on_init(function()
     reset_technology_effects()
     update_simulation()
     add_automatic_underground_pipe_connector_support()
+    build_color_name_cycles()
 end)
 
 script.on_load(function()
@@ -185,6 +164,7 @@ script.on_configuration_changed(function()
     setup_storage()
     reset_technology_effects()
     add_automatic_underground_pipe_connector_support()
+    build_color_name_cycles()
 end)
 
 
@@ -193,7 +173,7 @@ end)
 -- for name, prototype in pairs(game.fluid_prototypes) do
 --     local surface = game.player.surface
 --     local force = game.player.force
---     local fluid_name = prototype.name
+--     local fluid_name = proto.name
 --     if game.entity_prototypes[fluid_name .. "-pipe"] then
 --         local underground = surface.create_entity{
 --             name = fluid_name .. "-pipe-to-ground",
