@@ -51,6 +51,10 @@ local function unpaint_pipes(event)
     end
 end
 
+
+script.on_event("color-coded-pipes-next-color", on_custom_input)
+script.on_event("color-coded-pipes-previous-color", on_custom_input)
+
 local function add_commands()
     commands.add_command("paint-pipes", "<color mode: fluid|rainbow>, <bots required: true|false> - replace pipes with color-coded versions", paint_pipes)
     commands.add_command("unpaint-pipes", "<bots required: true|false> - replace color-coded pipes with their base versions", unpaint_pipes)

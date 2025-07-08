@@ -87,7 +87,7 @@ local function get_order(item, color_name)
         order = order .. "-" .. (fluid.order or "")
     end
     if color_order[color_name] then
-        order = order .. "-" .. (color_order[color_name] or "")
+        order = order .. "-[color]-" .. (color_order[color_name] or "")
     end
     return order
 end
@@ -503,6 +503,29 @@ if settings.startup["color-coded-pipes-regroup-recipes"].value then
         end
     end
 end
+
+
+--------------------------------------------------------------------
+-- add linked game controls for build_size_up and build_size_down --
+--------------------------------------------------------------------
+
+---@type data.CustomInputPrototype
+local next_color_linked_game_control = {
+    type = "custom-input",
+    name = "color-coded-pipes-next-color",
+    key_sequence = "",
+    linked_game_control = "larger-terrain-building-area",
+    order = "a[color-coded-pipes-next-color]"
+}
+---@type data.CustomInputPrototype
+local previous_color_linked_game_control = {
+    type = "custom-input",
+    name = "color-coded-pipes-previous-color",
+    key_sequence = "",
+    linked_game_control = "smaller-terrain-building-area",
+    order = "b[color-coded-pipes-previous-color]"
+}
+data:extend { next_color_linked_game_control, previous_color_linked_game_control }
 
 
 --------------------------------------------------------
