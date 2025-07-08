@@ -54,61 +54,58 @@ end
 local function build_color_name_cycles()
     storage.forward_colors = {}
     storage.reverse_colors = {}
-    local orders = {}
+    local colors_by_order = {}
+
     for color_name in pairs(pipe_colors) do
-        local pipe_recipe = prototypes.recipe[color_name .. "-color-coded-pipe"]
-        if pipe_recipe and not pipe_recipe.hidden_in_factoriopedia then
-            orders[pipe_recipe.order] = color_name
+        local recipe = prototypes.recipe[color_name .. "-color-coded-pipe"]
+        if recipe and not recipe.hidden_in_factoriopedia then
+            colors_by_order[recipe.order] = color_name
         end
     end
 
     local sorted_orders = {}
-    for order in pairs(orders) do
+    for order in pairs(colors_by_order) do
         table.insert(sorted_orders, order)
     end
     table.sort(sorted_orders)
 
     for i, order in ipairs(sorted_orders) do
-        local current = orders[order]
-        local next_index = (i % #sorted_orders) + 1
-        local next_color = orders[sorted_orders[next_index]]
-        storage.forward_colors[current] = next_color
-        storage.reverse_colors[next_color] = current
+        local current = colors_by_order[order]
+        local next = colors_by_order[sorted_orders[(i % #sorted_orders) + 1]]
+        storage.forward_colors[current] = next
+        storage.reverse_colors[next] = current
+    end
+end
+
+---@param player LuaPlayer
+---@return string|nil item_name, string|nil color_name, string|nil item_type
+local function get_color_coded_cursor_item(player)
+    if player.cursor_stack and player.cursor_stack.valid_for_read then
+        local name = player.cursor_stack.name
+        local color, item_type = name:match("^(.-)%-color%-coded%-(.+)$")
+        return name, color, item_type
+    elseif player.cursor_ghost then
+        local ghost = player.cursor_ghost
+        local ghost_name = ghost and (type(ghost) == "string" and ghost
+            or type(ghost.name) == "string" and ghost.name
+            or type(ghost.name.name) == "string" and ghost.name.name) or nil
+        if ghost_name and type(ghost_name) == "string" then
+            local color, item_type = ghost_name:match("^(.-)%-color%-coded%-(.+)$")
+            return ghost_name, color, item_type
+        end
     end
 end
 
 ---@param event EventData.CustomInputEvent
 local function on_custom_input(event)
-    local input_name = event.input_name
     local player = game.get_player(event.player_index)
     if not (player and player.valid) then return end
 
-    local item_name, item_type, color_name
+    local item_name, color_name, item_type = get_color_coded_cursor_item(player)
+    if not (item_name and color_name and item_type) then return end
 
-    if player.cursor_stack and player.cursor_stack.valid_for_read then
-        item_name = player.cursor_stack.name
-        color_name, item_type = item_name:match("^(.-)%-color%-coded%-(.+)$")
-    elseif player.cursor_ghost then
-        local ghost = player.cursor_ghost or ""
-        if type(ghost) == "string" then
-            item_name = ghost
-        elseif type(ghost.name) == "string" then
-            item_name = ghost.name
-        elseif type(ghost.name.name) == "string" then
-            item_name = ghost.name.name
-        end
-        color_name, item_type = item_name:match("^(.-)%-color%-coded%-(.+)$")
-    else
-        return
-    end
-
-    if not (color_name and item_type) then return end
-    local target_color
-    if input_name == "color-coded-pipes-next-color" then
-        target_color = storage.forward_colors[color_name]
-    elseif input_name == "color-coded-pipes-previous-color" then
-        target_color = storage.reverse_colors[color_name]
-    end
+    local direction = event.input_name
+    local target_color = direction == "color-coded-pipes-next-color" and storage.forward_colors[color_name] or direction == "color-coded-pipes-previous-color" and storage.reverse_colors[color_name]
     if not target_color then return end
 
     local target_name = target_color .. "-color-coded-" .. item_type
@@ -116,12 +113,12 @@ local function on_custom_input(event)
 
     local inventory = player.get_main_inventory()
     if inventory and inventory.valid then
-        local found, stack_index = inventory.find_item_stack(target_name)
+        local found, slot = inventory.find_item_stack(target_name)
         if found and player.cursor_stack.can_set_stack(found) then
             local count = found.count
             player.clear_cursor()
             player.cursor_stack.swap_stack(found)
-            player.hand_location = { inventory = inventory.index, slot = stack_index or 1 }
+            player.hand_location = { inventory = inventory.index, slot = slot or 1 }
             player.create_local_flying_text {
                 text = { "", 
                     "[item=" .. target_name .. "]",
@@ -138,7 +135,6 @@ local function on_custom_input(event)
         end
     end
 
-    -- If item not in inventory, fallback to ghost cursor
     player.clear_cursor()
     player.cursor_ghost = target_name
     player.create_local_flying_text {
