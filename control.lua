@@ -83,15 +83,16 @@ local function get_color_coded_cursor_item(player)
     if player.cursor_stack and player.cursor_stack.valid_for_read then
         local name = player.cursor_stack.name
         local color, item_type = name:match("^(.-)%-color%-coded%-(.+)$")
-        return name, color, item_type
-    elseif player.cursor_ghost then
-        local ghost = player.cursor_ghost
-        local ghost_name = ghost and (type(ghost) == "string" and ghost
+        if color and item_type then return name, color, item_type end
+    end
+    local ghost = player.cursor_ghost
+    if ghost then
+        local ghost_name = type(ghost) == "string" and ghost
             or type(ghost.name) == "string" and ghost.name
-            or type(ghost.name.name) == "string" and ghost.name.name) or nil
-        if ghost_name and type(ghost_name) == "string" then
+            or type(ghost.name.name) == "string" and ghost.name.name
+        if type(ghost_name) == "string" then
             local color, item_type = ghost_name:match("^(.-)%-color%-coded%-(.+)$")
-            return ghost_name, color, item_type
+            if color and item_type then return ghost_name, color, item_type end
         end
     end
 end
