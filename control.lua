@@ -127,8 +127,12 @@ local function on_custom_input(event)
     local item_name, color_name, item_type = get_color_coded_cursor_item(player)
     if not (item_name and color_name and item_type) then return end
 
-    local direction = event.input_name
-    local target_color = direction == "color-coded-pipes-next-color" and storage.forward_colors[color_name] or direction == "color-coded-pipes-previous-color" and storage.reverse_colors[color_name]
+    local target_color
+    if event.input_name == "color-coded-pipes-next-color" then
+        target_color = storage.forward_colors[color_name]
+    elseif event.input_name == "color-coded-pipes-previous-color" then
+        target_color = storage.reverse_colors[color_name]
+    end
     if not target_color then return end
 
     local target_name = target_color .. "-color-coded-" .. item_type
