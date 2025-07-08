@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.1
-Date: ????
+Date: 2025-07-08
   Changes:
     - added hidden optional dependency for bzlead mod to capture its changes to the base pipe prototypes
     - updated mod description
