@@ -3,6 +3,7 @@ Version: 1.4.2
 Date: ????
   Changes:
     - removed migration files
+    - added mod setting to show/hide pride flag color pipes
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.1
 Date: 2025-07-08
