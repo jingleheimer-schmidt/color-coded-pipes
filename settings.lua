@@ -23,6 +23,14 @@ local fluid_recipes = {
     hidden = false,
     order = "20",
 }
+local pride_recipes = {
+    type = "bool-setting",
+    name = "color-coded-pipes-show-pride-recipes",
+    setting_type = "startup",
+    default_value = false,
+    hidden = false,
+    order = "22",
+}
 local regroup_recipes = {
     type = "bool-setting",
     name = "color-coded-pipes-regroup-recipes",
@@ -41,7 +49,7 @@ local recipe_ingredients = {
     order = "30",
 }
 
-data:extend { menu_simulations, rainbow_recipes, fluid_recipes, regroup_recipes, recipe_ingredients }
+data:extend { menu_simulations, rainbow_recipes, pride_recipes, fluid_recipes, regroup_recipes, recipe_ingredients }
 
 local a = 0.6
 local rgb_colors = {

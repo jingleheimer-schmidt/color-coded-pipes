@@ -37,13 +37,28 @@ data:extend { item_group }
 -- create subgroups for the color-coded variants --
 ---------------------------------------------------
 
+local subgroup_order = {
+    ["rainbow-"] = "a[rainbow]",
+    ["fluid-"] = "b[fluid]",
+    ["pride-"] = "c[pride]",
+    ["pride-lesbian-"] = "d[pride-lesbian]",
+    ["pride-gay-"] = "e[pride-gay]",
+    ["pride-bi-"] = "f[pride-bi]",
+    ["pride-trans-"] = "g[pride-trans]",
+    ["pride-pan-"] = "h[pride-pan]",
+    ["pride-ace-"] = "i[pride-ace]",
+    ["pride-nonbinary-"] = "j[pride-nonbinary]",
+    ["pride-bitranspan-"] = "k[pride-bitranspan]",
+    ["pride-acenonbinary-"] = "l[pride-ace-nonbinary]"
+}
+
 for _, group in pairs(base_entities) do
-    for _, prefix in pairs({ "fluid-", "rainbow-" }) do
+    for prefix, order in pairs(subgroup_order) do
         local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
         if subgroup then
             subgroup.name = prefix .. "color-coded-" .. group.name
             subgroup.group = "color-coded-pipes"
-            subgroup.order = subgroup.order .. (prefix == "fluid-" and "-b[fluid]" or "-a[rainbow]") .. group.order
+            subgroup.order = subgroup.order .. order .. group.order
             data:extend { subgroup }
         end
     end
@@ -87,7 +102,7 @@ local function get_order(item, color_name)
         order = order .. "-" .. (fluid.order or "")
     end
     if color_order[color_name] then
-        order = order .. "-" .. (color_order[color_name] or "")
+        order = order .. "-[color]-" .. (color_order[color_name] or "")
     end
     return order
 end
@@ -100,6 +115,25 @@ end
 local function get_subgroup(type, name)
     if data.raw["fluid"][name] then
         return "fluid-color-coded-" .. type
+    elseif string.find(name, "pride_lesbian_", 1, true) then
+        return "pride-lesbian-color-coded-" .. type
+    elseif string.find(name, "pride_gay_", 1, true) then
+        return "pride-gay-color-coded-" .. type
+    elseif string.find(name, "pride_bi_", 1, true) then
+        -- return "pride-bi-color-coded-" .. type
+        return "pride-bitranspan-color-coded-" .. type
+    elseif string.find(name, "pride_trans_", 1, true) then
+        -- return "pride-trans-color-coded-" .. type
+        return "pride-bitranspan-color-coded-" .. type
+    elseif string.find(name, "pride_pan_", 1, true) then
+        -- return "pride-pan-color-coded-" .. type
+        return "pride-bitranspan-color-coded-" .. type
+    elseif string.find(name, "pride_ace_", 1, true) then
+        -- return "pride-ace-color-coded-" .. type
+        return "pride-acenonbinary-color-coded-" .. type
+    elseif string.find(name, "pride_nonbinary_", 1, true) then
+        -- return "pride-nonbinary-color-coded-" .. type
+        return "pride-acenonbinary-color-coded-" .. type
     else
         return "rainbow-color-coded-" .. type
     end
@@ -464,11 +498,13 @@ end
 
 local hide_rainbow_recipes = not settings.startup["color-coded-pipes-show-rainbow-recipes"].value
 local hide_fluid_recipes = not settings.startup["color-coded-pipes-show-fluid-recipes"].value
+local hide_pride_recipes = not settings.startup["color-coded-pipes-show-pride-recipes"].value
 
 for color_name, color in pairs(pipe_colors) do
     local is_fluid_color = data.raw["fluid"][color_name] and true or false
-    local is_rainbow_color = not is_fluid_color
-    local built_from_base_item = (hide_rainbow_recipes and is_rainbow_color) or (hide_fluid_recipes and is_fluid_color)
+    local is_pride_color = string.find(color_name, "pride_", 1, true) and true or false
+    local is_rainbow_color = not (is_fluid_color or is_pride_color)
+    local built_from_base_item = (hide_rainbow_recipes and is_rainbow_color) or (hide_fluid_recipes and is_fluid_color) or (hide_pride_recipes and is_pride_color)
 
     for _, base in pairs(base_entities) do
         create_color_overlay_item(base.type, base.name, color_name, color, built_from_base_item)
@@ -503,6 +539,29 @@ if settings.startup["color-coded-pipes-regroup-recipes"].value then
         end
     end
 end
+
+
+--------------------------------------------------------------------
+-- add linked game controls for build_size_up and build_size_down --
+--------------------------------------------------------------------
+
+---@type data.CustomInputPrototype
+local next_color_linked_game_control = {
+    type = "custom-input",
+    name = "color-coded-pipes-next-color",
+    key_sequence = "",
+    linked_game_control = "larger-terrain-building-area",
+    order = "a[color-coded-pipes-next-color]"
+}
+---@type data.CustomInputPrototype
+local previous_color_linked_game_control = {
+    type = "custom-input",
+    name = "color-coded-pipes-previous-color",
+    key_sequence = "",
+    linked_game_control = "smaller-terrain-building-area",
+    order = "b[color-coded-pipes-previous-color]"
+}
+data:extend { next_color_linked_game_control, previous_color_linked_game_control }
 
 
 --------------------------------------------------------

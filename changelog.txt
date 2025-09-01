@@ -2,6 +2,9 @@
 Version: 1.4.2
 Date: ????
   Changes:
+    - removed migration files
+    - added mod setting to show/hide pride flag color pipes
+    - added linked game controls to cycle through pipe colors with build size up/down
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.1
 Date: 2025-07-08

@@ -51,6 +51,111 @@ local function unpaint_pipes(event)
     end
 end
 
+local function build_color_name_cycles()
+    storage.forward_colors = {}
+    storage.reverse_colors = {}
+    local colors_by_order = {}
+
+    for color_name in pairs(pipe_colors) do
+        local recipe = prototypes.recipe[color_name .. "-color-coded-pipe"]
+        if recipe and not recipe.hidden_in_factoriopedia then
+            colors_by_order[recipe.order] = color_name
+        end
+    end
+
+    local sorted_orders = {}
+    for order in pairs(colors_by_order) do
+        table.insert(sorted_orders, order)
+    end
+    table.sort(sorted_orders)
+
+    for i, order in ipairs(sorted_orders) do
+        local current = colors_by_order[order]
+        local next = colors_by_order[sorted_orders[(i % #sorted_orders) + 1]]
+        storage.forward_colors[current] = next
+        storage.reverse_colors[next] = current
+    end
+end
+
+---@param player LuaPlayer
+---@return string|nil item_name, string|nil color_name, string|nil item_type
+local function get_color_coded_cursor_item(player)
+    if player.cursor_stack and player.cursor_stack.valid_for_read then
+        local name = player.cursor_stack.name
+        local color, item_type = name:match("^(.-)%-color%-coded%-(.+)$")
+        if color and item_type then return name, color, item_type end
+    end
+    local ghost = player.cursor_ghost
+    if ghost then
+        local ghost_name = type(ghost) == "string" and ghost
+            or type(ghost.name) == "string" and ghost.name
+            or type(ghost.name.name) == "string" and ghost.name.name
+        if type(ghost_name) == "string" then
+            local color, item_type = ghost_name:match("^(.-)%-color%-coded%-(.+)$")
+            if color and item_type then return ghost_name, color, item_type end
+        end
+    end
+end
+
+---@param player LuaPlayer
+---@param item_name string
+---@param color_name string
+---@param item_count number?
+local function create_local_flying_text(player, item_name, color_name, item_count)
+    player.create_local_flying_text {
+        text = {
+            "",
+            "[item=" .. item_name .. "]",
+            { "fluid-name." .. color_name },
+            " (",
+            item_count or { "color-coded.ghost" },
+            ")",
+        },
+        create_at_cursor = true,
+        speed = 1,
+    }
+end
+
+---@param event EventData.CustomInputEvent
+local function on_custom_input(event)
+    local player = game.get_player(event.player_index)
+    if not (player and player.valid) then return end
+
+    local item_name, color_name, item_type = get_color_coded_cursor_item(player)
+    if not (item_name and color_name and item_type) then return end
+
+    local target_color
+    if event.input_name == "color-coded-pipes-next-color" then
+        target_color = storage.forward_colors[color_name]
+    elseif event.input_name == "color-coded-pipes-previous-color" then
+        target_color = storage.reverse_colors[color_name]
+    end
+    if not target_color then return end
+
+    local target_name = target_color .. "-color-coded-" .. item_type
+    if not prototypes.item[target_name] then return end
+
+    local inventory = player.get_main_inventory()
+    if inventory and inventory.valid then
+        local found, slot = inventory.find_item_stack(target_name)
+        if found and player.cursor_stack.can_set_stack(found) then
+            local count = found.count
+            player.clear_cursor()
+            player.cursor_stack.swap_stack(found)
+            player.hand_location = { inventory = inventory.index, slot = slot or 1 }
+            create_local_flying_text(player, target_name, target_color, count)
+            return
+        end
+    end
+
+    player.clear_cursor()
+    player.cursor_ghost = target_name
+    create_local_flying_text(player, target_name, target_color)
+end
+
+script.on_event("color-coded-pipes-next-color", on_custom_input)
+script.on_event("color-coded-pipes-previous-color", on_custom_input)
+
 local function add_commands()
     commands.add_command("paint-pipes", "<color mode: fluid|rainbow>, <bots required: true|false> - replace pipes with color-coded versions", paint_pipes)
     commands.add_command("unpaint-pipes", "<bots required: true|false> - replace color-coded pipes with their base versions", unpaint_pipes)
@@ -91,6 +196,7 @@ script.on_init(function()
     reset_technology_effects()
     update_simulation()
     add_automatic_underground_pipe_connector_support()
+    build_color_name_cycles()
 end)
 
 script.on_load(function()
@@ -101,6 +207,7 @@ script.on_configuration_changed(function()
     setup_storage()
     reset_technology_effects()
     add_automatic_underground_pipe_connector_support()
+    build_color_name_cycles()
 end)
 
 
@@ -109,7 +216,7 @@ end)
 -- for name, prototype in pairs(game.fluid_prototypes) do
 --     local surface = game.player.surface
 --     local force = game.player.force
---     local fluid_name = prototype.name
+--     local fluid_name = proto.name
 --     if game.entity_prototypes[fluid_name .. "-pipe"] then
 --         local underground = surface.create_entity{
 --             name = fluid_name .. "-pipe-to-ground",
