@@ -48,6 +48,8 @@ local subgroup_order = {
     ["pride-pan-"] = "h[pride-pan]",
     ["pride-ace-"] = "i[pride-ace]",
     ["pride-nonbinary-"] = "j[pride-nonbinary]",
+    ["pride-bitranspan-"] = "k[pride-bitranspan]",
+    ["pride-acenonbinary-"] = "l[pride-ace-nonbinary]"
 }
 
 for _, group in pairs(base_entities) do
@@ -118,15 +120,20 @@ local function get_subgroup(type, name)
     elseif string.find(name, "pride_gay_", 1, true) then
         return "pride-gay-color-coded-" .. type
     elseif string.find(name, "pride_bi_", 1, true) then
-        return "pride-bi-color-coded-" .. type
+        -- return "pride-bi-color-coded-" .. type
+        return "pride-bitranspan-color-coded-" .. type
     elseif string.find(name, "pride_trans_", 1, true) then
-        return "pride-trans-color-coded-" .. type
+        -- return "pride-trans-color-coded-" .. type
+        return "pride-bitranspan-color-coded-" .. type
     elseif string.find(name, "pride_pan_", 1, true) then
-        return "pride-pan-color-coded-" .. type
+        -- return "pride-pan-color-coded-" .. type
+        return "pride-bitranspan-color-coded-" .. type
     elseif string.find(name, "pride_ace_", 1, true) then
-        return "pride-ace-color-coded-" .. type
+        -- return "pride-ace-color-coded-" .. type
+        return "pride-acenonbinary-color-coded-" .. type
     elseif string.find(name, "pride_nonbinary_", 1, true) then
-        return "pride-nonbinary-color-coded-" .. type
+        -- return "pride-nonbinary-color-coded-" .. type
+        return "pride-acenonbinary-color-coded-" .. type
     else
         return "rainbow-color-coded-" .. type
     end
