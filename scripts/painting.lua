@@ -65,7 +65,7 @@ local function paint_pipe(player, pipe, bots_required, planner_mode)
         if bots_required then
             pipe.order_upgrade {
                 force = force,
-                target = name,
+                target = { name = name, quality = pipe.quality },
                 player = player,
                 direction = direction
             }
@@ -109,7 +109,7 @@ local function unpaint_pipe(player, pipe, bots_required)
         if bots_required then
             pipe.order_upgrade {
                 force = force,
-                target = target_name,
+                target = { name = target_name, quality = pipe.quality },
                 player = player,
                 direction = direction,
             }
