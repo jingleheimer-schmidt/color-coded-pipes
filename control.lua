@@ -48,7 +48,7 @@ local function unpaint_pipes(event)
     if not player then return end
     local surface = player.surface
     local force = player.force
-    local bots_required = (event.parameter or ""):lower() == "true" and true or false
+    local bots_required = (event.parameter or ""):lower() == "true"
     local found_entities = surface.find_entities_filtered { name = storage.entity_names, force = force }
     for _, entity in pairs(found_entities) do
         unpaint_pipe(player, entity, bots_required)
