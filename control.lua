@@ -33,7 +33,7 @@ local function paint_pipes(event)
         table.insert(params, param)
     end
     local planner_mode = params[1] or ""
-    local bots_required = ((params[2] or ""):lower() == "true") and true or false
+    local bots_required = (params[2] or ""):lower() == "true"
     local found_entities = surface.find_entities_filtered { name = storage.entity_names, force = force }
     for _, entity in pairs(found_entities) do
         paint_pipe(player, entity, bots_required, planner_mode)
