@@ -28,8 +28,12 @@ local function paint_pipes(event)
     local surface = player.surface
     local force = player.force
     local parameter = event.parameter or ""
-    local planner_mode, bots_required = parameter:match("([^,%s]+)[,%s]*([^,%s]*)")
-    bots_required = (bots_required == "true") and true or false
+    local params = {}
+    for param in parameter:gmatch("[^,%s]+") do
+        table.insert(params, param)
+    end
+    local planner_mode = params[1] or ""
+    local bots_required = (params[2] or ""):lower() == "true"
     local found_entities = surface.find_entities_filtered { name = storage.entity_names, force = force }
     for _, entity in pairs(found_entities) do
         paint_pipe(player, entity, bots_required, planner_mode)
@@ -44,7 +48,7 @@ local function unpaint_pipes(event)
     if not player then return end
     local surface = player.surface
     local force = player.force
-    local bots_required = event.parameter == "true" and true or false
+    local bots_required = (event.parameter or ""):lower() == "true"
     local found_entities = surface.find_entities_filtered { name = storage.entity_names, force = force }
     for _, entity in pairs(found_entities) do
         unpaint_pipe(player, entity, bots_required)
