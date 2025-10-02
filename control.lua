@@ -28,8 +28,12 @@ local function paint_pipes(event)
     local surface = player.surface
     local force = player.force
     local parameter = event.parameter or ""
-    local planner_mode, bots_required = parameter:match("([^,%s]+)[,%s]*([^,%s]*)")
-    bots_required = (bots_required == "true") and true or false
+    local params = {}
+    for param in parameter:gmatch("[^,%s]+") do
+        table.insert(params, param)
+    end
+    local planner_mode = params[1] or ""
+    local bots_required = (params[2] or ""):lower() == "true"
     local found_entities = surface.find_entities_filtered { name = storage.entity_names, force = force }
     for _, entity in pairs(found_entities) do
         paint_pipe(player, entity, bots_required, planner_mode)
@@ -44,7 +48,7 @@ local function unpaint_pipes(event)
     if not player then return end
     local surface = player.surface
     local force = player.force
-    local bots_required = event.parameter == "true" and true or false
+    local bots_required = (event.parameter or ""):lower() == "true"
     local found_entities = surface.find_entities_filtered { name = storage.entity_names, force = force }
     for _, entity in pairs(found_entities) do
         unpaint_pipe(player, entity, bots_required)
@@ -78,21 +82,24 @@ local function build_color_name_cycles()
 end
 
 ---@param player LuaPlayer
----@return string|nil item_name, string|nil color_name, string|nil item_type
+---@return string|nil item_name, string|nil color_name, string|nil item_type, string|nil quality
 local function get_color_coded_cursor_item(player)
-    if player.cursor_stack and player.cursor_stack.valid_for_read then
-        local name = player.cursor_stack.name
+    local cursor_stack = player.cursor_stack
+    if cursor_stack and cursor_stack.valid_for_read then
+        local name = cursor_stack.name
+        local quality = cursor_stack.quality and cursor_stack.quality.name or prototypes.quality.normal.name
         local color, item_type = name:match("^(.-)%-color%-coded%-(.+)$")
-        if color and item_type then return name, color, item_type end
+        if color and item_type then return name, color, item_type, quality end
     end
     local ghost = player.cursor_ghost
     if ghost then
         local ghost_name = type(ghost) == "string" and ghost
             or type(ghost.name) == "string" and ghost.name
             or type(ghost.name.name) == "string" and ghost.name.name
+        local quality = type(ghost) == "table" and ghost.quality and ghost.quality.name or prototypes.quality.normal.name
         if type(ghost_name) == "string" then
             local color, item_type = ghost_name:match("^(.-)%-color%-coded%-(.+)$")
-            if color and item_type then return ghost_name, color, item_type end
+            if color and item_type then return ghost_name, color, item_type, quality end
         end
     end
 end
@@ -100,12 +107,13 @@ end
 ---@param player LuaPlayer
 ---@param item_name string
 ---@param color_name string
+---@param item_quality string
 ---@param item_count number?
-local function create_local_flying_text(player, item_name, color_name, item_count)
+local function create_local_flying_text(player, item_name, color_name, item_quality, item_count)
     player.create_local_flying_text {
         text = {
             "",
-            "[item=" .. item_name .. "]",
+            "[item=" .. item_name .. ",quality=" .. item_quality .. "]",
             { "fluid-name." .. color_name },
             " (",
             item_count or { "color-coded.ghost" },
@@ -121,8 +129,8 @@ local function on_custom_input(event)
     local player = game.get_player(event.player_index)
     if not (player and player.valid) then return end
 
-    local item_name, color_name, item_type = get_color_coded_cursor_item(player)
-    if not (item_name and color_name and item_type) then return end
+    local item_name, color_name, item_type, item_quality = get_color_coded_cursor_item(player)
+    if not (item_name and color_name and item_type and item_quality) then return end
 
     local target_color
     if event.input_name == "color-coded-pipes-next-color" then
@@ -137,20 +145,20 @@ local function on_custom_input(event)
 
     local inventory = player.get_main_inventory()
     if inventory and inventory.valid then
-        local found, slot = inventory.find_item_stack(target_name)
+        local found, slot = inventory.find_item_stack { name = target_name, quality = item_quality }
         if found and player.cursor_stack.can_set_stack(found) then
             local count = found.count
             player.clear_cursor()
             player.cursor_stack.swap_stack(found)
             player.hand_location = { inventory = inventory.index, slot = slot or 1 }
-            create_local_flying_text(player, target_name, target_color, count)
+            create_local_flying_text(player, target_name, target_color, item_quality, count)
             return
         end
     end
 
     player.clear_cursor()
-    player.cursor_ghost = target_name
-    create_local_flying_text(player, target_name, target_color)
+    player.cursor_ghost = { name = target_name, quality = item_quality }
+    create_local_flying_text(player, target_name, target_color, item_quality)
 end
 
 script.on_event("color-coded-pipes-next-color", on_custom_input)
