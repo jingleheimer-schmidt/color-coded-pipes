@@ -174,28 +174,61 @@ local pipe_colors = {
     pride_nonbinary_black = { r = 044, g = 044, b = 044, a = alpha },
 }
 
+local rgb_colors = {
+    red = get_color("color-coded-pipes-red"),
+    orange = get_color("color-coded-pipes-orange"),
+    yellow = get_color("color-coded-pipes-yellow"),
+    green = get_color("color-coded-pipes-green"),
+    blue = get_color("color-coded-pipes-blue"),
+    purple = get_color("color-coded-pipes-purple"),
+    pink = get_color("color-coded-pipes-pink"),
+    black = get_color("color-coded-pipes-black"),
+    white = get_color("color-coded-pipes-white"),
+}
+
+local function get_closest_named_color(color)
+    local closest_name
+    local min_distance_sq = math.huge
+    for name, ref in pairs(rgb_colors) do
+        local dr = ((ref.r or ref[1] or 0) - (color.r or color[1] or 0))
+        local dg = ((ref.g or ref[2] or 0) - (color.g or color[2] or 0))
+        local db = ((ref.b or ref[3] or 0) - (color.b or color[3] or 0))
+        local distance_sq = (3 * dr * dr) + (4 * dg * dg) + (2 * db * db)
+        if distance_sq < min_distance_sq then
+            min_distance_sq = distance_sq
+            closest_name = name
+        end
+    end
+    return closest_name
+end
+
+local fluid_to_color_map = {}
+
 local fluids = data and data.raw and data.raw["fluid"] or prototypes and prototypes.fluid
 if fluids then
     for _, fluid in pairs(fluids) do
         if fluid.base_color and not fluid.hidden and not fluid.parameter then
             local base_color = util.get_color_with_alpha(fluid.base_color, 0.6, true)
             pipe_colors[fluid.name] = table.deepcopy(base_color)
+            local closest_color_name = get_closest_named_color(fluid.base_color)
+            fluid_to_color_map[fluid.name] = closest_color_name
         end
     end
 end
 
-local fluid_to_color_map = {
-    ["water"] = "blue",
-    ["crude-oil"] = "black",
-    ["steam"] = "white",
-    ["heavy-oil"] = "red",
-    ["light-oil"] = "orange",
-    ["petroleum-gas"] = "purple",
-    ["sulfuric-acid"] = "yellow",
-    ["lubricant"] = "green",
-}
+-- local fluid_to_color_map = {
+--     ["water"] = "blue",
+--     ["crude-oil"] = "black",
+--     ["steam"] = "white",
+--     ["heavy-oil"] = "red",
+--     ["light-oil"] = "orange",
+--     ["petroleum-gas"] = "purple",
+--     ["sulfuric-acid"] = "yellow",
+--     ["lubricant"] = "green",
+-- }
 
 return {
+    rgb_colors = rgb_colors,
     pipe_filenames = pipe_filenames,
     pipe_to_ground_filenames = pipe_to_ground_filenames,
     color_order = color_order,
