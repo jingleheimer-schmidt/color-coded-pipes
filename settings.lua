@@ -59,16 +59,24 @@ data:extend { menu_simulations, rainbow_recipes, pride_recipes, fluid_recipes, r
 
 local a = 0.6
 local rgb_colors = {
-    red = { r = 0.9, g = 0.2, b = 0.2, a = a },
-    orange = { r = 0.9, g = 0.5, b = 0.2, a = a },
-    yellow = { r = 0.9, g = 0.9, b = 0.2, a = a },
+    red = { r = 0.9, g = 0.1, b = 0.1, a = a },
+    orange = { r = 0.9, g = 0.4, b = 0.1, a = a },
+    yellow = { r = 0.9, g = 0.8, b = 0.2, a = a },
     green = { r = 0.2, g = 0.8, b = 0.2, a = a },
     blue = { r = 0.1, g = 0.3, b = 0.7, a = a },
     purple = { r = 0.6, g = 0.2, b = 0.9, a = a },
-    pink = { r = 0.8, g = 0.2, b = 0.6, a = a },
-    black = { r = 0.2, g = 0.2, b = 0.2, a = a },
+    pink = { r = 0.9, g = 0.4, b = 0.8, a = a },
+    black = { r = 0.1, g = 0.1, b = 0.1, a = a },
     white = { r = 0.9, g = 0.9, b = 0.9, a = a },
 }
+
+for name, color in pairs(rgb_colors) do
+    local modifier = 0.75 -- darken just a little
+    color.r = color.r * modifier
+    color.g = color.g * modifier
+    color.b = color.b * modifier
+    rgb_colors[name] = color
+end
 
 local order = {
     ["red"] = "a",
