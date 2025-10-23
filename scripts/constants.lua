@@ -4,6 +4,10 @@ local functions = require("__color-coded-pipes__.scripts.functions")
 local append = functions.append
 local get_color = functions.get_color
 
+-------------------------------------
+--- list of pipe sprite filenames ---
+-------------------------------------
+
 local pipe_filenames = {
     "corner-down-left",
     "corner-down-right",
@@ -128,6 +132,10 @@ if active_mods["Flow Control"] then append(base_entities, flow_control_entities)
 if active_mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entities) end
 if active_mods["zithorian-extra-storage-tanks-port"] then append(base_entities, zithorian_extra_storage_tanks_entities) end
 
+-------------------------
+--- color definitions ---
+-------------------------
+
 local alpha = 255 * 0.8
 
 ---@type table<string, Color>
@@ -186,44 +194,35 @@ local rgb_colors = {
     white = get_color("color-coded-pipes-white"),
 }
 
--- local function get_closest_named_color(color)
---     local closest_name
---     local min_distance_sq = math.huge
---     for name, ref in pairs(rgb_colors) do
---         local dr = ((ref.r or ref[1] or 0) - (color.r or color[1] or 0))
---         local dg = ((ref.g or ref[2] or 0) - (color.g or color[2] or 0))
---         local db = ((ref.b or ref[3] or 0) - (color.b or color[3] or 0))
---         local distance_sq = (3 * dr * dr) + (4 * dg * dg) + (2 * db * db)
---         if distance_sq < min_distance_sq then
---             min_distance_sq = distance_sq
---             closest_name = name
---         end
---     end
---     return closest_name
--- end
-
--- STRATEGY: Switch from RGB Euclidean Distance to Weighted HSV Distance.
--- HSV (Hue, Saturation, Value) is much better for finding the visually closest
--- color because it separates brightness (V) and saturation (S) from the hue (H).
-
--- Helper function to convert a normalized RGB color (0-1) to HSV (H: 0-360, S: 0-1, V: 0-1)
+-- Helper function to convert an RGB color to HSV
+---@param r number
+---@param g number
+---@param b number
+---@return number h 0-360
+---@return number s 0-1
+---@return number v 0-1
 local function rgb_to_hsv(r, g, b)
+    if (r > 1) or (g > 1) or (b > 1) then
+        r = r / 255
+        g = g / 255
+        b = b / 255
+    end
     local min = math.min(r, g, b)
     local max = math.max(r, g, b)
     local delta = max - min
-    local h, s, v = 0, 0, max -- V is simply the max component
+    local h, s, v = 0, 0, max
 
     if max ~= 0 then
-        s = delta / max -- S is the range relative to brightness
+        s = delta / max
     end
 
     if delta ~= 0 then
         if r == max then
-            h = (g - b) / delta     -- between yellow and magenta
+            h = (g - b) / delta
         elseif g == max then
-            h = 2 + (b - r) / delta -- between cyan and yellow
+            h = 2 + (b - r) / delta
         else
-            h = 4 + (r - g) / delta -- between magenta and cyan
+            h = 4 + (r - g) / delta
         end
         h = h * 60
         if h < 0 then
@@ -237,9 +236,10 @@ end
 -- Cache for pre-calculated HSV values of named colors.
 local hsv_rgb_colors = {}
 
--- Main function now uses HSV for distance calculation
+-- gets the name of the closest matching rainbow color for a given Color
+---@param color Color
+---@return string
 local function get_closest_named_color(color)
-    -- Extract and convert input color
     local cR = color.r or color[1] or 0
     local cG = color.g or color[2] or 0
     local cB = color.b or color[3] or 0
@@ -248,7 +248,7 @@ local function get_closest_named_color(color)
     -- Convert the input color to HSV
     local cH, cS, cV = rgb_to_hsv(cR, cG, cB)
 
-    local closest_name
+    local closest_name = "black"
     local min_distance_sq = math.huge
 
     for name, ref in pairs(rgb_colors) do
@@ -264,7 +264,7 @@ local function get_closest_named_color(color)
             rH, rS, rV = rgb_to_hsv(rR, rG, rB)
             rA = ref.a or ref[4] or 1
 
-            -- Store all calculated values in the persistent cache
+            -- Store the calculated values in the cache
             hsv_rgb_colors[name] = { h = rH, s = rS, v = rV, a = rA }
         end
 
@@ -272,8 +272,6 @@ local function get_closest_named_color(color)
         rS = hsv_rgb_colors[name].s
         rV = hsv_rgb_colors[name].v
         rA = hsv_rgb_colors[name].a
-
-        -- 2. Calculate differences
 
         -- Hue difference (must be cyclical: distance between 10 and 350 is 20, not 340)
         local hDiff = math.abs(rH - cH)
@@ -283,11 +281,11 @@ local function get_closest_named_color(color)
         local dV = rV - cV
         local dA = rA - cA
 
-        -- 3. Calculate Weighted HSV Distance (Squared)
-        -- Weights tuned to match the specific Factorio fluid colors
-        local h_weight = 9 -- Highest importance: Ensures correct color family (red, blue, etc.) is chosen.
-        local s_weight = 5  -- Medium importance: Ensures saturation/dullness is considered.
-        local v_weight = 2  -- Lowest importance: Down-weights brightness differences (V) to prevent dark fluids matching black/white too easily.
+        -- 3. Calculate Weighted HSV Distance
+        -- Weights tuned to match ... arbitrary magic! jk i just kept adjusting until it looked good
+        local h_weight = 9 -- Highest importance; gets the color family (red, blue, etc.).
+        local s_weight = 5  -- Medium importance; considers saturation/dullness.
+        local v_weight = 2  -- Lowest importance; brightness differences.
         local a_weight = 1  -- Transparency difference.
 
         -- H is normalized to 0-1 range before squaring to match S and V magnitude.
@@ -304,6 +302,7 @@ local function get_closest_named_color(color)
     return closest_name
 end
 
+-- Mixes two colors by a given percentage (0 - 1)
 ---@param c1 Color
 ---@param c2 Color
 ---@param percent number
