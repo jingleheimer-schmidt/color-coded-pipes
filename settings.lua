@@ -1,4 +1,5 @@
 
+---@type data.ModBoolSettingPrototype
 local menu_simulations = {
     type = "bool-setting",
     name = "color-coded-main-menu-simulations",
@@ -7,6 +8,7 @@ local menu_simulations = {
     hidden = true,
     order = "0",
 }
+---@type data.ModBoolSettingPrototype
 local rainbow_recipes = {
     type = "bool-setting",
     name = "color-coded-pipes-show-rainbow-recipes",
@@ -15,6 +17,7 @@ local rainbow_recipes = {
     hidden = false,
     order = "10",
 }
+---@type data.ModBoolSettingPrototype
 local fluid_recipes = {
     type = "bool-setting",
     name = "color-coded-pipes-show-fluid-recipes",
@@ -23,6 +26,7 @@ local fluid_recipes = {
     hidden = false,
     order = "20",
 }
+---@type data.ModBoolSettingPrototype
 local pride_recipes = {
     type = "bool-setting",
     name = "color-coded-pipes-show-pride-recipes",
@@ -31,6 +35,7 @@ local pride_recipes = {
     hidden = false,
     order = "22",
 }
+---@type data.ModBoolSettingPrototype
 local regroup_recipes = {
     type = "bool-setting",
     name = "color-coded-pipes-regroup-recipes",
@@ -39,6 +44,7 @@ local regroup_recipes = {
     hidden = false,
     order = "25",
 }
+---@type data.ModStringSettingPrototype
 local recipe_ingredients = {
     type = "string-setting",
     name = "color-coded-pipes-recipe-ingredients",
@@ -77,6 +83,7 @@ local order = {
 }
 
 for name, color in pairs(rgb_colors) do
+    ---@type data.ModColorSettingPrototype
     local color_setting = {
         type = "color-setting",
         name = "color-coded-pipes-" .. name,
