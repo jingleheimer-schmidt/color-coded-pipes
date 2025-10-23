@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.4
 Date: ????
+  Features:
+    - improved fluid-to-rainbow color mapping logic for the /paint-pipes command and planner tool (spectrum match mode); mapping now support all modded fluids
   Changes:
     - improved rainbow pipe color differentiation (red is more red, pink is more pink, etc.)
     - updated main menu simulation to use rainbow pipe colors
