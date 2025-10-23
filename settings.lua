@@ -97,6 +97,7 @@ for name, color in pairs(rgb_colors) do
         name = "color-coded-pipes-" .. name,
         setting_type = "startup",
         default_value = color,
+        forced_value = color,
         order = order[name],
         hidden = true,
     }
