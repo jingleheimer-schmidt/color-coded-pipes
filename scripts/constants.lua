@@ -341,6 +341,13 @@ if fluids then
     end
 end
 
+-- overrides for specific fluids that don't map well
+fluid_to_color_map["petroleum-gas"] = "purple"
+fluid_to_color_map["heavy-oil"] = "red"
+fluid_to_color_map["holmium-solution"] = "pink"
+fluid_to_color_map["molten-copper"] = "red"
+fluid_to_color_map["thruster-fuel"] = "red"
+
 -- local fluid_to_color_map = {
 --     ["water"] = "blue",
 --     ["crude-oil"] = "black",
