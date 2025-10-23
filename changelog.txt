@@ -8,6 +8,8 @@ Date: ????
     - updated main menu simulation to use rainbow pipe colors
   Modding:
     - added forced_value to hidden pipe color mod settings
+  Locale:
+    - updated Russian (ru) locale from Crowdin
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.3
 Date: 2025-10-01
