@@ -3,6 +3,7 @@ Version: 1.4.4
 Date: ????
   Changes:
     - improved rainbow pipe color differentiation (red is more red, pink is more pink, etc.)
+    - updated main menu simulation to use rainbow pipe colors
   Modding:
     - added forced_value to hidden pipe color mod settings
 ---------------------------------------------------------------------------------------------------
