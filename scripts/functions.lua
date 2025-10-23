@@ -144,7 +144,7 @@ local function get_closest_named_color(color)
         local dV = rV - cV
         local dA = rA - cA
 
-        -- 3. Calculate Weighted HSV Distance
+        -- Calculate Weighted HSV Distance
         -- Weights tuned to match ... arbitrary magic! jk i just kept adjusting until it looked good
         local h_weight = 9 -- Highest importance; gets the color family (red, blue, etc.).
         local s_weight = 5  -- Medium importance; considers saturation/dullness.
