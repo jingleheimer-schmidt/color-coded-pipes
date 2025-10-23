@@ -326,7 +326,20 @@ local function mix_color(c1, c2, percent)
     }
 end
 
-local fluid_to_color_map = {}
+----------------------------------------------
+--- Build the fluid to color mapping table ---
+----------------------------------------------
+
+local fluid_to_color_map = {
+    ["water"] = "blue",
+    ["crude-oil"] = "black",
+    ["steam"] = "white",
+    ["heavy-oil"] = "red",
+    ["light-oil"] = "orange",
+    ["petroleum-gas"] = "purple",
+    ["sulfuric-acid"] = "yellow",
+    ["lubricant"] = "green",
+}
 
 local fluids = data and data.raw and data.raw["fluid"] or prototypes and prototypes.fluid
 if fluids then
@@ -347,17 +360,6 @@ fluid_to_color_map["heavy-oil"] = "red"
 fluid_to_color_map["holmium-solution"] = "pink"
 fluid_to_color_map["molten-copper"] = "red"
 fluid_to_color_map["thruster-fuel"] = "red"
-
--- local fluid_to_color_map = {
---     ["water"] = "blue",
---     ["crude-oil"] = "black",
---     ["steam"] = "white",
---     ["heavy-oil"] = "red",
---     ["light-oil"] = "orange",
---     ["petroleum-gas"] = "purple",
---     ["sulfuric-acid"] = "yellow",
---     ["lubricant"] = "green",
--- }
 
 return {
     rgb_colors = rgb_colors,
