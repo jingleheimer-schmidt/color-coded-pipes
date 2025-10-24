@@ -46,13 +46,13 @@ local function mix_color(c1, c2, percent)
     }
 end
 
--- Helper function to convert an RGB color to HSV
----@param r number
----@param g number
----@param b number
----@return number h 0-360
----@return number s 0-1
----@return number v 0-1
+-- Standard RGB to HSV conversion
+---@param r number Red [0–1 or 0–255]
+---@param g number Green [0–1 or 0–255]
+---@param b number Blue [0–1 or 0–255]
+---@return number h Hue in degrees [0–360)
+---@return number s Saturation [0–1]
+---@return number v Value [0–1]
 local function rgb_to_hsv(r, g, b)
     if (r > 1) or (g > 1) or (b > 1) then
         r = r / 255
@@ -83,6 +83,37 @@ local function rgb_to_hsv(r, g, b)
     end
 
     return h, s, v
+end
+
+--- Standard HSV to RGB conversion
+--- @param h number Hue in degrees [0–360)
+--- @param s number Saturation [0–1]
+--- @param v number Value [0–1]
+--- @return number r Red [0–1]
+--- @return number g Green [0–1]
+--- @return number b Blue [0–1]
+local function hsv_to_rgb(h, s, v)
+    h = ((h % 360) + 360) % 360
+    local c = v * s
+    local x = c * (1 - math.abs((h / 60) % 2 - 1))
+    local m = v - c
+
+    local r1, g1, b1
+    if h < 60 then
+        r1, g1, b1 = c, x, 0
+    elseif h < 120 then
+        r1, g1, b1 = x, c, 0
+    elseif h < 180 then
+        r1, g1, b1 = 0, c, x
+    elseif h < 240 then
+        r1, g1, b1 = 0, x, c
+    elseif h < 300 then
+        r1, g1, b1 = x, 0, c
+    else
+        r1, g1, b1 = c, 0, x
+    end
+
+    return r1 + m, g1 + m, b1 + m
 end
 
 -- Cache for pre-calculated HSV values of named colors.
