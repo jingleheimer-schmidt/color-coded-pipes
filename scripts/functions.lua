@@ -196,10 +196,27 @@ local function get_closest_named_color(color)
     return closest_name
 end
 
+-- Color to use for visualization. This color should be vibrant and easily distinguished.
+-- If not specified, this will be auto-generated from base_color by converting to HSV, decreasing saturation by 10% and setting value to 80%.
+---@param fluid data.FluidPrototype
+---@return Color
+local function get_fluid_visualization_color(fluid)
+    local base_color = fluid.base_color
+    local r, g, b = base_color.r or base_color[1], base_color.g or base_color[2], base_color.b or base_color[3]
+    local h, s, v = rgb_to_hsv(r, g, b)
+    s = s * 0.9
+    v = 0.8
+    r, g, b = hsv_to_rgb(h, s, v)
+    return { r = r, g = g, b = b, a = 1 }
+end
+
 return {
     replace_dash_with_underscore = replace_dash_with_underscore,
     append = append,
     get_color = get_color,
     get_closest_named_color = get_closest_named_color,
     mix_color = mix_color,
+    get_fluid_visualisation_color = get_fluid_visualization_color,
+    rgb_to_hsv = rgb_to_hsv,
+    hsv_to_rgb = hsv_to_rgb,
 }
