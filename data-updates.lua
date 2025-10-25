@@ -162,6 +162,47 @@ local function add_recipe_to_technology_effects(recipe_to_match, recipe_to_add)
     return added_to_technology
 end
 
+-- Accumulates base->set(new_recipe) so we can process techs once
+---@type table<string, table<string, boolean>>
+local recipe_unlock_map = {}
+
+-- Process all technologies once: if a tech unlocks a base recipe, also unlock all mapped variants.
+-- When a variant is added to a tech, disable it (so it’s gated by that tech).
+---@param mapping table<string, table<string, boolean>>
+local function process_recipe_unlocks(mapping)
+    if not mapping then return end
+
+    ---@param effects data.Modifier[]
+    ---@param recipe_name string
+    ---@return boolean
+    local function has_unlock(effects, recipe_name)
+        if not effects then return false end
+        for _, effect in pairs(effects) do
+            if effect.type == "unlock-recipe" and effect.recipe == recipe_name then
+                return true
+            end
+        end
+        return false
+    end
+
+    for _, technology in pairs(data.raw["technology"]) do
+        local effects = technology.effects
+        if effects then
+            for base_recipe, variant_set in pairs(mapping) do
+                if has_unlock(effects, base_recipe) then
+                    for new_recipe_name, _ in pairs(variant_set) do
+                        if not has_unlock(effects, new_recipe_name) then
+                            table.insert(effects, { type = "unlock-recipe", recipe = new_recipe_name })
+                        end
+                        local recipe = data.raw.recipe[new_recipe_name]
+                        if recipe then recipe.enabled = false end
+                    end
+                end
+            end
+        end
+    end
+end
+
 
 -- create icons for a color-coded item or entity
 ---@param prototype color_coded_prototypes
@@ -207,8 +248,9 @@ local function update_factoriopedia_simulation(old_entity_name, new_entity_name,
                     force = original_entity.force,
                     direction = original_entity.direction,
                     fluidbox = original_entity.fluidbox,
+                    quality = original_entity.quality,
                     fast_replace = true,
-                    spill = false
+                    spill = false,
                 }
             end
         end
@@ -279,10 +321,8 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
     if not localised_name then localised_name = { "entity-name." .. base_name } end
     color_coded_recipe.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
     if not built_from_base_item then
-        local added_to_technology = add_recipe_to_technology_effects(base_name, new_recipe_name)
-        if added_to_technology then
-            color_coded_recipe.enabled = false
-        end
+        recipe_unlock_map[base_name] = recipe_unlock_map[base_name] or {}
+        recipe_unlock_map[base_name][new_recipe_name] = true
     end
     color_coded_recipe.icons = data.raw["item"][new_recipe_name].icons
     color_coded_recipe.icon = nil
@@ -514,6 +554,8 @@ for color_name, color in pairs(pipe_colors) do
     end
 
 end
+
+process_recipe_unlocks(recipe_unlock_map)
 
 
 -----------------------------------------------
