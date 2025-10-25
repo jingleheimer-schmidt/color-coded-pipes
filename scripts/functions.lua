@@ -139,8 +139,12 @@ local function get_closest_named_color(color)
     local cB = color.b or color[3] or 0
     local cA = color.a or color[4] or 1
     local cH, cS, cV = rgb_to_hsv(cR, cG, cB)
+    -- Target saturation and value for matching non-gray colors.
     local MATCH_S, MATCH_V = 0.90, 0.80
+    -- Weights for hue, saturation, value, and alpha differences in the color distance calculation.
     local W_H, W_S, W_V, W_A = 3.0, 0.5, 0.3, 0.0
+    -- Thresholds for gray detection: minimum saturation to be considered colored,
+    -- and value split to distinguish between black and white.
     local GRAY_S_THRESH, GRAY_V_SPLIT = 0.18, 0.50
 
     if cS < GRAY_S_THRESH then
