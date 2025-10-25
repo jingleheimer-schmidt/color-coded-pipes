@@ -217,8 +217,9 @@ if fluids then
     for _, fluid in pairs(fluids) do
         if fluid.base_color and not fluid.hidden and not fluid.parameter then
             local visualisation_color = get_fluid_visualisation_color(fluid)
-            pipe_colors[fluid.name] = visualisation_color
             fluid_to_color_map[fluid.name] = get_closest_named_color(visualisation_color)
+            visualisation_color.a = 0.6
+            pipe_colors[fluid.name] = visualisation_color
         end
     end
 end
