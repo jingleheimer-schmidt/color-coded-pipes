@@ -162,20 +162,26 @@ local function add_recipe_to_technology_effects(recipe_to_match, recipe_to_add)
     return added_to_technology
 end
 
--- Accumulates base->set(new_recipe) so we can process techs once
----@type table<string, table<string, boolean>>
-local recipe_unlock_map = {}
+---@alias result_to_match string
+---@alias recipe_to_match string
+---@alias recipe_to_add string
+
+--- Table of recipes that should be unlocked alongside a base recipe.
+---@type table<recipe_to_match, table<recipe_to_add, boolean | recipe_to_match>>
+local unlock_variants_by_base_recipe = {}
+
+--- Table mapping each result item name to all recipes producing it.
+---@type table<result_to_match, table<recipe_to_add, boolean | recipe_to_match>>
+local unlock_variants_by_result = {}
 
 -- Process all technologies once: if a tech unlocks a base recipe, also unlock all mapped variants.
 -- When a variant is added to a tech, disable it (so it’s gated by that tech).
----@param mapping table<string, table<string, boolean>>
-local function process_recipe_unlocks(mapping)
-    if not mapping then return end
+local function process_recipe_unlocks()
 
     ---@param effects data.Modifier[]
     ---@param recipe_name string
     ---@return boolean
-    local function has_unlock(effects, recipe_name)
+    local function unlocks_recipe(effects, recipe_name)
         if not effects then return false end
         for _, effect in pairs(effects) do
             if effect.type == "unlock-recipe" and effect.recipe == recipe_name then
@@ -185,13 +191,65 @@ local function process_recipe_unlocks(mapping)
         return false
     end
 
+    ---@param effects data.Modifier[]
+    ---@param recipe_result string
+    ---@return boolean
+    local function unlocks_recipe_result_or_ingredient(effects, recipe_result)
+        if not effects then return false end
+        for _, effect in pairs(effects) do
+            if effect.type == "unlock-recipe" then
+                local recipe = data.raw.recipe[effect.recipe]
+                if recipe then
+                    for _, result in pairs(recipe.results) do
+                        if result.name == recipe_result then
+                            return true
+                        end
+                    end
+                    for _, ingredient in pairs(recipe.ingredients) do
+                        if ingredient.name == recipe_result then
+                            return true
+                        end
+                    end
+                end
+            end
+        end
+        return false
+    end
+
     for _, technology in pairs(data.raw["technology"]) do
         local effects = technology.effects
         if effects then
-            for base_recipe, variant_set in pairs(mapping) do
-                if has_unlock(effects, base_recipe) then
+            for recipe_result, variant_set in pairs(unlock_variants_by_result) do
+                if unlocks_recipe_result_or_ingredient(effects, recipe_result) then
+                    for recipe_to_add, _ in pairs(variant_set) do
+                        if not unlocks_recipe(effects, recipe_to_add) then
+                            table.insert(effects, { type = "unlock-recipe", recipe = recipe_to_add })
+                            local recipe = data.raw.recipe[recipe_to_add]
+                            if recipe then recipe.enabled = false end
+                            unlock_variants_by_result[recipe_result][recipe_to_add] = false
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    for _, variant_set in pairs(unlock_variants_by_result) do
+        for new_recipe_name, recipe_to_match in pairs(variant_set) do
+            if recipe_to_match then
+                unlock_variants_by_base_recipe[recipe_to_match] = unlock_variants_by_base_recipe[recipe_to_match] or {}
+                unlock_variants_by_base_recipe[recipe_to_match][new_recipe_name] = recipe_to_match
+            end
+        end
+    end
+
+    for _, technology in pairs(data.raw["technology"]) do
+        local effects = technology.effects
+        if effects then
+            for base_recipe, variant_set in pairs(unlock_variants_by_base_recipe) do
+                if unlocks_recipe(effects, base_recipe) then
                     for new_recipe_name, _ in pairs(variant_set) do
-                        if not has_unlock(effects, new_recipe_name) then
+                        if not unlocks_recipe(effects, new_recipe_name) then
                             table.insert(effects, { type = "unlock-recipe", recipe = new_recipe_name })
                         end
                         local recipe = data.raw.recipe[new_recipe_name]
@@ -321,8 +379,13 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
     if not localised_name then localised_name = { "entity-name." .. base_name } end
     color_coded_recipe.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
     if not built_from_base_item then
-        recipe_unlock_map[base_name] = recipe_unlock_map[base_name] or {}
-        recipe_unlock_map[base_name][new_recipe_name] = true
+        if data.raw["fluid"][color_name] then
+            unlock_variants_by_result[color_name] = unlock_variants_by_result[color_name] or {}
+            unlock_variants_by_result[color_name][new_recipe_name] = base_name
+        else
+            unlock_variants_by_base_recipe[base_name] = unlock_variants_by_base_recipe[base_name] or {}
+            unlock_variants_by_base_recipe[base_name][new_recipe_name] = base_name
+        end
     end
     color_coded_recipe.icons = data.raw["item"][new_recipe_name].icons
     color_coded_recipe.icon = nil
@@ -555,7 +618,7 @@ for color_name, color in pairs(pipe_colors) do
 
 end
 
-process_recipe_unlocks(recipe_unlock_map)
+process_recipe_unlocks()
 
 
 -----------------------------------------------
