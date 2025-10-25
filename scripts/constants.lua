@@ -201,16 +201,7 @@ local rgb_colors = {
 --- Build the fluid to color mapping table ---
 ----------------------------------------------
 
-local fluid_to_color_map = {
-    ["water"] = "blue",
-    ["crude-oil"] = "black",
-    ["steam"] = "white",
-    ["heavy-oil"] = "red",
-    ["light-oil"] = "orange",
-    ["petroleum-gas"] = "purple",
-    ["sulfuric-acid"] = "yellow",
-    ["lubricant"] = "green",
-}
+local fluid_to_color_map = {}
 
 local fluids = data and data.raw and data.raw["fluid"] or prototypes and prototypes.fluid
 if fluids then
@@ -225,11 +216,9 @@ if fluids then
 end
 
 -- overrides for specific fluids that don't map well
-fluid_to_color_map["petroleum-gas"] = "purple"
 fluid_to_color_map["heavy-oil"] = "red"
 fluid_to_color_map["holmium-solution"] = "pink"
-fluid_to_color_map["molten-copper"] = "red"
-fluid_to_color_map["thruster-fuel"] = "red"
+fluid_to_color_map["crude-oil"] = "black"
 
 return {
     rgb_colors = rgb_colors,
