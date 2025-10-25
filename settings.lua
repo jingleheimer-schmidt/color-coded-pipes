@@ -72,10 +72,10 @@ local rgb_colors = {
 
 -- reduce brightness
 for name, color in pairs(rgb_colors) do
-    local factor = 0.8
-    color.r = color.r * factor
-    color.g = color.g * factor
-    color.b = color.b * factor
+    local multiplier = 0.8
+    color.r = color.r * multiplier
+    color.g = color.g * multiplier
+    color.b = color.b * multiplier
 end
 
 local order = {
