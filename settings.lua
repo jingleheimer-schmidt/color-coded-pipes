@@ -57,7 +57,7 @@ local recipe_ingredients = {
 
 data:extend { menu_simulations, rainbow_recipes, pride_recipes, fluid_recipes, regroup_recipes, recipe_ingredients }
 
-local a = 0.6
+local a = 0.5
 local rgb_colors = {
     red    = { r = 0.800, g = 0.078, b = 0.078, a = a },
     orange = { r = 0.800, g = 0.439, b = 0.078, a = a },
