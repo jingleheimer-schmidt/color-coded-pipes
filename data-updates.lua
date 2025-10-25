@@ -368,7 +368,7 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
             result_count = result.amount or result.amount_max or 1
         end
     end
-    if built_from_base_item or color_name == "fusion-plasma" then
+    if built_from_base_item or color_name == "fusion-plasma" then -- special handling to hide the fusion-plasma recipes since it's special and can't be put in pipes
         color_coded_recipe.enabled = false
         color_coded_recipe.hidden_in_factoriopedia = true
     end
