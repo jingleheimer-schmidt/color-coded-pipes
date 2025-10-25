@@ -3,9 +3,12 @@ Version: 1.4.4
 Date: ????
   Features:
     - improved fluid-to-rainbow color mapping logic for the /paint-pipes command and planner tool (spectrum match mode); mapping now supports all modded fluids
+    - fluid color recipes now unlock with any tech that unlocks recipes using the fluid
   Changes:
-    - improved rainbow pipe color differentiation (red is more red, pink is more pink, etc.)
+    - improved rainbow pipe color differentiation (red is redder, pink is pinker, etc.) and adjusted hues toward the centers of their respective HSV cylinders
+    - updated fluid color pipes to use the visualization color instead of the base color
     - updated main menu simulation to use rainbow pipe colors
+    - hid the fusion-plasma pipe recipes when space age is enabled
   Modding:
     - added forced_value to hidden pipe color mod settings
   Locale:
