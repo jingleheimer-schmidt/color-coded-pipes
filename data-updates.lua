@@ -367,7 +367,7 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
             result_count = result.amount or result.amount_max or 1
         end
     end
-    if built_from_base_item then
+    if built_from_base_item or color_name == "fusion-plasma" then
         color_coded_recipe.enabled = false
         color_coded_recipe.hidden_in_factoriopedia = true
     end
@@ -378,7 +378,7 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
     local localised_name = color_coded_recipe.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
     color_coded_recipe.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
-    if not built_from_base_item then
+    if not built_from_base_item and color_name ~= "fusion-plasma" then
         if data.raw["fluid"][color_name] then
             unlock_variants_by_result[color_name] = unlock_variants_by_result[color_name] or {}
             unlock_variants_by_result[color_name][new_recipe_name] = base_name
