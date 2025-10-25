@@ -11,6 +11,7 @@ local color_order = constants.color_order
 local pipe_colors = constants.pipe_colors
 local replace_dash_with_underscore = functions.replace_dash_with_underscore
 local base_entities = constants.base_entities
+local mix_color = functions.mix_color
 
 
 ---------------------------------------
