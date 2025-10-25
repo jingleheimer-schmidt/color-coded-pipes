@@ -70,14 +70,6 @@ local rgb_colors = {
     black  = { r = 0.000, g = 0.000, b = 0.000, a = a },
 }
 
-for name, color in pairs(rgb_colors) do
-    local modifier = 0.75 -- darken just a little
-    color.r = color.r * modifier
-    color.g = color.g * modifier
-    color.b = color.b * modifier
-    rgb_colors[name] = color
-end
-
 local order = {
     ["red"] = "a",
     ["orange"] = "b",
