@@ -59,15 +59,15 @@ data:extend { menu_simulations, rainbow_recipes, pride_recipes, fluid_recipes, r
 
 local a = 0.6
 local rgb_colors = {
-    red = { r = 0.9, g = 0.1, b = 0.1, a = a },
-    orange = { r = 0.9, g = 0.4, b = 0.1, a = a },
-    yellow = { r = 0.9, g = 0.8, b = 0.2, a = a },
-    green = { r = 0.2, g = 0.8, b = 0.2, a = a },
-    blue = { r = 0.1, g = 0.3, b = 0.7, a = a },
-    purple = { r = 0.6, g = 0.2, b = 0.9, a = a },
-    pink = { r = 0.9, g = 0.4, b = 0.8, a = a },
-    black = { r = 0.1, g = 0.1, b = 0.1, a = a },
-    white = { r = 0.9, g = 0.9, b = 0.9, a = a },
+    red    = { r = 0.800, g = 0.078, b = 0.078, a = a },
+    orange = { r = 0.800, g = 0.439, b = 0.078, a = a },
+    yellow = { r = 0.800, g = 0.800, b = 0.078, a = a },
+    green  = { r = 0.078, g = 0.800, b = 0.078, a = a },
+    blue   = { r = 0.133, g = 0.349, b = 0.902, a = a },
+    purple = { r = 0.361, g = 0.000, b = 0.600, a = a },
+    pink   = { r = 0.949, g = 0.527, b = 0.780, a = a },
+    white  = { r = 0.800, g = 0.800, b = 0.800, a = a },
+    black  = { r = 0.000, g = 0.000, b = 0.000, a = a },
 }
 
 for name, color in pairs(rgb_colors) do
