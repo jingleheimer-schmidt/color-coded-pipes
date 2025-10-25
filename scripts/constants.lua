@@ -5,7 +5,7 @@ local append = functions.append
 local get_color = functions.get_color
 local mix_color = functions.mix_color
 local get_closest_named_color = functions.get_closest_named_color
-local get_fluid_visualisation_color = functions.get_fluid_visualisation_color
+local get_fluid_visualization_color = functions.get_fluid_visualization_color
 
 -------------------------------------
 --- list of pipe sprite filenames ---
@@ -207,10 +207,10 @@ local fluids = data and data.raw and data.raw["fluid"] or prototypes and prototy
 if fluids then
     for _, fluid in pairs(fluids) do
         if fluid.base_color and not fluid.hidden and not fluid.parameter then
-            local visualisation_color = get_fluid_visualisation_color(fluid)
-            fluid_to_color_map[fluid.name] = get_closest_named_color(visualisation_color)
-            visualisation_color.a = 0.6
-            pipe_colors[fluid.name] = visualisation_color
+            local visualization_color = get_fluid_visualization_color(fluid)
+            fluid_to_color_map[fluid.name] = get_closest_named_color(visualization_color)
+            visualization_color.a = 0.6
+            pipe_colors[fluid.name] = visualization_color
         end
     end
 end

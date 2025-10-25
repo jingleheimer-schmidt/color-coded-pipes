@@ -200,7 +200,7 @@ return {
     get_color = get_color,
     get_closest_named_color = get_closest_named_color,
     mix_color = mix_color,
-    get_fluid_visualisation_color = get_fluid_visualization_color,
+    get_fluid_visualization_color = get_fluid_visualization_color,
     rgb_to_hsv = rgb_to_hsv,
     hsv_to_rgb = hsv_to_rgb,
 }
