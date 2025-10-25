@@ -70,6 +70,14 @@ local rgb_colors = {
     black  = { r = 0.000, g = 0.000, b = 0.000, a = a },
 }
 
+-- reduce brightness
+for name, color in pairs(rgb_colors) do
+    local factor = 0.8
+    color.r = color.r * factor
+    color.g = color.g * factor
+    color.b = color.b * factor
+end
+
 local order = {
     ["red"] = "a",
     ["orange"] = "b",
