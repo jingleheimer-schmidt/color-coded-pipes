@@ -185,7 +185,7 @@ local function get_closest_named_color(color)
 end
 
 -- Color to use for visualization. This color should be vibrant and easily distinguished.
--- If not specified, this will be auto-generated from base_color by converting to HSV, decreasing saturation by 10% and setting value to 80%.
+-- If not specified, this will be auto-generated from base_color by converting to HSV, decreasing saturation by 10% and boosting value by 2x, up to 0.8 max. This differes from base game, which just sets v to 0.8 directly.
 ---@param fluid data.FluidPrototype
 ---@return Color
 local function get_fluid_visualization_color(fluid)
