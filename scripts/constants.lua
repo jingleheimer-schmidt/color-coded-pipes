@@ -218,7 +218,6 @@ end
 -- overrides for specific fluids that don't map well
 fluid_to_color_map["heavy-oil"] = "red"
 fluid_to_color_map["holmium-solution"] = "pink"
-fluid_to_color_map["crude-oil"] = "black"
 
 return {
     rgb_colors = rgb_colors,
