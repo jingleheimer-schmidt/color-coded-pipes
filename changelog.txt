@@ -12,6 +12,7 @@ Date: ????
   Modding:
     - added forced_value to hidden pipe color mod settings
   Locale:
+    - updated mod setting descriptions
     - updated Russian (ru) locale from Crowdin
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.3
