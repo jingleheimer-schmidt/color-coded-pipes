@@ -184,8 +184,13 @@ local function get_closest_named_color(color)
     return closest_name
 end
 
--- Color to use for visualization. This color should be vibrant and easily distinguished.
--- If not specified, this will be auto-generated from base_color by converting to HSV, decreasing saturation by 10% and boosting value by 2x, up to 0.8 max. This differes from base game, which just sets v to 0.8 directly.
+-- Gets the visualization color for a fluid.
+-- This is a little different from the base game, to keep darker colors from blowing out to white.
+-- If it's not explicitly defined on the fluid prototype, it is auto-generated
+-- from `fluid.base_color` by:
+--   1. Converting to HSV
+--   2. Reducing saturation by 10%
+--   3. Doubling the value (brightness), capped at 0.8
 ---@param fluid data.FluidPrototype
 ---@return Color
 local function get_fluid_visualization_color(fluid)
