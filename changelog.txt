@@ -6,9 +6,9 @@ Date: ????
     - fluid color recipes now unlock with any tech that unlocks recipes using the fluid
   Changes:
     - improved rainbow pipe color differentiation (red is redder, pink is pinker, etc.) and adjusted hues toward the centers of their respective HSV cylinders
-    - updated fluid color pipes to use the visualization color instead of the base color
+    - updated fluid color pipes to use the fluid visualization color instead of base color
     - updated main menu simulation to use rainbow pipe colors
-    - hid the fusion-plasma pipe recipes when space age is enabled
+    - hid the fusion-plasma color coded recipes when space age is enabled
   Modding:
     - added forced_value to hidden pipe color mod settings
   Locale:
