@@ -1,5 +1,5 @@
 
-local constants = require("__color-coded-pipes__.scripts.constants")
+local constants = require("__color-coded-pipes__.scripts.constants") ---@module "scripts.constants"
 local fluid_to_color_map = constants.fluid_to_color_map
 
 --- Returns the name of the fluid in a given entity's fluidbox

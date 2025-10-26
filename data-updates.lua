@@ -3,14 +3,15 @@
 -- import util constants and functions --
 -----------------------------------------
 
-local constants = require("__color-coded-pipes__.scripts.constants")
-local functions = require("__color-coded-pipes__.scripts.functions")
+local constants = require("__color-coded-pipes__.scripts.constants") ---@module "scripts.constants"
+local functions = require("__color-coded-pipes__.scripts.functions") ---@module "scripts.functions"
 local pipe_filenames = constants.pipe_filenames
 local pipe_to_ground_filenames = constants.pipe_to_ground_filenames
 local color_order = constants.color_order
 local pipe_colors = constants.pipe_colors
 local replace_dash_with_underscore = functions.replace_dash_with_underscore
 local base_entities = constants.base_entities
+local mix_color = functions.mix_color
 
 
 ---------------------------------------
@@ -162,6 +163,135 @@ local function add_recipe_to_technology_effects(recipe_to_match, recipe_to_add)
     return added_to_technology
 end
 
+---@alias result_to_match string
+---@alias recipe_to_match string
+---@alias recipe_to_add string
+
+--- Table of recipes that should be unlocked alongside a base recipe.
+---@type table<recipe_to_match, table<recipe_to_add, boolean | recipe_to_match>>
+local unlock_variants_by_base_recipe = {}
+
+--- Table mapping each result item name to all recipes producing it.
+---@type table<result_to_match, table<recipe_to_add, boolean | recipe_to_match>>
+local unlock_variants_by_result = {}
+
+-- Process all technologies once: if a tech unlocks a base recipe, also unlock all mapped variants.
+-- When a variant is added to a tech, disable it (so it’s gated by that tech).
+local function process_recipe_unlocks()
+
+    -- ## 1. Pre-computation Phase
+    -- Build fast-lookup maps of what each technology unlocks.
+
+    ---@type table<string, table<string, boolean>>
+    local tech_unlocks_recipe = {} --- [tech_name] -> [recipe_name] -> true
+    ---@type table<string, table<string, boolean>>
+    local tech_unlocks_item = {} --- [tech_name] -> [item_name] -> true
+
+    for tech_name, technology in pairs(data.raw.technology) do
+        tech_unlocks_recipe[tech_name] = {}
+        tech_unlocks_item[tech_name] = {}
+        if technology.effects then
+            for _, effect in pairs(technology.effects) do
+                if effect.type == "unlock-recipe" then
+                    local recipe_name = effect.recipe
+                    tech_unlocks_recipe[tech_name][recipe_name] = true
+                    local recipe = data.raw.recipe[recipe_name]
+                    if recipe then
+                        if recipe.results then
+                            for _, result in pairs(recipe.results) do
+                                tech_unlocks_item[tech_name][result.name] = true
+                            end
+                        end
+                        if recipe.ingredients then
+                            for _, ingredient in pairs(recipe.ingredients) do
+                                tech_unlocks_item[tech_name][ingredient.name] = true
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    -- ## 2. Logic Phase
+    -- Result-link first, then base-link as a fallback.
+
+    ---@type table<string, table<string, boolean>>
+    local tech_additions = {} --- [tech_name] -> [recipe_to_add] -> true
+    ---@type table<string, boolean>
+    local all_variants_to_disable = {} --- [recipe_name] -> true
+    ---@type table<string, table<string, boolean>>
+    local variants_to_link_by_base = {} --- [base_recipe] -> [variant_recipe] -> true
+
+    -- Pass A: Process by result, populating fallbacks
+    for recipe_result, variant_set in pairs(unlock_variants_by_result) do
+        for recipe_to_add, recipe_to_match in pairs(variant_set) do
+            all_variants_to_disable[recipe_to_add] = true
+            local was_linked_by_result = false
+
+            -- Find all techs that unlock this result
+            for tech_name, unlocked_items in pairs(tech_unlocks_item) do
+                if unlocked_items[recipe_result] then
+                    tech_additions[tech_name] = tech_additions[tech_name] or {}
+                    tech_additions[tech_name][recipe_to_add] = true
+                    was_linked_by_result = true
+                end
+            end
+
+            -- If it wasn't linked AND has a base recipe fallback, add to fallback list
+            if not was_linked_by_result and type(recipe_to_match) == "string" then
+                variants_to_link_by_base[recipe_to_match] = variants_to_link_by_base[recipe_to_match] or {}
+                variants_to_link_by_base[recipe_to_match][recipe_to_add] = true
+            end
+        end
+    end
+
+    -- Pass B: Add original base-recipe map to the fallback list
+    for base_recipe, variant_set in pairs(unlock_variants_by_base_recipe) do
+        for recipe_to_add, _ in pairs(variant_set) do
+            all_variants_to_disable[recipe_to_add] = true
+            variants_to_link_by_base[base_recipe] = variants_to_link_by_base[base_recipe] or {}
+            variants_to_link_by_base[base_recipe][recipe_to_add] = true
+        end
+    end
+
+    -- Pass C: Process all fallbacks by base recipe
+    for base_recipe, variant_set in pairs(variants_to_link_by_base) do
+        for recipe_to_add, _ in pairs(variant_set) do
+            -- Find all techs that unlock this base recipe
+            for tech_name, unlocked_recipes in pairs(tech_unlocks_recipe) do
+                if unlocked_recipes[base_recipe] then
+                    tech_additions[tech_name] = tech_additions[tech_name] or {}
+                    tech_additions[tech_name][recipe_to_add] = true
+                end
+            end
+        end
+    end
+
+    -- ## 3. Application Phase
+
+    -- Disable all variant recipes
+    for recipe_name, _ in pairs(all_variants_to_disable) do
+        local recipe = data.raw.recipe[recipe_name]
+        if recipe then
+            recipe.enabled = false
+        end
+    end
+
+    -- Add new unlock effects to technologies
+    for tech_name, recipes_to_add in pairs(tech_additions) do
+        local technology = data.raw.technology[tech_name]
+        if technology then
+            technology.effects = technology.effects or {}
+
+            for recipe_to_add, _ in pairs(recipes_to_add) do
+                table.insert(technology.effects, { type = "unlock-recipe", recipe = recipe_to_add })
+            end
+        end
+    end
+
+end
+
 
 -- create icons for a color-coded item or entity
 ---@param prototype color_coded_prototypes
@@ -207,8 +337,9 @@ local function update_factoriopedia_simulation(old_entity_name, new_entity_name,
                     force = original_entity.force,
                     direction = original_entity.direction,
                     fluidbox = original_entity.fluidbox,
+                    quality = original_entity.quality,
                     fast_replace = true,
-                    spill = false
+                    spill = false,
                 }
             end
         end
@@ -267,7 +398,8 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
             result_count = result.amount or result.amount_max or 1
         end
     end
-    if built_from_base_item then
+    -- special handling to hide the fusion-plasma recipes since it's special and can't be put in pipes
+    if built_from_base_item or color_name == "fusion-plasma" then
         color_coded_recipe.enabled = false
         color_coded_recipe.hidden_in_factoriopedia = true
     end
@@ -278,10 +410,13 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
     local localised_name = color_coded_recipe.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
     color_coded_recipe.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
-    if not built_from_base_item then
-        local added_to_technology = add_recipe_to_technology_effects(base_name, new_recipe_name)
-        if added_to_technology then
-            color_coded_recipe.enabled = false
+    if not built_from_base_item and color_name ~= "fusion-plasma" then
+        if data.raw["fluid"][color_name] then
+            unlock_variants_by_result[color_name] = unlock_variants_by_result[color_name] or {}
+            unlock_variants_by_result[color_name][new_recipe_name] = base_name
+        else
+            unlock_variants_by_base_recipe[base_name] = unlock_variants_by_base_recipe[base_name] or {}
+            unlock_variants_by_base_recipe[base_name][new_recipe_name] = base_name
         end
     end
     color_coded_recipe.icons = data.raw["item"][new_recipe_name].icons
@@ -514,6 +649,8 @@ for color_name, color in pairs(pipe_colors) do
     end
 
 end
+
+process_recipe_unlocks()
 
 
 -----------------------------------------------

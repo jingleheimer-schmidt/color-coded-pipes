@@ -1,8 +1,15 @@
 
 local util = require("util")
-local functions = require("__color-coded-pipes__.scripts.functions")
+local functions = require("__color-coded-pipes__.scripts.functions") ---@module "scripts.functions"
 local append = functions.append
 local get_color = functions.get_color
+local mix_color = functions.mix_color
+local get_closest_named_color = functions.get_closest_named_color
+local get_fluid_visualization_color = functions.get_fluid_visualization_color
+
+-------------------------------------
+--- list of pipe sprite filenames ---
+-------------------------------------
 
 local pipe_filenames = {
     "corner-down-left",
@@ -128,6 +135,10 @@ if active_mods["Flow Control"] then append(base_entities, flow_control_entities)
 if active_mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0_entities) end
 if active_mods["zithorian-extra-storage-tanks-port"] then append(base_entities, zithorian_extra_storage_tanks_entities) end
 
+-------------------------
+--- color definitions ---
+-------------------------
+
 local alpha = 255 * 0.8
 
 ---@type table<string, Color>
@@ -174,28 +185,42 @@ local pipe_colors = {
     pride_nonbinary_black = { r = 044, g = 044, b = 044, a = alpha },
 }
 
+local rgb_colors = {
+    red = get_color("color-coded-pipes-red"),
+    orange = get_color("color-coded-pipes-orange"),
+    yellow = get_color("color-coded-pipes-yellow"),
+    green = get_color("color-coded-pipes-green"),
+    blue = get_color("color-coded-pipes-blue"),
+    purple = get_color("color-coded-pipes-purple"),
+    pink = get_color("color-coded-pipes-pink"),
+    black = get_color("color-coded-pipes-black"),
+    white = get_color("color-coded-pipes-white"),
+}
+
+----------------------------------------------
+--- Build the fluid to color mapping table ---
+----------------------------------------------
+
+local fluid_to_color_map = {}
+
 local fluids = data and data.raw and data.raw["fluid"] or prototypes and prototypes.fluid
 if fluids then
     for _, fluid in pairs(fluids) do
         if fluid.base_color and not fluid.hidden and not fluid.parameter then
-            local base_color = util.get_color_with_alpha(fluid.base_color, 0.6, true)
-            pipe_colors[fluid.name] = table.deepcopy(base_color)
+            local visualization_color = get_fluid_visualization_color(fluid)
+            fluid_to_color_map[fluid.name] = get_closest_named_color(visualization_color)
+            visualization_color.a = 0.6
+            pipe_colors[fluid.name] = visualization_color
         end
     end
 end
 
-local fluid_to_color_map = {
-    ["water"] = "blue",
-    ["crude-oil"] = "black",
-    ["steam"] = "white",
-    ["heavy-oil"] = "red",
-    ["light-oil"] = "orange",
-    ["petroleum-gas"] = "purple",
-    ["sulfuric-acid"] = "yellow",
-    ["lubricant"] = "green",
-}
+-- overrides for specific fluids that don't map well
+fluid_to_color_map["heavy-oil"] = "red"
+fluid_to_color_map["holmium-solution"] = "pink"
 
 return {
+    rgb_colors = rgb_colors,
     pipe_filenames = pipe_filenames,
     pipe_to_ground_filenames = pipe_to_ground_filenames,
     color_order = color_order,
