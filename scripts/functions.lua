@@ -149,7 +149,7 @@ local function get_closest_named_color(color)
 
     if cS < GRAY_S_THRESH then
         local name = (cV >= GRAY_V_SPLIT) and "white" or "black"
-        return name, 0
+        return name
     end
 
     local closest_name = "black"
