@@ -15,7 +15,9 @@
     "? zithorian-extra-storage-tanks-port",
     "? automatic-underground-pipe-connectors",
     "(?) bzlead",
-    "(?) pypostprocessing"
+    "(?) pypostprocessing",
+    "(?) Krastorio2",
+    "(?) Krastorio2-spaced-out"
   ],
   "package": {
     "ignore": [
