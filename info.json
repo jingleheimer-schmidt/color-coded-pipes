@@ -1,6 +1,6 @@
 {
   "name": "color-coded-pipes",
-  "version": "1.4.5",
+  "version": "1.5.0",
   "title": "Color Coded Pipes",
   "author": "asher_sky",
   "contact": "",
@@ -15,11 +15,14 @@
     "? zithorian-extra-storage-tanks-port",
     "? automatic-underground-pipe-connectors",
     "(?) bzlead",
-    "(?) pypostprocessing"
+    "(?) pypostprocessing",
+    "(?) Krastorio2",
+    "(?) Krastorio2-spaced-out"
   ],
   "package": {
     "ignore": [
-      "**/*.psd"
+      "**/*.psd",
+      "**/*.js"
     ],
     "sync_portal_details": true,
     "readme": "readme.md"

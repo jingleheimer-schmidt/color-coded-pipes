@@ -166,7 +166,7 @@ local function get_closest_named_color(color)
     return closest_name
 end
 
-rendering.clear()
+rendering.clear("")
 local pipes = game.player.surface.find_entities_filtered { type = "pipe" }
 for _, pipe in pairs(pipes) do
     pipe.destroy()
