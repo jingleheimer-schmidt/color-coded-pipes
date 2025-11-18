@@ -21,7 +21,8 @@
   ],
   "package": {
     "ignore": [
-      "**/*.psd"
+      "**/*.psd",
+      "**/*.js"
     ],
     "sync_portal_details": true,
     "readme": "readme.md"
