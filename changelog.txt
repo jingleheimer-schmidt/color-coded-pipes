@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.0
-Date: ????
+Date: 2025-11-18
   Features:
     - added color coded variants for Krastorio 2 steel pipes, pipe-to-grounds, pumps, big storage tanks, and huge storage tanks
   Locale:
