@@ -27,6 +27,7 @@ This mod will create color coded versions of the pipes and fluid handling equipm
 - [Flow Control](https://mods.factorio.com/mod/Flow%20Control)
 - [Storage Tank Mk2](https://mods.factorio.com/mod/StorageTank2_2_0)
 - [Zithorian's Extra Storage Tanks](https://mods.factorio.com/mod/zithorian-extra-storage-tanks-port)
+- [Krastorio 2](https://mods.factorio.com/mod/Krastorio2) and [Krastorio 2 Spaced Out](https://mods.factorio.com/mod/Krastorio2-spaced-out)
 
 This mod includes explicit compatibility for:
 [No Pipe Touching](https://mods.factorio.com/mod/no-pipe-touching) - Allows building different color pipes directly next to each other without connecting.
