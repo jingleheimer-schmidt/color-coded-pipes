@@ -3,6 +3,8 @@ Version: 1.4.5
 Date: ????
   Features:
     - added color coded variants for Krastorio 2 steel pipes, pipe-to-grounds, pumps, big storage tanks, and huge storage tanks
+  Locale:
+    - updated cs, de, fr, ru, and uk locales from Crowdin
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.4
 Date: 2025-10-25
