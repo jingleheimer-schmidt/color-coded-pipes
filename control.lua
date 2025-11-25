@@ -202,7 +202,9 @@ local function add_automatic_underground_pipe_connector_support()
             for color_name, color in pairs(pipe_colors) do
                 local underground_name = color_name .. "-color-coded-" .. entity_data.name
                 local pipe_name = color_name .. "-color-coded-pipe"
-                new_undergrounds[underground_name] = { entity = pipe_name, item = pipe_name }
+                if prototypes.entity[underground_name] and prototypes.entity[pipe_name] then
+                    new_undergrounds[underground_name] = { entity = pipe_name, item = pipe_name }
+                end
             end
         end
     end

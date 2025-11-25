@@ -6,6 +6,8 @@ Date: ????
     - pride flag color pipe prototypes are not generated (instead of just hidden) when disabled in mod settings and both No Pipe Touching and Actual Underground Pipes mods are enabled
     - added hidden optional dependency for planet-rabbasca mod to capture compatibility fluids it adds when crushing-industry mod is also enabled
     - added prototype validation check to report missing pipes for fluids added after color coded pipes data-updates stage
+  Bugfixes:
+    - fixed error caused by automatic-underground-pipe-connectors support script running on undefined prototypes
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.0
 Date: 2025-11-18
