@@ -213,14 +213,6 @@ local function add_automatic_underground_pipe_connector_support()
     end
 end
 
-script.on_nth_tick(60, function()
-    if storage.validate_prototypes then
-        validate_prototypes()
-        storage.validate_prototypes = nil
-    end
-    script.on_nth_tick(60, nil)
-end)
-
 script.on_init(function()
     setup_storage()
     add_commands()
@@ -228,7 +220,10 @@ script.on_init(function()
     update_simulation()
     add_automatic_underground_pipe_connector_support()
     build_color_name_cycles()
-    storage.validate_prototypes = true
+    script.on_nth_tick(60, function()
+        validate_prototypes()
+        script.on_nth_tick(60, nil)
+    end)
 end)
 
 script.on_load(function()
