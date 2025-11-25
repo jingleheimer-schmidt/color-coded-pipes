@@ -181,6 +181,19 @@ local function update_simulation()
     end
 end
 
+local function validate_prototypes()
+    for _, entity_data in pairs(base_entities) do
+        for color_name, _ in pairs(pipe_colors) do
+            local item_prototype = prototypes.item[color_name .. "-color-coded-" .. entity_data.name]
+            local entity_prototype = prototypes.entity[color_name .. "-color-coded-" .. entity_data.name]
+            local recipe_prototype = prototypes.recipe[color_name .. "-color-coded-" .. entity_data.name]
+            if not (item_prototype and entity_prototype and recipe_prototype) then
+                game.print({ "color-coded-pipes-error.missing-prototypes", "[fluid=" .. color_name .. "]" })
+            end
+        end
+    end
+end
+
 local function add_automatic_underground_pipe_connector_support()
     if not script.active_mods["automatic-underground-pipe-connectors"] then return end
     local new_undergrounds = {}
@@ -189,7 +202,9 @@ local function add_automatic_underground_pipe_connector_support()
             for color_name, color in pairs(pipe_colors) do
                 local underground_name = color_name .. "-color-coded-" .. entity_data.name
                 local pipe_name = color_name .. "-color-coded-pipe"
-                new_undergrounds[underground_name] = { entity = pipe_name, item = pipe_name }
+                if prototypes.entity[underground_name] and prototypes.entity[pipe_name] then
+                    new_undergrounds[underground_name] = { entity = pipe_name, item = pipe_name }
+                end
             end
         end
     end
@@ -198,6 +213,14 @@ local function add_automatic_underground_pipe_connector_support()
     end
 end
 
+script.on_nth_tick(60, function()
+    if storage.validate_prototypes then
+        validate_prototypes()
+        storage.validate_prototypes = nil
+    end
+    script.on_nth_tick(60, nil)
+end)
+
 script.on_init(function()
     setup_storage()
     add_commands()
@@ -205,6 +228,7 @@ script.on_init(function()
     update_simulation()
     add_automatic_underground_pipe_connector_support()
     build_color_name_cycles()
+    storage.validate_prototypes = true
 end)
 
 script.on_load(function()
@@ -214,6 +238,7 @@ end)
 script.on_configuration_changed(function()
     setup_storage()
     reset_technology_effects()
+    validate_prototypes()
     add_automatic_underground_pipe_connector_support()
     build_color_name_cycles()
 end)

@@ -123,14 +123,14 @@ local storage_tank_2_2_0_entities = {
     { type = "storage-tank", name = "storage-tank2", order = "-a[2]" },
 }
 local zithorian_extra_storage_tanks_entities = {
-    { type = "storage-tank", name = "fluid-tank-1x1", order = "-a[3]" },
-    { type = "storage-tank", name = "fluid-tank-2x2", order = "-a[4]" },
-    { type = "storage-tank", name = "fluid-tank-3x4", order = "-a[5]" },
-    { type = "storage-tank", name = "fluid-tank-5x5", order = "-a[6]" },
+    { type = "storage-tank", name = "fluid-tank-1x1", order = "-a[5]" },
+    { type = "storage-tank", name = "fluid-tank-2x2", order = "-a[6]" },
+    { type = "storage-tank", name = "fluid-tank-3x4", order = "-a[7]" },
+    { type = "storage-tank", name = "fluid-tank-5x5", order = "-a[8]" },
 }
 local krastorio_2_entities = {
-    { type = "storage-tank", name = "kr-big-storage-tank", order = "-a[7]" },
-    { type = "storage-tank", name = "kr-huge-storage-tank", order = "-a[8]" },
+    { type = "storage-tank", name = "kr-big-storage-tank", order = "-a[3]" },
+    { type = "storage-tank", name = "kr-huge-storage-tank", order = "-a[4]" },
     { type = "pipe", name = "kr-steel-pipe", order = "-f[1]" },
     { type = "pipe-to-ground", name = "kr-steel-pipe-to-ground", order = "-g[1]" },
     { type = "pump", name = "kr-steel-pump", order = "-h[1]" },
@@ -161,6 +161,10 @@ local pipe_colors = {
     pink = get_color("color-coded-pipes-pink"),
     black = get_color("color-coded-pipes-black"),
     white = get_color("color-coded-pipes-white"),
+}
+
+---@type table<string, Color>
+local pride_colors = {
     pride_lesbian_dark_orange = { r = 213, g = 045, b = 000, a = alpha },
     pride_lesbian_orange = { r = 239, g = 118, b = 039, a = alpha },
     pride_lesbian_light_orange = { r = 255, g = 154, b = 086, a = alpha },
@@ -193,6 +197,12 @@ local pipe_colors = {
     pride_nonbinary_purple = { r = 156, g = 089, b = 209, a = alpha },
     pride_nonbinary_black = { r = 044, g = 044, b = 044, a = alpha },
 }
+
+if not (active_mods["the-one-mod-with-underground-bits"] and active_mods["no-pipe-touching"] and settings.startup["color-coded-pipes-show-pride-recipes"].value == false) then
+    for name, color in pairs(pride_colors) do
+        pipe_colors[name] = color
+    end
+end
 
 local rgb_colors = {
     red = get_color("color-coded-pipes-red"),

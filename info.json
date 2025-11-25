@@ -17,7 +17,8 @@
     "(?) bzlead",
     "(?) pypostprocessing",
     "(?) Krastorio2",
-    "(?) Krastorio2-spaced-out"
+    "(?) Krastorio2-spaced-out",
+    "(?) planet-rabbasca"
   ],
   "package": {
     "ignore": [
