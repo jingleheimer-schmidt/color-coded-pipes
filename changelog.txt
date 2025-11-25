@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.1
-Date: ????
+Date: 2025-11-25
   Changes:
     - updated the order that zithorian extra storage tanks and krastorio 2 storage tanks appear in the crafting menu
     - pride flag color pipe prototypes are not generated (instead of just hidden) when disabled in mod settings and both No Pipe Touching and Actual Underground Pipes mods are enabled
