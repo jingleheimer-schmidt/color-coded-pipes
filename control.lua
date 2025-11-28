@@ -213,12 +213,11 @@ local function add_automatic_underground_pipe_connector_support()
     end
 end
 
-script.on_nth_tick(60, function()
+script.on_nth_tick(600, function()
     if storage.validate_prototypes then
         validate_prototypes()
         storage.validate_prototypes = nil
     end
-    script.on_nth_tick(60, nil)
 end)
 
 script.on_init(function()
