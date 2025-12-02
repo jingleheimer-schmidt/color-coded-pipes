@@ -3,6 +3,7 @@ Version: 1.5.3
 Date: ????
   Changes:
     - updated item icon overlays by ZarSasha to support Zithorian's Extra Storage Tanks for 2.0 version 1.0.6
+    - added color coded variants for K2 Fluid Storage big storage tank and huge storage tank
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.2
 Date: 2025-11-28

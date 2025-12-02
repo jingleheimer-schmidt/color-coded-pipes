@@ -136,6 +136,11 @@ local krastorio_2_entities = {
     { type = "pump", name = "kr-steel-pump", order = "-h[1]" },
 }
 
+local k2_fluid_storage_entities = {
+    { type = "storage-tank", name = "kr-fluid-storage-1", order = "-a[3]" },
+    { type = "storage-tank", name = "kr-fluid-storage-2", order = "-a[4]" },
+}
+
 local active_mods = mods or script and script.active_mods
 if active_mods["pipe_plus"] then append(base_entities, pipe_plus_entities) end
 if active_mods["Flow Control"] then append(base_entities, flow_control_entities) end
@@ -143,6 +148,7 @@ if active_mods["StorageTank2_2_0"] then append(base_entities, storage_tank_2_2_0
 if active_mods["zithorian-extra-storage-tanks-port"] then append(base_entities, zithorian_extra_storage_tanks_entities) end
 if active_mods["Krastorio2"] then append(base_entities, krastorio_2_entities) end
 if active_mods["Krastorio2-spaced-out"] then append(base_entities, krastorio_2_entities) end
+if active_mods["k2-fluid-storage"] then append(base_entities, k2_fluid_storage_entities) end
 
 -------------------------
 --- color definitions ---
