@@ -18,7 +18,9 @@
     "(?) pypostprocessing",
     "(?) Krastorio2",
     "(?) Krastorio2-spaced-out",
-    "(?) planet-rabbasca"
+    "(?) planet-rabbasca",
+    "(?) k2-fluid-storage",
+    "(?) k2-steel-pipes"
   ],
   "package": {
     "ignore": [
