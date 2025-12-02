@@ -5,6 +5,8 @@ Date: ????
     - updated item icon overlays by ZarSasha to support Zithorian's Extra Storage Tanks for 2.0 version 1.0.6
     - added color coded variants for K2 Fluid Storage big storage tank and huge storage tank
     - added color coded variants for K2 Steel Pipes steel pipe, steel pipe-to-ground, and steel pump
+  Locale:
+    - updated (ru) locale from Crowdin
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.2
 Date: 2025-11-28
