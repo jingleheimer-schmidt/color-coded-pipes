@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.0
-Date: ????
+Date: 2025-12-01
   Features:
     - added color coded variants for K2 Fluid Storage big storage tank and huge storage tank
     - added color coded variants for K2 Steel Pipes steel pipe, steel pipe-to-ground, and steel pump
