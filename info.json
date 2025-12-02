@@ -13,14 +13,14 @@
     "? Flow Control",
     "? StorageTank2_2_0",
     "? zithorian-extra-storage-tanks-port",
-    "? automatic-underground-pipe-connectors",
+    "? Krastorio2",
+    "? Krastorio2-spaced-out",
+    "? k2-fluid-storage",
+    "? k2-steel-pipes",
+    "(?) automatic-underground-pipe-connectors",
     "(?) bzlead",
     "(?) pypostprocessing",
-    "(?) Krastorio2",
-    "(?) Krastorio2-spaced-out",
-    "(?) planet-rabbasca",
-    "(?) k2-fluid-storage",
-    "(?) k2-steel-pipes"
+    "(?) planet-rabbasca"
   ],
   "package": {
     "ignore": [
