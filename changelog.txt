@@ -1,7 +1,13 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.5.3
+Version: 1.6.0
 Date: ????
+  Features:
+    - added color coded variants for K2 Fluid Storage big storage tank and huge storage tank
+    - added color coded variants for K2 Steel Pipes steel pipe, steel pipe-to-ground, and steel pump
   Changes:
+    - updated item icon overlays by ZarSasha to support Zithorian's Extra Storage Tanks for 2.0 version 1.0.6
+  Locale:
+    - updated (ru) locale from Crowdin
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.2
 Date: 2025-11-28
@@ -21,7 +27,7 @@ Date: 2025-11-25
 Version: 1.5.0
 Date: 2025-11-18
   Features:
-    - added color coded variants for Krastorio 2 steel pipes, pipe-to-grounds, pumps, big storage tanks, and huge storage tanks
+    - added color coded variants for Krastorio 2 steel pipe, steel pipe-to-ground, steel pump, big storage tank, and huge storage tank
   Locale:
     - updated cs, de, fr, ru, and uk locales from Crowdin
 ---------------------------------------------------------------------------------------------------
