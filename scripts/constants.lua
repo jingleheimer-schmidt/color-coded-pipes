@@ -123,10 +123,10 @@ local storage_tank_2_2_0_entities = {
     { type = "storage-tank", name = "storage-tank2", order = "-a[2]" },
 }
 local zithorian_extra_storage_tanks_entities = {
-    { type = "storage-tank", name = "fluid-tank-1x1", order = "-a[5]" },
-    { type = "storage-tank", name = "fluid-tank-2x2", order = "-a[6]" },
-    { type = "storage-tank", name = "fluid-tank-3x4", order = "-a[7]" },
-    { type = "storage-tank", name = "fluid-tank-5x5", order = "-a[8]" },
+    { type = "storage-tank", name = "zith-storage-tank-1x1", order = "-a[5]" },
+    { type = "storage-tank", name = "zith-storage-tank-2x2", order = "-a[6]" },
+    { type = "storage-tank", name = "zith-storage-tank-3x4", order = "-a[7]" },
+    { type = "storage-tank", name = "zith-storage-tank-5x5", order = "-a[8]" },
 }
 local krastorio_2_entities = {
     { type = "storage-tank", name = "kr-big-storage-tank", order = "-a[3]" },
