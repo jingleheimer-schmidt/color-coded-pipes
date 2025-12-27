@@ -12,7 +12,7 @@
     "? pipe_plus",
     "? Flow Control",
     "? StorageTank2_2_0",
-    "? zithorian-extra-storage-tanks-port",
+    "? zithorian-extra-storage-tanks-port >= 1.1.0",
     "? Krastorio2",
     "? Krastorio2-spaced-out",
     "? k2-fluid-storage",
