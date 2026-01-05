@@ -20,7 +20,9 @@
     "(?) automatic-underground-pipe-connectors",
     "(?) bzlead",
     "(?) pypostprocessing",
-    "(?) planet-rabbasca"
+    "(?) planet-rabbasca",
+    "(?) bzlead2",
+    "(?) BrassTacks-Updated"
   ],
   "package": {
     "ignore": [
