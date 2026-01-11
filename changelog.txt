@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.2
-Date: ????
+Date: 2026-01-10
   Changes:
     - changed K2 Spaced Out, K2 Fluid Storage, and K2 Steel Pipes dependencies from optional to hidden optional
     - added hidden optional dependency for Lead - Legacy and Brass Tacks Legacy to capture their changes to the base pipe prototypes
