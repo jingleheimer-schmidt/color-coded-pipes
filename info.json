@@ -14,13 +14,15 @@
     "? StorageTank2_2_0",
     "? zithorian-extra-storage-tanks-port >= 1.1.0",
     "? Krastorio2",
-    "? Krastorio2-spaced-out",
-    "? k2-fluid-storage",
-    "? k2-steel-pipes",
+    "(?) Krastorio2-spaced-out",
+    "(?) k2-fluid-storage",
+    "(?) k2-steel-pipes",
     "(?) automatic-underground-pipe-connectors",
     "(?) bzlead",
     "(?) pypostprocessing",
-    "(?) planet-rabbasca"
+    "(?) planet-rabbasca",
+    "(?) bzlead2",
+    "(?) BrassTacks-Updated"
   ],
   "package": {
     "ignore": [
