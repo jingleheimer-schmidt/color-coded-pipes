@@ -195,7 +195,7 @@ end
 ---@return Color
 local function get_fluid_visualization_color(fluid)
     local base_color = fluid.base_color
-    local r, g, b = base_color.r or base_color[1], base_color.g or base_color[2], base_color.b or base_color[3]
+    local r, g, b = base_color.r or base_color[1] or 0, base_color.g or base_color[2] or 0, base_color.b or base_color[3] or 0
     local h, s, v = rgb_to_hsv(r, g, b)
     s = s * 0.9
     v = math.min(0.8, v * 2)
