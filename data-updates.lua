@@ -79,28 +79,6 @@ for _, base in pairs(base_entities) do
     end
 end
 
-------------------------------------------------------------
--- force the game to use the k2-fluid-storage hr graphics --
-------------------------------------------------------------
-
-if mods["k2-fluid-storage"] then
-    local tank_1 = data.raw["storage-tank"]["kr-fluid-storage-1"]
-    if tank_1 and tank_1.pictures and tank_1.pictures.picture and tank_1.pictures.picture.sheets then
-        for id, sheet in pairs(tank_1.pictures.picture.sheets) do
-            if sheet.hr_version then
-                data.raw["storage-tank"]["kr-fluid-storage-1"].pictures.picture.sheets[id] = sheet.hr_version
-            end
-        end
-    end
-    local tank_2 = data.raw["storage-tank"]["kr-fluid-storage-2"]
-    if tank_2 and tank_2.pictures and tank_2.pictures.picture and tank_2.pictures.picture.sheets then
-        for id, sheet in pairs(tank_2.pictures.picture.sheets) do
-            if sheet.hr_version then
-                data.raw["storage-tank"]["kr-fluid-storage-2"].pictures.picture.sheets[id] = sheet.hr_version
-            end
-        end
-    end
-end
 
 ------------------------------------
 -- just a couple helper functions --
