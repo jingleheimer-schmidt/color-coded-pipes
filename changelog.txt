@@ -2,6 +2,7 @@
 Version: 1.6.3
 Date: ????
   Changes:
+    - added compatibility script to force k2-fluid-storage to use its hr graphics
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.2
 Date: 2026-01-10
