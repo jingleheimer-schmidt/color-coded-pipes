@@ -335,7 +335,7 @@ local function create_color_overlay_icons(prototype, color, type)
         tint = color
     }
     if icons then
-        icon_overlay.icon_size = icons[1].icon_size
+        icon_overlay.icon_size = icons[1].icon_size or 64
         table.insert(icons, icon_overlay)
     else
         icons = { icon_base, icon_overlay }
