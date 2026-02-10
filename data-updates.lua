@@ -340,6 +340,35 @@ local function create_color_overlay_icons(prototype, color, type)
     else
         icons = { icon_base, icon_overlay }
     end
+    -- overlay the fluid icon to the top right corner
+    local fluid_name = prototype.name:match("^(.*)%-color%-coded%-")
+    if data.raw["fluid"][fluid_name] then
+        local fluid_icon = data.raw["fluid"][fluid_name].icon
+        local fluid_icon_size = data.raw["fluid"][fluid_name].icon_size or 64
+        local fluid_icons = data.raw["fluid"][fluid_name].icons
+        if fluid_icons then
+            for i = 1, #fluid_icons do
+                local icon = fluid_icons[i]
+                ---@type data.IconData
+                local fluid_icon_overlay = {
+                    icon = icon.icon,
+                    icon_size = icon.icon_size or 64,
+                    scale = 1 / 5,
+                    shift = { 1 * ((icon.icon_size or 64) / 8), -1 * ((icon.icon_size or 64) / 8) }
+                }
+                table.insert(icons, fluid_icon_overlay)
+            end
+        elseif fluid_icon then
+            ---@type data.IconData
+            local fluid_icon_overlay = {
+                icon = fluid_icon,
+                icon_size = fluid_icon_size,
+                scale = 1 / 5,
+                shift = { 1 * (fluid_icon_size / 8), -1 * (fluid_icon_size / 8) }
+            }
+            table.insert(icons, fluid_icon_overlay)
+        end
+    end
     return icons
 end
 

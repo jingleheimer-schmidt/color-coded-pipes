@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.3
 Date: ????
+  Features:
+    - added fluid icon overlays to the top right corner of fluid color coded pipe icons
   Changes:
     - added compatibility script to force k2-fluid-storage to use its hr graphics
 ---------------------------------------------------------------------------------------------------
