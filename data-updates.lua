@@ -66,6 +66,25 @@ for _, group in pairs(base_entities) do
     end
 end
 
+for color_name, color in pairs(pipe_colors) do
+    local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+    if subgroup then
+        subgroup.name = color_name .. "-color-coded"
+        subgroup.group = "color-coded-pipes"
+        subgroup.order = "z[z]a[color]" .. (color_order[color_name] or "")
+        if not color_order[color_name] then
+            subgroup.order = "z[z]b[fluid]" .. color_name
+        end
+        local fluid = data.raw["fluid"][color_name]
+        if fluid and fluid.name and fluid.order then
+            subgroup.order = "z[z]b[fluid]" .. fluid.order
+        end
+        if string.find(color_name, "pride_", 1, true) then
+            subgroup.order = "z[z]c[pride]" .. (color_order[color_name] or "")
+        end
+        data:extend { subgroup }
+    end
+end
 
 -------------------------------------------------------------------------------------------------
 -- add a fast_replaceable_group to the base pipes so that all the color-coded pipes inherit it --
@@ -115,29 +134,33 @@ end
 ---@param name string
 ---@return string
 local function get_subgroup(type, name)
-    if data.raw["fluid"][name] then
-        return "fluid-color-coded-" .. type
-    elseif string.find(name, "pride_lesbian_", 1, true) then
-        return "pride-lesbian-color-coded-" .. type
-    elseif string.find(name, "pride_gay_", 1, true) then
-        return "pride-gay-color-coded-" .. type
-    elseif string.find(name, "pride_bi_", 1, true) then
-        -- return "pride-bi-color-coded-" .. type
-        return "pride-bitranspan-color-coded-" .. type
-    elseif string.find(name, "pride_trans_", 1, true) then
-        -- return "pride-trans-color-coded-" .. type
-        return "pride-bitranspan-color-coded-" .. type
-    elseif string.find(name, "pride_pan_", 1, true) then
-        -- return "pride-pan-color-coded-" .. type
-        return "pride-bitranspan-color-coded-" .. type
-    elseif string.find(name, "pride_ace_", 1, true) then
-        -- return "pride-ace-color-coded-" .. type
-        return "pride-acenonbinary-color-coded-" .. type
-    elseif string.find(name, "pride_nonbinary_", 1, true) then
-        -- return "pride-nonbinary-color-coded-" .. type
-        return "pride-acenonbinary-color-coded-" .. type
+    if settings.startup["color-coded-pipes-sort-recipes-by-color"].value then
+        return name .. "-color-coded"
     else
-        return "rainbow-color-coded-" .. type
+        if data.raw["fluid"][name] then
+            return "fluid-color-coded-" .. type
+        elseif string.find(name, "pride_lesbian_", 1, true) then
+            return "pride-lesbian-color-coded-" .. type
+        elseif string.find(name, "pride_gay_", 1, true) then
+            return "pride-gay-color-coded-" .. type
+        elseif string.find(name, "pride_bi_", 1, true) then
+            -- return "pride-bi-color-coded-" .. type
+            return "pride-bitranspan-color-coded-" .. type
+        elseif string.find(name, "pride_trans_", 1, true) then
+            -- return "pride-trans-color-coded-" .. type
+            return "pride-bitranspan-color-coded-" .. type
+        elseif string.find(name, "pride_pan_", 1, true) then
+            -- return "pride-pan-color-coded-" .. type
+            return "pride-bitranspan-color-coded-" .. type
+        elseif string.find(name, "pride_ace_", 1, true) then
+            -- return "pride-ace-color-coded-" .. type
+            return "pride-acenonbinary-color-coded-" .. type
+        elseif string.find(name, "pride_nonbinary_", 1, true) then
+            -- return "pride-nonbinary-color-coded-" .. type
+            return "pride-acenonbinary-color-coded-" .. type
+        else
+            return "rainbow-color-coded-" .. type
+        end
     end
 end
 

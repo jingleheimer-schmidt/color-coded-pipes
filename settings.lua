@@ -44,6 +44,15 @@ local regroup_recipes = {
     hidden = false,
     order = "25",
 }
+---@type data.ModBoolSettingPrototype
+local sort_recipes_by_color = {
+    type = "bool-setting",
+    name = "color-coded-pipes-sort-recipes-by-color",
+    setting_type = "startup",
+    default_value = false,
+    hidden = false,
+    order = "26",
+}
 ---@type data.ModStringSettingPrototype
 local recipe_ingredients = {
     type = "string-setting",
@@ -55,7 +64,7 @@ local recipe_ingredients = {
     order = "30",
 }
 
-data:extend { menu_simulations, rainbow_recipes, pride_recipes, fluid_recipes, regroup_recipes, recipe_ingredients }
+data:extend { menu_simulations, rainbow_recipes, pride_recipes, fluid_recipes, regroup_recipes, sort_recipes_by_color, recipe_ingredients }
 
 local a = 0.5
 local rgb_colors = {
