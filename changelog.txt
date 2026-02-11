@@ -6,6 +6,7 @@ Date: ????
     - added fluid icons to the localized names of fluid color coded pipes and recipes
   Changes:
     - added compatibility script to force k2-fluid-storage to use its hr graphics
+    - included hidden fluids in pipe generation scripts
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.2
 Date: 2026-01-10

@@ -434,6 +434,12 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
         color_coded_recipe.enabled = false
         color_coded_recipe.hidden_in_factoriopedia = true
     end
+    if data.raw["fluid"][color_name] then
+        if data.raw["fluid"][color_name].hidden then
+            color_coded_recipe.enabled = false
+            color_coded_recipe.hidden = true
+        end
+    end
     local recipe_ingredient_type = settings.startup["color-coded-pipes-recipe-ingredients"].value
     if recipe_ingredient_type == "base-item" then
         color_coded_recipe.ingredients = { { type = "item", name = base_name, amount = result_count } }
