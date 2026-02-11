@@ -398,7 +398,8 @@ local function create_color_overlay_item(base_type, base_name, color_name, color
     item.place_result = item_name
     local localised_name = item.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
-    item.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
+    local fluid_img = data.raw["fluid"][color_name] and ("[img=fluid/" .. color_name .. "]") or ""
+    item.localised_name = { "color-coded.name", localised_name, { "", fluid_img, { "fluid-name." .. color_name } } }
     item.icons = create_color_overlay_icons(item, color, base_name)
     item.icon = nil
     item.order = get_order(item, color_name)
@@ -439,7 +440,8 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
     end
     local localised_name = color_coded_recipe.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
-    color_coded_recipe.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
+    local fluid_img = data.raw["fluid"][color_name] and ("[img=fluid/" .. color_name .. "]") or ""
+    color_coded_recipe.localised_name = { "color-coded.name", localised_name, { "", fluid_img, { "fluid-name." .. color_name } } }
     if not built_from_base_item and color_name ~= "fusion-plasma" then
         if data.raw["fluid"][color_name] then
             unlock_variants_by_result[color_name] = unlock_variants_by_result[color_name] or {}
@@ -576,7 +578,8 @@ local function create_color_overlay_entity(base_type, base_name, color_name, col
     entity.icon = nil
     local localised_name = entity.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
-    entity.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
+    local fluid_img = data.raw["fluid"][color_name] and ("[img=fluid/" .. color_name .. "]") or ""
+    entity.localised_name = { "color-coded.name", localised_name, { "", fluid_img, { "fluid-name." .. color_name } } }
     entity.corpse = color_name .. "-color-coded-" .. base_name .. "-remnants"
     if mods["no-pipe-touching"] then
         entity.npt_compat = { mod = "color-coded-pipes", tag = color_name }
@@ -637,7 +640,8 @@ local function create_color_overlay_corpse(base_type, base_name, color_name, col
     corpse.order = get_order(corpse, color_name)
     local localised_name = corpse.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
-    corpse.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
+    local fluid_img = data.raw["fluid"][color_name] and ("[img=fluid/" .. color_name .. "]") or ""
+    corpse.localised_name = { "color-coded.name", localised_name, { "", fluid_img, { "fluid-name." .. color_name } } }
     corpse.animation_overlay = table.deepcopy(corpse.animation)
     if remnant_uses_base_corpse then
         base_name = corpse_mapping[base_name] or base_type
