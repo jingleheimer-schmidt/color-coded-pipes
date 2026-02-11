@@ -220,7 +220,7 @@ local function process_recipe_unlocks()
                     local recipe_name = effect.recipe
                     tech_unlocks_recipe[tech_name][recipe_name] = true
                     local recipe = data.raw.recipe[recipe_name]
-                    if recipe then
+                    if recipe and recipe.name and not string.find(recipe.name, "-barrel$") then
                         if recipe.results then
                             for _, result in pairs(recipe.results) do
                                 tech_unlocks_item[tech_name][result.name] = true
