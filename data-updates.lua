@@ -3,6 +3,7 @@
 -- import util constants and functions --
 -----------------------------------------
 
+local compatibility = require("__color-coded-pipes__.scripts.compatibility") ---@module "scripts.compatibility"
 local constants = require("__color-coded-pipes__.scripts.constants") ---@module "scripts.constants"
 local functions = require("__color-coded-pipes__.scripts.functions") ---@module "scripts.functions"
 local pipe_filenames = constants.pipe_filenames
@@ -65,6 +66,25 @@ for _, group in pairs(base_entities) do
     end
 end
 
+for color_name, color in pairs(pipe_colors) do
+    local subgroup = table.deepcopy(data.raw["item-subgroup"]["energy-pipe-distribution"])
+    if subgroup then
+        subgroup.name = color_name .. "-color-coded"
+        subgroup.group = "color-coded-pipes"
+        subgroup.order = "z[z]a[color]" .. (color_order[color_name] or "")
+        if not color_order[color_name] then
+            subgroup.order = "z[z]b[fluid]" .. color_name
+        end
+        local fluid = data.raw["fluid"][color_name]
+        if fluid and fluid.name and fluid.order then
+            subgroup.order = "z[z]b[fluid]" .. fluid.order
+        end
+        if string.find(color_name, "pride_", 1, true) then
+            subgroup.order = "z[z]c[pride]" .. (color_order[color_name] or "")
+        end
+        data:extend { subgroup }
+    end
+end
 
 -------------------------------------------------------------------------------------------------
 -- add a fast_replaceable_group to the base pipes so that all the color-coded pipes inherit it --
@@ -114,29 +134,33 @@ end
 ---@param name string
 ---@return string
 local function get_subgroup(type, name)
-    if data.raw["fluid"][name] then
-        return "fluid-color-coded-" .. type
-    elseif string.find(name, "pride_lesbian_", 1, true) then
-        return "pride-lesbian-color-coded-" .. type
-    elseif string.find(name, "pride_gay_", 1, true) then
-        return "pride-gay-color-coded-" .. type
-    elseif string.find(name, "pride_bi_", 1, true) then
-        -- return "pride-bi-color-coded-" .. type
-        return "pride-bitranspan-color-coded-" .. type
-    elseif string.find(name, "pride_trans_", 1, true) then
-        -- return "pride-trans-color-coded-" .. type
-        return "pride-bitranspan-color-coded-" .. type
-    elseif string.find(name, "pride_pan_", 1, true) then
-        -- return "pride-pan-color-coded-" .. type
-        return "pride-bitranspan-color-coded-" .. type
-    elseif string.find(name, "pride_ace_", 1, true) then
-        -- return "pride-ace-color-coded-" .. type
-        return "pride-acenonbinary-color-coded-" .. type
-    elseif string.find(name, "pride_nonbinary_", 1, true) then
-        -- return "pride-nonbinary-color-coded-" .. type
-        return "pride-acenonbinary-color-coded-" .. type
+    if settings.startup["color-coded-pipes-sort-recipes-by-color"].value then
+        return name .. "-color-coded"
     else
-        return "rainbow-color-coded-" .. type
+        if data.raw["fluid"][name] then
+            return "fluid-color-coded-" .. type
+        elseif string.find(name, "pride_lesbian_", 1, true) then
+            return "pride-lesbian-color-coded-" .. type
+        elseif string.find(name, "pride_gay_", 1, true) then
+            return "pride-gay-color-coded-" .. type
+        elseif string.find(name, "pride_bi_", 1, true) then
+            -- return "pride-bi-color-coded-" .. type
+            return "pride-bitranspan-color-coded-" .. type
+        elseif string.find(name, "pride_trans_", 1, true) then
+            -- return "pride-trans-color-coded-" .. type
+            return "pride-bitranspan-color-coded-" .. type
+        elseif string.find(name, "pride_pan_", 1, true) then
+            -- return "pride-pan-color-coded-" .. type
+            return "pride-bitranspan-color-coded-" .. type
+        elseif string.find(name, "pride_ace_", 1, true) then
+            -- return "pride-ace-color-coded-" .. type
+            return "pride-acenonbinary-color-coded-" .. type
+        elseif string.find(name, "pride_nonbinary_", 1, true) then
+            -- return "pride-nonbinary-color-coded-" .. type
+            return "pride-acenonbinary-color-coded-" .. type
+        else
+            return "rainbow-color-coded-" .. type
+        end
     end
 end
 
@@ -196,7 +220,7 @@ local function process_recipe_unlocks()
                     local recipe_name = effect.recipe
                     tech_unlocks_recipe[tech_name][recipe_name] = true
                     local recipe = data.raw.recipe[recipe_name]
-                    if recipe then
+                    if recipe and recipe.name and not string.find(recipe.name, "-barrel$") then
                         if recipe.results then
                             for _, result in pairs(recipe.results) do
                                 tech_unlocks_item[tech_name][result.name] = true
@@ -313,10 +337,39 @@ local function create_color_overlay_icons(prototype, color, type)
         tint = color
     }
     if icons then
-        icon_overlay.icon_size = icons[1].icon_size
+        icon_overlay.icon_size = icons[1].icon_size or 64
         table.insert(icons, icon_overlay)
     else
         icons = { icon_base, icon_overlay }
+    end
+    -- overlay the fluid icon to the top right corner
+    local fluid_name = prototype.name:match("^(.*)%-color%-coded%-")
+    if data.raw["fluid"][fluid_name] then
+        local fluid_icon = data.raw["fluid"][fluid_name].icon
+        local fluid_icon_size = data.raw["fluid"][fluid_name].icon_size or 64
+        local fluid_icons = data.raw["fluid"][fluid_name].icons
+        if fluid_icons then
+            for i = 1, #fluid_icons do
+                local icon = fluid_icons[i]
+                ---@type data.IconData
+                local fluid_icon_overlay = {
+                    icon = icon.icon,
+                    icon_size = icon.icon_size or 64,
+                    scale = 1 / 5,
+                    shift = { 1 * ((icon.icon_size or 64) / 8), -1 * ((icon.icon_size or 64) / 8) }
+                }
+                table.insert(icons, fluid_icon_overlay)
+            end
+        elseif fluid_icon then
+            ---@type data.IconData
+            local fluid_icon_overlay = {
+                icon = fluid_icon,
+                icon_size = fluid_icon_size,
+                scale = 1 / 5,
+                shift = { 1 * (fluid_icon_size / 8), -1 * (fluid_icon_size / 8) }
+            }
+            table.insert(icons, fluid_icon_overlay)
+        end
     end
     return icons
 end
@@ -368,7 +421,8 @@ local function create_color_overlay_item(base_type, base_name, color_name, color
     item.place_result = item_name
     local localised_name = item.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
-    item.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
+    local fluid_img = data.raw["fluid"][color_name] and ("[img=fluid/" .. color_name .. "]") or ""
+    item.localised_name = { "color-coded.name", localised_name, { "", fluid_img, { "fluid-name." .. color_name } } }
     item.icons = create_color_overlay_icons(item, color, base_name)
     item.icon = nil
     item.order = get_order(item, color_name)
@@ -403,13 +457,20 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
         color_coded_recipe.enabled = false
         color_coded_recipe.hidden_in_factoriopedia = true
     end
+    if data.raw["fluid"][color_name] then
+        if data.raw["fluid"][color_name].hidden then
+            color_coded_recipe.enabled = false
+            color_coded_recipe.hidden = true
+        end
+    end
     local recipe_ingredient_type = settings.startup["color-coded-pipes-recipe-ingredients"].value
     if recipe_ingredient_type == "base-item" then
         color_coded_recipe.ingredients = { { type = "item", name = base_name, amount = result_count } }
     end
     local localised_name = color_coded_recipe.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
-    color_coded_recipe.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
+    local fluid_img = data.raw["fluid"][color_name] and ("[img=fluid/" .. color_name .. "]") or ""
+    color_coded_recipe.localised_name = { "color-coded.name", localised_name, { "", fluid_img, { "fluid-name." .. color_name } } }
     if not built_from_base_item and color_name ~= "fusion-plasma" then
         if data.raw["fluid"][color_name] then
             unlock_variants_by_result[color_name] = unlock_variants_by_result[color_name] or {}
@@ -546,7 +607,8 @@ local function create_color_overlay_entity(base_type, base_name, color_name, col
     entity.icon = nil
     local localised_name = entity.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
-    entity.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
+    local fluid_img = data.raw["fluid"][color_name] and ("[img=fluid/" .. color_name .. "]") or ""
+    entity.localised_name = { "color-coded.name", localised_name, { "", fluid_img, { "fluid-name." .. color_name } } }
     entity.corpse = color_name .. "-color-coded-" .. base_name .. "-remnants"
     if mods["no-pipe-touching"] then
         entity.npt_compat = { mod = "color-coded-pipes", tag = color_name }
@@ -607,7 +669,8 @@ local function create_color_overlay_corpse(base_type, base_name, color_name, col
     corpse.order = get_order(corpse, color_name)
     local localised_name = corpse.localised_name
     if not localised_name then localised_name = { "entity-name." .. base_name } end
-    corpse.localised_name = { "color-coded.name", localised_name, { "fluid-name." .. color_name } }
+    local fluid_img = data.raw["fluid"][color_name] and ("[img=fluid/" .. color_name .. "]") or ""
+    corpse.localised_name = { "color-coded.name", localised_name, { "", fluid_img, { "fluid-name." .. color_name } } }
     corpse.animation_overlay = table.deepcopy(corpse.animation)
     if remnant_uses_base_corpse then
         base_name = corpse_mapping[base_name] or base_type

@@ -236,7 +236,7 @@ local fluid_to_color_map = {}
 local fluids = data and data.raw and data.raw["fluid"] or prototypes and prototypes.fluid
 if fluids then
     for _, fluid in pairs(fluids) do
-        if fluid.base_color and not fluid.hidden and not fluid.parameter then
+        if fluid.base_color and not fluid.parameter then
             local visualization_color = get_fluid_visualization_color(fluid)
             fluid_to_color_map[fluid.name] = get_closest_named_color(visualization_color)
             visualization_color.a = 0.6

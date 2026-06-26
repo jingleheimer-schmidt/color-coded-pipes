@@ -22,7 +22,11 @@
     "(?) pypostprocessing",
     "(?) planet-rabbasca",
     "(?) bzlead2",
-    "(?) BrassTacks-Updated"
+    "(?) BrassTacks-Updated",
+    "(?) Paracelsin",
+    "(?) planet-muluna",
+    "(?) nulls-k2so-tweaks",
+    "(?) stellar-foundry"
   ],
   "package": {
     "ignore": [

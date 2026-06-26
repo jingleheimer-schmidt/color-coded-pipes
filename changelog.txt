@@ -1,7 +1,14 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.3
 Date: ????
+  Features:
+    - added fluid icon overlays to the top right corner of fluid color coded pipe icons
+    - added fluid icons to the localized names of fluid color coded pipes and recipes
+    - added mod setting to organize pipe subgroups (sorting order) based on pipe color or type
   Changes:
+    - added compatibility script to force k2-fluid-storage to use its hr graphics
+    - included hidden fluids in pipe generation scripts
+    - excluded "-barrel" recipes from unlocking color coded pipes
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.2
 Date: 2026-01-10
