@@ -83,7 +83,7 @@ local function paint_pipe(player, pipe, bots_required, planner_mode)
                     spill = false,
                     player = nil,
                 }
-                entity.last_user = player
+                if entity then entity.last_user = player end
             end
         end
     end
@@ -126,7 +126,7 @@ local function unpaint_pipe(player, pipe, bots_required)
                     spill = false,
                     player = nil,
                 }
-                entity.last_user = player
+                if entity then entity.last_user = player end
             end
         end
     end
