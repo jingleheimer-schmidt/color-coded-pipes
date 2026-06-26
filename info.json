@@ -6,9 +6,9 @@
   "contact": "",
   "homepage": "",
   "Description": "Visualize and plan your fluid network with color-coded pipes! \nBuild with red, orange, yellow, green, blue, purple, pink, black, white, and perfect-match colors for each fluid. \nIncludes pipes, undergrounds, pumps, and storage tanks.",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": [
-    "base >= 2.0.46",
+    "base >= 2.1.8",
     "? pipe_plus",
     "? Flow Control",
     "? StorageTank2_2_0",
