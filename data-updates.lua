@@ -3,7 +3,7 @@
 -- import util constants and functions --
 -----------------------------------------
 
-local compatibility = require("__color-coded-pipes__.scripts.compatibility") ---@module "scripts.compatibility"
+require("__color-coded-pipes__.scripts.compatibility")
 local constants = require("__color-coded-pipes__.scripts.constants") ---@module "scripts.constants"
 local functions = require("__color-coded-pipes__.scripts.functions") ---@module "scripts.functions"
 local pipe_filenames = constants.pipe_filenames
