@@ -5,7 +5,7 @@ Date: ????
     - updated for Factorio 2.1
 ---------------------------------------------------------------------------------------------------
 Version: 1.6.3
-Date: ????
+Date: 2026-06-25
   Features:
     - added fluid icon overlays to the top right corner of fluid color coded pipe icons
     - added fluid icons to the localized names of fluid color coded pipes and recipes

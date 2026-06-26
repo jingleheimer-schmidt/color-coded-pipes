@@ -52,6 +52,6 @@ Special thanks to justarandomgeek for the [Factorio Modding Toolkit](https://git
 ---------------------
 # License
 
-Color Coded Pipes © 2024-2025 by asher\_sky is licensed under Attribution-NonCommercial-ShareAlike 4.0 International.
+Color Coded Pipes © 2024-2026 by asher\_sky is licensed under Attribution-NonCommercial-ShareAlike 4.0 International.
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/
 or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
