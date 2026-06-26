@@ -129,6 +129,14 @@ local function unpaint_pipe(player, pipe, bots_required)
                 if entity then entity.last_user = player end
             end
         end
+    else
+        local upgrade_target = pipe.get_upgrade_target()
+        if upgrade_target then
+            local color_coded_upgrade_target = upgrade_target.name:find("-color-coded-", 1, true)
+            if color_coded_upgrade_target then
+                pipe.cancel_upgrade(player.force, player)
+            end
+        end
     end
 end
 
