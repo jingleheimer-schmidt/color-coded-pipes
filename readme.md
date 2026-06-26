@@ -38,8 +38,8 @@ This mod includes explicit compatibility for:
 # Translation
 
 Help translate Color Coded Pipes to more languages: https://crowdin.com/project/factorio-mods-localization
-Currently available locale:
-🇺🇸 English (en), 🇦🇩 Catalan (ca), 🇨🇿 Czech (cs), 🇩🇪 German (de), 🇫🇷 French (fr), 🇯🇵 Japanese (ja), 🇰🇷 Korean (ko), 🇵🇱 Polish (pl), 🇧🇷 Portuguese (pt-BR), 🇷🇺 Russian (ru), 🇺🇦 Ukrainian (uk), 🇨🇳 Chinese (zh-CN)
+Currently available locales:
+🇺🇸 English (en), 🇦🇩 Catalan (ca), 🇨🇿 Czech (cs), 🇩🇪 German (de), 🇫🇮 Finnish (fi), 🇫🇷 French (fr), 🇭🇺 Hungarian (hu), 🇯🇵 Japanese (ja), 🇰🇷 Korean (ko), 🇵🇱 Polish (pl), 🇧🇷 Portuguese (pt-BR), 🇷🇺 Russian (ru), 🇺🇦 Ukrainian (uk), 🇨🇳 Chinese (zh-CN)
 
 ---------------------
 # Credits
