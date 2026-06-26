@@ -22,9 +22,9 @@ if mods["nulls-k2so-tweaks"] then
 end
 
 
-----------------------------------------------------
--- force k2-fluid-storage to use it's hr graphics --
-----------------------------------------------------
+-----------------------------------------------
+-- force k2-fluid-storage to use hr graphics --
+-----------------------------------------------
 
 if mods["k2-fluid-storage"] then
     local tank_1 = data.raw["storage-tank"]["kr-fluid-storage-1"]
