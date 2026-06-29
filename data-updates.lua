@@ -3,7 +3,7 @@
 -- import util constants and functions --
 -----------------------------------------
 
-local compatibility = require("__color-coded-pipes__.scripts.compatibility") ---@module "scripts.compatibility"
+require("__color-coded-pipes__.scripts.compatibility")
 local constants = require("__color-coded-pipes__.scripts.constants") ---@module "scripts.constants"
 local functions = require("__color-coded-pipes__.scripts.functions") ---@module "scripts.functions"
 local pipe_filenames = constants.pipe_filenames
@@ -389,7 +389,6 @@ local function update_factoriopedia_simulation(old_entity_name, new_entity_name,
                     position = original_entity.position,
                     force = original_entity.force,
                     direction = original_entity.direction,
-                    fluidbox = original_entity.fluidbox,
                     quality = original_entity.quality,
                     fast_replace = true,
                     spill = false,
@@ -461,6 +460,7 @@ local function create_color_overlay_recipe(base_type, base_name, color_name, col
         if data.raw["fluid"][color_name].hidden then
             color_coded_recipe.enabled = false
             color_coded_recipe.hidden = true
+            color_coded_recipe.hidden_in_factoriopedia = true
         end
     end
     local recipe_ingredient_type = settings.startup["color-coded-pipes-recipe-ingredients"].value

@@ -2,42 +2,37 @@
 local constants = require("__color-coded-pipes__.scripts.constants") ---@module "scripts.constants"
 local fluid_to_color_map = constants.fluid_to_color_map
 
---- Returns the name of the fluid in a given entity's fluidbox
+--- Returns the name of the fluid in a given entity's fluid storages or segments.
 ---@param entity LuaEntity
 ---@return string
 local function get_fluid_name(entity)
-    local fluidbox = entity.fluidbox
-    if not (fluidbox and fluidbox.valid) then return "" end
 
-    for i = 1, #fluidbox do
-        -- Try segment contents first
-        local contents = fluidbox.get_fluid_segment_contents(i)
-        if contents and next(contents) then
-            local max_name, max_amount = nil, 0
-            for name, count in pairs(contents) do
-                if count > max_amount then
-                    max_name, max_amount = name, count
+    local fluid_contents = entity.get_fluid_contents()
+    if fluid_contents and next(fluid_contents) then
+        local max_name, max_amount = nil, 0
+        for name, count in pairs(fluid_contents) do
+            if count > max_amount then
+                max_name, max_amount = name, count
+            end
+        end
+        if max_name then
+            return max_name
+        end
+    end
+
+    local fluids_count = entity.fluids_count
+    if fluids_count and fluids_count > 0 then
+        local max_name, max_amount = nil, 0
+        for i = 1, fluids_count do
+            local segment = entity.has_fluid_segment(i) and entity.get_fluid_segment_fluid(i) or nil
+            if segment then
+                if segment.amount > max_amount then
+                    max_name, max_amount = segment.name, segment.amount
                 end
             end
-            return max_name or ""
         end
-
-        -- Fall back to fluidbox[i].name
-        local fluid = fluidbox[i]
-        if fluid and fluid.name then
-            return fluid.name
-        end
-
-        -- Try locked fluid
-        local locked = fluidbox.get_locked_fluid(i)
-        if locked then
-            return locked
-        end
-
-        -- Finally try filter
-        local filter = fluidbox.get_filter(i)
-        if filter and filter.name then
-            return filter.name
+        if max_name then
+            return max_name
         end
     end
 
@@ -84,12 +79,11 @@ local function paint_pipe(player, pipe, bots_required, planner_mode)
                     force = force,
                     direction = direction,
                     quality = pipe.quality,
-                    fluidbox = pipe.fluidbox,
                     fast_replace = true,
                     spill = false,
                     player = nil,
                 }
-                entity.last_user = player
+                if entity then entity.last_user = player end
             end
         end
     end
@@ -128,12 +122,19 @@ local function unpaint_pipe(player, pipe, bots_required)
                     force = force,
                     direction = direction,
                     quality = pipe.quality,
-                    fluidbox = pipe.fluidbox,
                     fast_replace = true,
                     spill = false,
                     player = nil,
                 }
-                entity.last_user = player
+                if entity then entity.last_user = player end
+            end
+        end
+    else
+        local upgrade_target = pipe.get_upgrade_target()
+        if upgrade_target then
+            local color_coded_upgrade_target = upgrade_target.name:find("-color-coded-", 1, true)
+            if color_coded_upgrade_target then
+                pipe.cancel_upgrade(player.force, player)
             end
         end
     end
